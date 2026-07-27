@@ -3,6 +3,10 @@ import Image from "next/image";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { siteMedia } from "@/lib/storefront/site-media";
 
+/**
+ * Route-level loading shell. Soft pulse is CSS-only so it stays an RSC;
+ * globals.css already disables non-essential motion under prefers-reduced-motion.
+ */
 export default function StorefrontLoading() {
   return (
     <div className="relative isolate flex min-h-[60svh] items-center justify-center overflow-hidden bg-[var(--color-brand-deep)] text-white">
@@ -19,7 +23,7 @@ export default function StorefrontLoading() {
         <p className="text-xs font-semibold tracking-[0.28em] text-[var(--color-accent)] uppercase">
           VERONICA MARK
         </p>
-        <p className="mt-4 font-display text-3xl drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] sm:text-4xl">
+        <p className="vm-loading-copy mt-4 font-display text-3xl drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] sm:text-4xl">
           Preparing your edit…
         </p>
       </div>

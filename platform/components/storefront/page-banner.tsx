@@ -1,6 +1,10 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
+import { motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type PageBannerProps = {
@@ -18,6 +22,7 @@ type PageBannerProps = {
 
 /**
  * Full-bleed editorial page banner — same gradient treatment as About / Contact heroes.
+ * Title stays visible for LCP; supporting copy fades up.
  */
 export function PageBanner({
   src,
@@ -29,6 +34,7 @@ export function PageBanner({
   priority = false,
   align = "center",
 }: PageBannerProps) {
+  const reduceMotion = useReducedMotion();
   const centered = align === "center";
 
   return (
@@ -40,14 +46,22 @@ export function PageBanner({
         className,
       )}
     >
-      <Image
-        src={src}
-        alt=""
-        fill
-        priority={priority}
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
+      <motion.div
+        aria-hidden
+        className="absolute inset-0 -z-20"
+        initial={reduceMotion ? false : { scale: 1.04 }}
+        animate={{ scale: 1 }}
+        transition={motionTransition(reduceMotion, 1.2)}
+      >
+        <Image
+          src={src}
+          alt=""
+          fill
+          priority={priority}
+          sizes="100vw"
+          className="object-cover"
+        />
+      </motion.div>
       <MediaScrim variant={centered ? "center" : "left"} />
       <div
         aria-hidden
@@ -85,14 +99,17 @@ export function PageBanner({
           {title}
         </h1>
         {description ? (
-          <p
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={motionTransition(reduceMotion, 0.55)}
             className={cn(
               "mt-4 text-base leading-7 text-white/90 sm:text-lg",
               centered ? "mx-auto max-w-2xl" : "max-w-2xl",
             )}
           >
             {description}
-          </p>
+          </motion.p>
         ) : null}
       </div>
     </header>

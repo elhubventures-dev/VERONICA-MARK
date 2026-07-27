@@ -5,9 +5,11 @@ import { ProductGallery } from "@/components/commerce/product-gallery";
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
 import { PdpPurchasePanel } from "@/components/storefront/pdp-purchase-panel";
 import { RecentlyViewedRail } from "@/components/storefront/recently-viewed-rail";
+import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { getPublicEnv } from "@/lib/env";
+import { staggerDelay } from "@/lib/motion";
 import { getProductDetail, queryCatalog } from "@/lib/storefront/catalog-queries";
 import { demoProductDetails } from "@/lib/storefront/demo-catalog";
 
@@ -93,7 +95,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
-        <section className="mt-16 border-t border-[var(--color-border)] pt-16">
+        <Reveal className="mt-16 border-t border-[var(--color-border)] pt-16">
           <SectionHeading eyebrow="The story" title="Product story" />
           <div className="max-w-3xl space-y-4 text-base leading-8 text-[var(--color-muted-foreground)]">
             <p>{product.description}</p>
@@ -106,81 +108,90 @@ export default async function ProductPage({ params }: ProductPageProps) {
               care of a managed-brand partnership — so you can purchase with confidence.
             </p>
           </div>
-        </section>
+        </Reveal>
 
         <section className="mt-16 border-t border-[var(--color-border)] pt-16">
-          <SectionHeading eyebrow="Details" title="Specifications" />
+          <Reveal>
+            <SectionHeading eyebrow="Details" title="Specifications" />
+          </Reveal>
           <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {product.specs.map((spec) => (
-              <div key={spec.label} className="rounded-xl border border-[var(--color-border)] p-4">
-                <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
-                  {spec.label}
-                </dt>
-                <dd className="mt-1 font-medium">{spec.value}</dd>
-              </div>
+            {product.specs.map((spec, index) => (
+              <Reveal key={spec.label} delay={staggerDelay(index)}>
+                <div className="rounded-xl border border-[var(--color-border)] p-4">
+                  <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
+                    {spec.label}
+                  </dt>
+                  <dd className="mt-1 font-medium">{spec.value}</dd>
+                </div>
+              </Reveal>
             ))}
-            <div className="rounded-xl border border-[var(--color-border)] p-4">
-              <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
-                Delivery
-              </dt>
-              <dd className="mt-1 font-medium">Standard 3–5 days · Express 1–2 days</dd>
-            </div>
+            <Reveal delay={staggerDelay(product.specs.length)}>
+              <div className="rounded-xl border border-[var(--color-border)] p-4">
+                <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
+                  Delivery
+                </dt>
+                <dd className="mt-1 font-medium">Standard 3–5 days · Express 1–2 days</dd>
+              </div>
+            </Reveal>
           </dl>
         </section>
 
         <section className="mt-16 border-t border-[var(--color-border)] pt-16">
-          <SectionHeading
-            eyebrow="Verified reviews"
-            title="Client impressions"
-            description={`${product.reviews.length} verified reviews · ${avgRating.toFixed(1)} average rating`}
-          />
+          <Reveal>
+            <SectionHeading
+              eyebrow="Verified reviews"
+              title="Client impressions"
+              description={`${product.reviews.length} verified reviews · ${avgRating.toFixed(1)} average rating`}
+            />
+          </Reveal>
           <div className="grid gap-4 md:grid-cols-2">
-            {product.reviews.map((review) => (
-              <article
-                key={review.id}
-                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <div>
-                    <p className="font-medium">{review.author}</p>
-                    <p className="mt-0.5 text-[10px] tracking-[0.14em] text-[var(--color-accent)] uppercase">
-                      Verified purchase
+            {product.reviews.map((review, index) => (
+              <Reveal key={review.id} delay={staggerDelay(index)}>
+                <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="font-medium">{review.author}</p>
+                      <p className="mt-0.5 text-[10px] tracking-[0.14em] text-[var(--color-accent)] uppercase">
+                        Verified purchase
+                      </p>
+                    </div>
+                    <p
+                      className="text-sm text-[var(--color-muted-foreground)]"
+                      aria-label={`${review.rating} out of 5 stars`}
+                    >
+                      {"★".repeat(review.rating)}
+                      {"☆".repeat(5 - review.rating)}
                     </p>
                   </div>
-                  <p
-                    className="text-sm text-[var(--color-muted-foreground)]"
-                    aria-label={`${review.rating} out of 5 stars`}
-                  >
-                    {"★".repeat(review.rating)}
-                    {"☆".repeat(5 - review.rating)}
+                  <h3 className="mt-2 font-display text-lg">{review.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
+                    {review.body}
                   </p>
-                </div>
-                <h3 className="mt-2 font-display text-lg">{review.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-foreground)]">
-                  {review.body}
-                </p>
-                <time
-                  className="mt-3 block text-xs text-[var(--color-muted-foreground)]"
-                  dateTime={review.date}
-                >
-                  {new Date(review.date).toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </time>
-              </article>
+                  <time
+                    className="mt-3 block text-xs text-[var(--color-muted-foreground)]"
+                    dateTime={review.date}
+                  >
+                    {new Date(review.date).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </time>
+                </article>
+              </Reveal>
             ))}
           </div>
         </section>
 
         {relatedProducts.length > 0 ? (
           <section className="mt-16 border-t border-[var(--color-border)] pt-16">
-            <SectionHeading
-              eyebrow="Related collections"
-              title="You may also love"
-              description="Further signatures from the same house or olfactive family."
-            />
+            <Reveal>
+              <SectionHeading
+                eyebrow="Related collections"
+                title="You may also love"
+                description="Further signatures from the same house or olfactive family."
+              />
+            </Reveal>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
               {relatedProducts.map((p) => (
                 <CatalogProductCard key={p.id} product={p} />

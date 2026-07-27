@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
-import { motionTransition } from "@/lib/motion";
+import { accentFillCtaClass, ghostOnDarkCtaClass, motionTransition } from "@/lib/motion";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 export function AboutHero() {
@@ -55,16 +55,10 @@ export function AboutHero() {
           Founded in Nigeria to redefine how luxury is discovered, experienced, and trusted.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <Link
-            href="/shop"
-            className="inline-flex min-h-11 items-center justify-center bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)]"
-          >
+          <Link href="/shop" className={accentFillCtaClass}>
             Explore the collection
           </Link>
-          <a
-            href="#our-story"
-            className="inline-flex min-h-11 items-center justify-center border border-[color-mix(in_srgb,var(--color-accent)_55%,white)] px-7 text-sm font-semibold text-white transition-colors hover:border-[var(--color-accent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)]"
-          >
+          <a href="#our-story" className={ghostOnDarkCtaClass}>
             Our story
           </a>
         </div>

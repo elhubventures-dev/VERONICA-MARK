@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
-import { motionTransition } from "@/lib/motion";
+import { accentFillCtaClass, ghostOnDarkCtaClass, motionTransition } from "@/lib/motion";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 export function HeroBanner() {
@@ -46,16 +46,10 @@ export function HeroBanner() {
             from trusted brands around the world.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
-            <Link
-              href="/categories/perfumes"
-              className="inline-flex min-h-11 items-center justify-center bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)]"
-            >
+            <Link href="/categories/perfumes" className={accentFillCtaClass}>
               Explore the collection
             </Link>
-            <Link
-              href="/about"
-              className="inline-flex min-h-11 items-center justify-center border border-[color-mix(in_srgb,var(--color-accent)_55%,white)] px-7 text-sm font-semibold text-white transition-colors hover:border-[var(--color-accent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)]"
-            >
+            <Link href="/about" className={ghostOnDarkCtaClass}>
               Our story
             </Link>
           </div>

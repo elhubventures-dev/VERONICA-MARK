@@ -3,15 +3,20 @@
  * Shown in cart drawer, bag page, and checkout guard rails.
  */
 
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
+import { motionTransition } from "@/lib/motion";
 import { siteMedia } from "@/lib/storefront/site-media";
 import { cn } from "@/lib/utils";
 
-export interface EmptyCartProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface EmptyCartProps {
+  className?: string;
   onContinueShopping?: () => void;
   ctaHref?: string;
 }
@@ -20,15 +25,18 @@ export function EmptyCart({
   className,
   onContinueShopping,
   ctaHref = "/shop",
-  ...props
 }: EmptyCartProps) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={motionTransition(reduceMotion, 0.45)}
       className={cn(
         "flex flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-[var(--color-border)] bg-[var(--color-muted)] text-center",
         className,
       )}
-      {...props}
     >
       <div className="relative aspect-[16/9] w-full max-w-md overflow-hidden">
         <Image
@@ -55,6 +63,6 @@ export function EmptyCart({
           </Button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

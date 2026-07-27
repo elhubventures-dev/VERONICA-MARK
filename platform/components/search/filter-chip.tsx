@@ -20,7 +20,7 @@ export function FilterChip({ label, onRemove, className }: FilterChipProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)] px-3 py-1 text-sm text-[var(--color-foreground)]",
+        "inline-flex items-center gap-1 rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)] px-3 py-1 text-sm text-[var(--color-foreground)] transition-[background-color,transform] duration-200 hover:bg-[color-mix(in_srgb,var(--color-muted)_80%,white)]",
         className,
       )}
     >

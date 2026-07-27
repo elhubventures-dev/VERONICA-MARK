@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -7,11 +8,13 @@ import * as React from "react";
 
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { Button } from "@/components/ui/button";
+import { motionTransition } from "@/lib/motion";
 
 export function CheckoutConfirmationContent() {
   const searchParams = useSearchParams();
   const orderFromUrl = searchParams.get("order");
   const [orderNumber, setOrderNumber] = React.useState(orderFromUrl ?? "VM-2026-0001");
+  const reduceMotion = useReducedMotion();
 
   React.useEffect(() => {
     try {
@@ -27,7 +30,12 @@ export function CheckoutConfirmationContent() {
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-20 sm:px-8">
-      <div className="text-center">
+      <motion.div
+        className="text-center"
+        initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={motionTransition(reduceMotion, 0.5)}
+      >
         <div className="mx-auto inline-flex size-16 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-success)_12%,var(--color-surface))] text-[var(--color-success)]">
           <CheckCircle2 className="size-8" aria-hidden />
         </div>
@@ -48,7 +56,7 @@ export function CheckoutConfirmationContent() {
             <Link href="/shop">Continue shopping</Link>
           </Button>
         </div>
-      </div>
+      </motion.div>
 
       <TrustSignals variant="compact" className="mt-12" />
       <p className="mt-6 text-center text-xs tracking-[0.16em] text-[var(--color-muted-foreground)] uppercase">

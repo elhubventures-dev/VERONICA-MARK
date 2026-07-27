@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 import { CheckoutSteps, type CheckoutPhase } from "@/components/commerce/checkout-steps";
 import { CheckoutSummary } from "@/components/commerce/checkout-summary";
 import { CouponInput } from "@/components/commerce/coupon-input";
 import { Price } from "@/components/commerce/price";
 import { CheckoutPaymentOption } from "@/components/storefront/checkout-payment-option";
+import { Reveal } from "@/components/storefront/reveal";
 import { CheckoutPolicyLinks, TrustSignals } from "@/components/storefront/trust-signals";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +27,7 @@ import {
   shippingFeeNgn,
   type ShippingMethodId,
 } from "@/lib/commerce/shipping-rates";
+import { motionTransition } from "@/lib/motion";
 import { demoCoupons } from "@/lib/storefront/demo-catalog";
 import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 
@@ -55,6 +58,7 @@ function buildInitialShipping(checkoutCountry: string): ShippingForm {
 
 export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
   const router = useRouter();
+  const reduceMotion = useReducedMotion();
   const { lines, subtotal, couponCode, setCouponCode } = useCart();
   const { checkoutCountry, isInternationalBrowser, displayCurrency, usdNgnRate } = useRegion();
   const [phase, setPhase] = React.useState<CheckoutPhase>("shipping");
@@ -74,6 +78,12 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
   const [couponError, setCouponError] = React.useState<string>();
   const [submitError, setSubmitError] = React.useState<string>();
   const [orderNotes, setOrderNotes] = React.useState("");
+
+  const phaseMotion = {
+    initial: reduceMotion ? false : ({ opacity: 0, y: 10 } as const),
+    animate: { opacity: 1, y: 0 },
+    transition: motionTransition(reduceMotion, 0.35),
+  };
 
   React.useEffect(() => {
     if (geoApplied) return;
@@ -209,22 +219,28 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
       {!hideTitle ? (
-        <>
+        <Reveal>
           <h1 className="font-display text-3xl sm:text-4xl">Checkout</h1>
           <p className="mt-2 text-[var(--color-muted-foreground)]">
             Secure payment · Clear delivery updates
           </p>
-        </>
+        </Reveal>
       ) : null}
 
       <TrustSignals variant="checkout" className={hideTitle ? "mt-0" : "mt-8"} />
 
-      <CheckoutSteps current={phase} className="mt-8" />
+      <Reveal className="mt-8" delay={0.04}>
+        <CheckoutSteps current={phase} />
+      </Reveal>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="space-y-8">
           {phase === "shipping" ? (
-            <section className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+            <motion.section
+              key="shipping"
+              {...phaseMotion}
+              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+            >
               <h2 className="font-display text-xl">Contact &amp; shipping</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1 sm:col-span-2">
@@ -388,11 +404,15 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
               >
                 Continue to payment
               </Button>
-            </section>
+            </motion.section>
           ) : null}
 
           {phase === "payment" ? (
-            <section className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+            <motion.section
+              key="payment"
+              {...phaseMotion}
+              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+            >
               <h2 className="font-display text-xl">Secure payment</h2>
               <p className="text-sm text-[var(--color-muted-foreground)]">
                 You will complete payment on Paystack&apos;s encrypted page — card details are never
@@ -416,11 +436,15 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                   Review order
                 </Button>
               </div>
-            </section>
+            </motion.section>
           ) : null}
 
           {phase === "review" ? (
-            <section className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+            <motion.section
+              key="review"
+              {...phaseMotion}
+              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+            >
               <h2 className="font-display text-xl">Review &amp; place order</h2>
               <dl className="space-y-2 text-sm">
                 <div>
@@ -474,11 +498,11 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                 </div>
                 <CheckoutPolicyLinks />
               </div>
-            </section>
+            </motion.section>
           ) : null}
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <Reveal className="space-y-4 lg:sticky lg:top-24 lg:self-start" delay={0.06}>
           <CouponInput
             appliedCode={couponCode ?? undefined}
             onApply={async (code) => {
@@ -512,7 +536,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
             discount={totals.discount}
             total={totals.total}
           />
-        </aside>
+        </Reveal>
       </div>
     </div>
   );

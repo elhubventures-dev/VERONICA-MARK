@@ -102,7 +102,7 @@ export const demoBrands: StorefrontBrand[] = [
     name: "VMA SCENTS",
     description:
       "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
-    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1200&q=85",
+    image: "/media/brands/vma-scents.png",
   },
   {
     id: "maison-violette",

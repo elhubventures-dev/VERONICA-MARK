@@ -5,6 +5,8 @@ import { ExternalLink, Mail, PackageSearch } from "lucide-react";
 import { ContactEnquiryForm } from "@/components/storefront/contact-enquiry-form";
 import { ContactHero } from "@/components/storefront/contact-hero";
 import { ContactOrderForm } from "@/components/storefront/contact-order-form";
+import { Reveal } from "@/components/storefront/reveal";
+import { staggerDelay } from "@/lib/motion";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { storefrontContact } from "@/lib/storefront/contact";
 
@@ -15,6 +17,55 @@ export const metadata: Metadata = buildPageMetadata({
   path: "/contact",
 });
 
+const contactChannels = [
+  {
+    id: "email",
+    label: "Email",
+    body: (
+      <>
+        <a
+          href={`mailto:${storefrontContact.email}`}
+          className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium text-[var(--color-foreground)] transition-colors hover:text-[var(--color-primary)] sm:text-base"
+        >
+          <Mail className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
+          {storefrontContact.email}
+        </a>
+        <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">
+          {storefrontContact.responseNote}
+        </p>
+      </>
+    ),
+  },
+  {
+    id: "website",
+    label: "Website",
+    body: (
+      <a
+        href={storefrontContact.websiteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium text-[var(--color-foreground)] transition-colors hover:text-[var(--color-primary)] sm:text-base"
+      >
+        <ExternalLink className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
+        {storefrontContact.websiteLabel}
+      </a>
+    ),
+  },
+  {
+    id: "orders",
+    label: "Orders",
+    body: (
+      <Link
+        href="/track-order"
+        className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium underline-offset-4 transition-opacity hover:underline hover:opacity-80 sm:text-base"
+      >
+        <PackageSearch className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
+        Track an existing order
+      </Link>
+    ),
+  },
+] as const;
+
 export default function ContactPage() {
   return (
     <article className="bg-[var(--color-background)]">
@@ -22,7 +73,7 @@ export default function ContactPage() {
 
       <section className="border-b border-[var(--color-border)]">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 lg:py-16">
-          <div className="text-center">
+          <Reveal className="text-center">
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-primary)] uppercase">
               Client services
             </p>
@@ -31,56 +82,25 @@ export default function ContactPage() {
               Prefer email or the web? Our team is ready to help with selection, orders and
               delivery.
             </p>
-          </div>
+          </Reveal>
 
           <ul className="mt-12 grid gap-8 border-t border-[var(--color-border)] pt-10 sm:grid-cols-3 sm:gap-6">
-            <li className="text-center">
-              <p className="text-xs font-semibold tracking-[0.16em] text-[var(--color-muted-foreground)] uppercase">
-                Email
-              </p>
-              <a
-                href={`mailto:${storefrontContact.email}`}
-                className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium text-[var(--color-foreground)] transition-colors hover:text-[var(--color-primary)] sm:text-base"
-              >
-                <Mail className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
-                {storefrontContact.email}
-              </a>
-              <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">
-                {storefrontContact.responseNote}
-              </p>
-            </li>
-            <li className="text-center">
-              <p className="text-xs font-semibold tracking-[0.16em] text-[var(--color-muted-foreground)] uppercase">
-                Website
-              </p>
-              <a
-                href={storefrontContact.websiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium text-[var(--color-foreground)] transition-colors hover:text-[var(--color-primary)] sm:text-base"
-              >
-                <ExternalLink className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
-                {storefrontContact.websiteLabel}
-              </a>
-            </li>
-            <li className="text-center">
-              <p className="text-xs font-semibold tracking-[0.16em] text-[var(--color-muted-foreground)] uppercase">
-                Orders
-              </p>
-              <Link
-                href="/track-order"
-                className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 text-sm font-medium underline-offset-4 hover:underline sm:text-base"
-              >
-                <PackageSearch className="size-4 shrink-0 text-[var(--color-accent)]" aria-hidden />
-                Track an existing order
-              </Link>
-            </li>
+            {contactChannels.map((channel, index) => (
+              <Reveal key={channel.id} delay={staggerDelay(index)}>
+                <li className="text-center">
+                  <p className="text-xs font-semibold tracking-[0.16em] text-[var(--color-muted-foreground)] uppercase">
+                    {channel.label}
+                  </p>
+                  {channel.body}
+                </li>
+              </Reveal>
+            ))}
           </ul>
         </div>
       </section>
 
       <section id="write-to-us" className="scroll-mt-24 border-b border-[var(--color-border)]">
-        <div className="mx-auto max-w-2xl px-5 py-16 sm:px-8 lg:py-20">
+        <Reveal className="mx-auto max-w-2xl px-5 py-16 sm:px-8 lg:py-20">
           <div className="text-center">
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-primary)] uppercase">
               Enquiry
@@ -91,14 +111,14 @@ export default function ContactPage() {
             </p>
           </div>
           <ContactEnquiryForm />
-        </div>
+        </Reveal>
       </section>
 
       <section
         id="order-support"
         className="scroll-mt-24 bg-[color-mix(in_srgb,var(--color-muted)_55%,var(--color-background))]"
       >
-        <div className="mx-auto max-w-2xl px-5 py-16 sm:px-8 lg:py-20">
+        <Reveal className="mx-auto max-w-2xl px-5 py-16 sm:px-8 lg:py-20">
           <div className="text-center">
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-primary)] uppercase">
               Order support
@@ -112,7 +132,7 @@ export default function ContactPage() {
             </p>
           </div>
           <ContactOrderForm />
-        </div>
+        </Reveal>
       </section>
     </article>
   );

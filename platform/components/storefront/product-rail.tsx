@@ -4,6 +4,7 @@ import Image from "next/image";
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { RailBanner } from "@/components/storefront/rail-banner";
+import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 
@@ -58,10 +59,12 @@ export function ProductRail({
           </div>
         ) : null}
         <div className="flex items-end justify-between gap-4">
-          <SectionHeading eyebrow={eyebrow} title={title} description={description} />
+          <Reveal>
+            <SectionHeading eyebrow={eyebrow} title={title} description={description} />
+          </Reveal>
           <Link
             href="/shop"
-            className="mb-8 hidden min-h-11 items-center text-sm font-semibold underline decoration-accent underline-offset-4 sm:inline-flex"
+            className="mb-8 hidden min-h-11 items-center text-sm font-semibold underline decoration-accent underline-offset-4 transition-opacity hover:opacity-70 sm:inline-flex"
           >
             View all
           </Link>

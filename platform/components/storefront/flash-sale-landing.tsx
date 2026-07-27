@@ -5,47 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
+import {
+  CountdownBlocks,
+  flashSaleCountdownUnits,
+} from "@/components/storefront/countdown-blocks";
 import { MediaScrim } from "@/components/storefront/media-scrim";
-import { motionTransition } from "@/lib/motion";
+import { accentFillCtaClass, ghostOnDarkCtaClass, motionTransition } from "@/lib/motion";
 import { flashSale } from "@/lib/storefront/demo-catalog";
 import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
-
-function CountdownBlocks({
-  time,
-}: {
-  time: NonNullable<ReturnType<typeof getFlashSaleRemaining>>;
-}) {
-  const units = (
-    [
-      ["Days", time.days],
-      ["Hours", time.hours],
-      ["Mins", time.minutes],
-      ["Secs", time.seconds],
-    ] as const
-  );
-
-  return (
-    <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3" aria-label="Time remaining">
-      {units.map(([label, value]) => (
-        <div
-          key={label}
-          className="min-w-[4.75rem] border px-3 py-3 text-center sm:min-w-[5.25rem] sm:px-4 sm:py-3.5"
-          style={{
-            backgroundColor: "#c7a25a",
-            color: "#3a013c",
-            borderColor: "#3a013c",
-          }}
-        >
-          <div className="font-display text-2xl tabular-nums sm:text-3xl">
-            {String(value).padStart(2, "0")}
-          </div>
-          <div className="mt-1 text-[10px] tracking-[0.16em] uppercase opacity-80">{label}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 /**
  * Full-bleed advert landing for /flash-sale — urgency, offer, countdown, CTA.
@@ -139,7 +107,11 @@ export function FlashSaleLanding() {
               <p className="mb-3 text-[11px] font-semibold tracking-[0.2em] text-[var(--color-accent)] uppercase">
                 {phase === "upcoming" ? "Opens in" : "Ends in"}
               </p>
-              <CountdownBlocks time={time} />
+              <CountdownBlocks
+                units={flashSaleCountdownUnits(time)}
+                size="lg"
+                className="flex flex-wrap justify-center gap-2.5 sm:gap-3"
+              />
             </>
           ) : ready ? (
             <p className="text-sm text-white/80">The private opening window has closed.</p>
@@ -162,24 +134,15 @@ export function FlashSaleLanding() {
           className="mt-10 flex flex-wrap items-center justify-center gap-3"
         >
           {ready && !time ? (
-            <Link
-              href="/shop"
-              className="inline-flex min-h-11 items-center justify-center bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)]"
-            >
+            <Link href="/shop" className={accentFillCtaClass}>
               Explore the collection
             </Link>
           ) : (
             <>
-              <a
-                href="#opening-edit"
-                className="inline-flex min-h-11 items-center justify-center bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)]"
-              >
+              <a href="#opening-edit" className={accentFillCtaClass}>
                 Shop the opening edit
               </a>
-              <Link
-                href="/shop"
-                className="inline-flex min-h-11 items-center justify-center border border-[color-mix(in_srgb,var(--color-accent)_55%,white)] px-7 text-sm font-semibold text-white transition-colors hover:border-[var(--color-accent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_14%,transparent)]"
-              >
+              <Link href="/shop" className={ghostOnDarkCtaClass}>
                 Browse all fragrances
               </Link>
             </>

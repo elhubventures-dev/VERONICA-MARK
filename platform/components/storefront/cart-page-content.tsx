@@ -8,6 +8,7 @@ import { CartSummary } from "@/components/commerce/cart-summary";
 import { CouponInput } from "@/components/commerce/coupon-input";
 import { EmptyCart } from "@/components/commerce/empty-cart";
 import { ShippingEstimator } from "@/components/commerce/shipping-estimator";
+import { Reveal } from "@/components/storefront/reveal";
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/features/cart/cart-context";
@@ -88,10 +89,12 @@ export function CartPageContent() {
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
-      <h1 className="font-display text-3xl sm:text-4xl">Your Bag</h1>
-      <p className="mt-2 text-[var(--color-muted-foreground)]">
-        {lines.length} {lines.length === 1 ? "item" : "items"} · Sign in to complete your order
-      </p>
+      <Reveal>
+        <h1 className="font-display text-3xl sm:text-4xl">Your Bag</h1>
+        <p className="mt-2 text-[var(--color-muted-foreground)]">
+          {lines.length} {lines.length === 1 ? "item" : "items"} · Sign in to complete your order
+        </p>
+      </Reveal>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
         <div className="space-y-4">
@@ -130,7 +133,7 @@ export function CartPageContent() {
           />
         </div>
 
-        <div className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <Reveal className="space-y-4 lg:sticky lg:top-24 lg:self-start" delay={0.06}>
           <CouponInput
             appliedCode={couponCode ?? undefined}
             onApply={handleApplyCoupon}
@@ -168,7 +171,7 @@ export function CartPageContent() {
             <Link href="/shop">Continue shopping</Link>
           </Button>
           <TrustSignals variant="compact" />
-        </div>
+        </Reveal>
       </div>
     </div>
   );

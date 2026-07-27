@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
-import { focusRingClass, motionTransition } from "@/lib/motion";
+import { editorialCtaClass, motionTransition } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 type RailBannerProps = {
   src: string;
@@ -66,10 +67,7 @@ export function RailBanner({
             </p>
           ) : null}
           {ctaLabel ? (
-            <Link
-              href={ctaHref}
-              className={`mt-7 inline-flex min-h-11 items-center border border-[var(--color-accent)] bg-transparent px-7 text-[0.7rem] font-semibold tracking-[0.18em] text-[var(--color-accent)] uppercase transition-[background-color,color,border-color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)] active:scale-[0.98] sm:mt-8 ${focusRingClass}`}
-            >
+            <Link href={ctaHref} className={cn("mt-7 sm:mt-8", editorialCtaClass)}>
               {ctaLabel}
             </Link>
           ) : null}

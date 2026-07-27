@@ -6,6 +6,7 @@ import * as React from "react";
 
 import { Price } from "@/components/commerce/price";
 import { EmptyState } from "@/components/data/empty-state";
+import { Reveal } from "@/components/storefront/reveal";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -45,7 +46,7 @@ export function CompareTable() {
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <Reveal className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl sm:text-4xl">Compare</h1>
           <p className="mt-2 text-[var(--color-muted-foreground)]">
@@ -55,7 +56,7 @@ export function CompareTable() {
         <Button type="button" variant="outline" onClick={clear}>
           Clear all
         </Button>
-      </div>
+      </Reveal>
 
       <div className="mt-10 overflow-x-auto rounded-xl border border-[var(--color-border)]">
         <Table>

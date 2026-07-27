@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
+import { Reveal } from "@/components/storefront/reveal";
 import { EmptyState } from "@/components/data/empty-state";
 import { Button } from "@/components/ui/button";
 import { useWishlist } from "@/features/wishlist/wishlist-context";
@@ -40,10 +41,12 @@ export function WishlistContent() {
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
-      <h1 className="font-display text-3xl sm:text-4xl">Wishlist</h1>
-      <p className="mt-2 text-[var(--color-muted-foreground)]">
-        {products.length} saved {products.length === 1 ? "fragrance" : "fragrances"}
-      </p>
+      <Reveal>
+        <h1 className="font-display text-3xl sm:text-4xl">Wishlist</h1>
+        <p className="mt-2 text-[var(--color-muted-foreground)]">
+          {products.length} saved {products.length === 1 ? "fragrance" : "fragrances"}
+        </p>
+      </Reveal>
       <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
         {products.map((product) => (
           <div key={product.id} className="relative">
@@ -51,7 +54,7 @@ export function WishlistContent() {
             <button
               type="button"
               onClick={() => remove(product.slug)}
-              className="absolute bottom-24 right-4 text-xs text-[var(--color-muted-foreground)] underline underline-offset-4 hover:text-[var(--color-error)]"
+              className="absolute bottom-24 right-4 text-xs text-[var(--color-muted-foreground)] underline underline-offset-4 transition-colors hover:text-[var(--color-error)]"
             >
               Remove
             </button>

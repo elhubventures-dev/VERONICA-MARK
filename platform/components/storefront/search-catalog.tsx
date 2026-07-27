@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
+import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import { SearchBar } from "@/components/search/search-bar";
 import { SearchEmpty } from "@/components/search/search-empty";
@@ -42,11 +43,13 @@ export function SearchCatalog({ products, query, total, page, totalPages }: Sear
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
-      <SectionHeading
-        eyebrow="Search"
-        title={query ? `Results for “${query}”` : "Find your fragrance"}
-        description="Search by name, brand, or category across the VERONICA MARK collection."
-      />
+      <Reveal>
+        <SectionHeading
+          eyebrow="Search"
+          title={query ? `Results for “${query}”` : "Find your fragrance"}
+          description="Search by name, brand, or category across the VERONICA MARK collection."
+        />
+      </Reveal>
 
       <div className="mb-8 max-w-xl">
         <SearchBar

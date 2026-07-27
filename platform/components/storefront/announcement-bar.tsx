@@ -2,7 +2,7 @@
 
 import { Flame, Gift, Sparkles, Tag, Zap } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const MESSAGE = "20% off · Code VM5AUG-20 · August Grand Opening";
 const COPIES = 8;
@@ -41,8 +41,19 @@ function TickerSegment() {
 export function AnnouncementBar() {
   const trackRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLAnchorElement>(null);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
+
     const track = trackRef.current;
     const root = rootRef.current;
     if (!track || !root) return;
@@ -88,7 +99,7 @@ export function AnnouncementBar() {
       root.removeEventListener("focusin", pause);
       root.removeEventListener("focusout", resume);
     };
-  }, []);
+  }, [reduceMotion]);
 
   return (
     <Link
@@ -97,14 +108,18 @@ export function AnnouncementBar() {
       className="relative block h-10 overflow-hidden bg-[var(--color-brand-deep)] text-xs font-semibold tracking-[0.16em] text-white uppercase focus-visible:outline-offset-[-2px]"
       aria-label={MESSAGE}
     >
-      <div
-        ref={trackRef}
-        className="absolute top-0 left-0 flex h-10 w-max items-center will-change-transform"
-        aria-hidden="true"
-      >
-        <TickerSegment />
-        <TickerSegment />
-      </div>
+      {reduceMotion ? (
+        <span className="flex h-10 items-center justify-center px-4">{MESSAGE}</span>
+      ) : (
+        <div
+          ref={trackRef}
+          className="absolute top-0 left-0 flex h-10 w-max items-center will-change-transform"
+          aria-hidden="true"
+        >
+          <TickerSegment />
+          <TickerSegment />
+        </div>
+      )}
     </Link>
   );
 }

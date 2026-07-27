@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { BrandMark } from "@/components/layout/brand-mark";
 import { MediaScrim } from "@/components/storefront/media-scrim";
+import { Reveal } from "@/components/storefront/reveal";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 const groups: { title: string; links: [string, string][] }[] = [
@@ -44,7 +45,7 @@ export function StorefrontFooter() {
         className="-z-20 object-cover"
       />
       <MediaScrim variant="center" />
-      <div className="relative mx-auto max-w-[1440px]">
+      <Reveal className="relative mx-auto max-w-[1440px]">
         <div className="grid gap-12 border-b border-white/15 pb-14 md:grid-cols-[1.5fr_2fr]">
           <div>
             <BrandMark href="/" variant="monogram" withWordmark size={40} className="text-white [&_span]:text-white" />
@@ -61,7 +62,7 @@ export function StorefrontFooter() {
                     <li key={href}>
                       <Link
                         href={href}
-                        className="inline-flex min-h-11 items-center text-sm text-white/70 hover:text-white"
+                        className="inline-flex min-h-11 items-center text-sm text-white/70 transition-colors duration-300 hover:text-white"
                       >
                         {label}
                       </Link>
@@ -76,7 +77,7 @@ export function StorefrontFooter() {
           <p>© {new Date().getFullYear()} VERONICA MARK. All rights reserved.</p>
           <p>Authenticity assured · Secure checkout · Curated for the Exceptional.</p>
         </div>
-      </div>
+      </Reveal>
     </footer>
   );
 }

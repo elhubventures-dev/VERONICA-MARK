@@ -5,7 +5,7 @@
 
 "use client";
 
-import { Loader2, ShoppingBag } from "lucide-react";
+import { Check, Loader2, ShoppingBag } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -28,20 +28,42 @@ export function AddToCartButton({
   onClick,
   ...props
 }: AddToCartButtonProps) {
+  const [justAdded, setJustAdded] = React.useState(false);
+  const wasLoading = React.useRef(false);
+
+  React.useEffect(() => {
+    if (wasLoading.current && !loading && !soldOut) {
+      setJustAdded(true);
+      const timer = window.setTimeout(() => setJustAdded(false), 1400);
+      wasLoading.current = false;
+      return () => window.clearTimeout(timer);
+    }
+    wasLoading.current = loading;
+  }, [loading, soldOut]);
+
+  const showSuccess = justAdded && !loading && !soldOut;
+
   return (
     <Button
       size={size}
-      className={cn("w-full sm:w-auto", className)}
+      className={cn(
+        "w-full transition-[transform,background-color] duration-300 active:scale-[0.98] sm:w-auto",
+        showSuccess &&
+          "bg-[color-mix(in_srgb,var(--color-success)_92%,black)] hover:bg-[color-mix(in_srgb,var(--color-success)_88%,black)]",
+        className,
+      )}
       disabled={disabled || loading || soldOut}
       onClick={onClick}
       {...props}
     >
       {loading ? (
         <Loader2 className="size-4 animate-spin" aria-hidden />
+      ) : showSuccess ? (
+        <Check className="size-4" aria-hidden />
       ) : (
         <ShoppingBag className="size-4" aria-hidden />
       )}
-      {soldOut ? "Out of Stock" : loading ? "Adding…" : label}
+      {soldOut ? "Out of Stock" : loading ? "Adding…" : showSuccess ? "Added" : label}
     </Button>
   );
 }

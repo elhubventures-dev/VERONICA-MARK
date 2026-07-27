@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import { GitCompare, Heart, Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ import { MobileNav } from "@/components/storefront/mobile-nav";
 import { useCart } from "@/features/cart/cart-context";
 import { useCompare } from "@/features/compare/compare-context";
 import { useWishlist } from "@/features/wishlist/wishlist-context";
+import { motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const shopColumns = [
@@ -65,20 +67,28 @@ function IconLink({
   children: React.ReactNode;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
     <Link
       href={href}
       aria-label={count ? `${label}, ${count} items` : label}
       className={cn(
-        "relative inline-flex size-10 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] transition-colors hover:bg-[var(--color-muted)]",
+        "relative inline-flex size-10 items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] transition-[background-color,transform,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-[var(--color-muted)] active:scale-[0.94]",
         className,
       )}
     >
       {children}
       {count && count > 0 ? (
-        <span className="absolute -top-1 -right-1 inline-flex min-w-5 items-center justify-center rounded-full bg-[var(--color-primary)] px-1 text-[10px] font-semibold text-white">
+        <motion.span
+          key={count}
+          initial={reduceMotion ? false : { scale: 0.6 }}
+          animate={{ scale: 1 }}
+          transition={motionTransition(reduceMotion, 0.25)}
+          className="absolute -top-1 -right-1 inline-flex min-w-5 items-center justify-center rounded-full bg-[var(--color-primary)] px-1 text-[10px] font-semibold text-white"
+        >
           {count > 99 ? "99+" : count}
-        </span>
+        </motion.span>
       ) : null}
     </Link>
   );
@@ -110,7 +120,7 @@ export function StorefrontHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium whitespace-nowrap text-[var(--color-muted-foreground)] transition-colors hover:text-[var(--color-foreground)]"
+              className="relative text-sm font-medium whitespace-nowrap text-[var(--color-muted-foreground)] transition-colors after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[var(--color-accent)] after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[var(--color-foreground)] hover:after:scale-x-100"
             >
               {link.label}
             </Link>
@@ -120,7 +130,7 @@ export function StorefrontHeader() {
         <div className="ml-auto flex items-center gap-2">
           <Link
             href="/search"
-            className="relative hidden min-h-10 min-w-[11rem] items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-muted-foreground)] transition-colors hover:bg-[var(--color-muted)] md:inline-flex"
+            className="relative hidden min-h-10 min-w-[11rem] items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-muted-foreground)] transition-[background-color,transform] duration-300 hover:bg-[var(--color-muted)] active:scale-[0.98] md:inline-flex"
             aria-label="Search the collection"
           >
             <Search className="size-4 shrink-0" aria-hidden />

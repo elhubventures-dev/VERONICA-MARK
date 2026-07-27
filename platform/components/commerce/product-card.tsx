@@ -73,7 +73,7 @@ export function ProductCard({
       viewport={{ once: true }}
       transition={motionTransition(reduceMotion)}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]",
+        "group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-[0_16px_40px_color-mix(in_srgb,var(--color-brand-deep)_14%,transparent)]",
         !inStock && "opacity-90",
         className,
       )}
@@ -89,7 +89,7 @@ export function ProductCard({
             fill
             sizes="(max-width:768px) 50vw, 320px"
             className={cn(
-              "object-contain transition-transform duration-500 group-hover:scale-[1.03]",
+              "object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]",
               !inStock && "grayscale-[0.35]",
             )}
           />

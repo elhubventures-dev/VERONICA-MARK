@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
+import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import { demoProducts } from "@/lib/storefront/demo-catalog";
 
@@ -53,7 +54,9 @@ export function RecentlyViewedRail({
   return (
     <section className="border-t border-[var(--color-border)] px-5 py-16 sm:px-8">
       <div className="mx-auto max-w-[1440px]">
-        <SectionHeading eyebrow="Your journey" title={title} />
+        <Reveal>
+          <SectionHeading eyebrow="Your journey" title={title} />
+        </Reveal>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
           {products.slice(0, 4).map((product) => (
             <CatalogProductCard key={product.id} product={product} />

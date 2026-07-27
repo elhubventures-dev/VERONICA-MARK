@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
 import { CatalogProductCard } from "@/components/storefront/catalog-product-card";
+import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import { ActiveFilters } from "@/components/search/active-filters";
 import { FacetedFilter } from "@/components/search/faceted-filter";
@@ -124,10 +125,13 @@ export function ShopCatalog({
 
   return (
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
-      <SectionHeading eyebrow="VERONICA MARK" title={title} description={description} />
+      <Reveal>
+        <SectionHeading eyebrow="VERONICA MARK" title={title} description={description} />
+      </Reveal>
 
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <FilterPanel
+          className="lg:sticky lg:top-24 lg:self-start"
           footer={
             <Button
               type="button"
@@ -190,7 +194,7 @@ export function ShopCatalog({
           />
 
           {products.length === 0 ? (
-            <div className="flex flex-col items-center rounded-xl border border-dashed border-[var(--color-border)] px-6 py-16 text-center">
+            <Reveal className="flex flex-col items-center rounded-xl border border-dashed border-[var(--color-border)] px-6 py-16 text-center">
               <h3 className="font-display text-xl">{emptyTitle}</h3>
               <p className="mt-2 max-w-md text-sm text-[var(--color-muted-foreground)]">
                 {emptyDescription}
@@ -203,7 +207,7 @@ export function ShopCatalog({
                   <Link href="/shop">Browse all fragrances</Link>
                 </Button>
               </div>
-            </div>
+            </Reveal>
           ) : (
             <>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">

@@ -4,6 +4,8 @@ import Link from "next/link";
 import * as React from "react";
 
 import { PageBanner } from "@/components/storefront/page-banner";
+import { Reveal } from "@/components/storefront/reveal";
+import { brandFillCtaClass } from "@/lib/motion";
 import { storefrontContact } from "@/lib/storefront/contact";
 import type { LegalSection } from "@/lib/storefront/legal-content";
 import { LEGAL_LAST_UPDATED } from "@/lib/storefront/legal-content";
@@ -94,22 +96,23 @@ export function LegalDocumentPage({
 
           <div className="page-split__main space-y-12">
             {sections.map((section) => (
-              <section
-                key={section.id}
-                id={section.id}
-                className="scroll-mt-28"
-                onFocusCapture={() => setActive(section.id)}
-              >
-                <h2 className="font-display text-2xl sm:text-3xl">{section.title}</h2>
-                <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--color-muted-foreground)] sm:text-base sm:leading-8">
-                  {section.paragraphs.map((paragraph, index) => (
-                    <p key={`${section.id}-${index}`}>{paragraph}</p>
-                  ))}
-                </div>
-              </section>
+              <Reveal key={section.id}>
+                <section
+                  id={section.id}
+                  className="scroll-mt-28"
+                  onFocusCapture={() => setActive(section.id)}
+                >
+                  <h2 className="font-display text-2xl sm:text-3xl">{section.title}</h2>
+                  <div className="mt-5 space-y-4 text-sm leading-7 text-[var(--color-muted-foreground)] sm:text-base sm:leading-8">
+                    {section.paragraphs.map((paragraph, index) => (
+                      <p key={`${section.id}-${index}`}>{paragraph}</p>
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
             ))}
 
-            <div className="border-t border-[var(--color-border)] pt-12">
+            <Reveal className="border-t border-[var(--color-border)] pt-12">
               <p className="text-xs font-semibold tracking-[0.2em] text-[var(--color-primary)] uppercase">
                 Need help?
               </p>
@@ -133,13 +136,10 @@ export function LegalDocumentPage({
                 </a>
                 .
               </p>
-              <Link
-                href="/contact"
-                className="mt-6 inline-flex min-h-11 items-center justify-center bg-[var(--color-brand-deep)] px-7 text-sm font-semibold text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-brand-deep)_88%,black)]"
-              >
+              <Link href="/contact" className={`mt-6 ${brandFillCtaClass}`}>
                 Contact us
               </Link>
-            </div>
+            </Reveal>
           </div>
         </div>
       </div>

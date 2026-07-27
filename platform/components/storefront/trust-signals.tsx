@@ -3,11 +3,13 @@
 import { BadgeCheck, Lock, PackageCheck, ShieldCheck, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
+import { Reveal } from "@/components/storefront/reveal";
 import { useRegion } from "@/features/storefront/region-context";
 import {
   DOMESTIC_SHIPPING_RATES,
   INTERNATIONAL_SHIPPING_RATE,
 } from "@/lib/commerce/shipping-rates";
+import { staggerDelay } from "@/lib/motion";
 import {
   OPENING_COUPON_CODE,
   OPENING_DISCOUNT_PERCENT,
@@ -120,31 +122,32 @@ export function TrustSignals({ variant = "compact", className }: TrustSignalsPro
 
   return (
     <ul className={cn("grid grid-cols-1 gap-3", className)}>
-      {list.map(({ icon: Icon, title, body }) => (
-        <li
-          key={title}
-          className={cn(
-            "rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]",
-            variant === "compact" ? "p-3" : "p-5",
-          )}
-        >
-          <div className="flex items-start gap-3">
-            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--color-primary)_8%,var(--color-surface))] text-[var(--color-primary)]">
-              <Icon className="size-4" aria-hidden />
-            </span>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium leading-snug">{title}</p>
-              <p
-                className={cn(
-                  "mt-1 text-[var(--color-muted-foreground)]",
-                  variant === "compact" ? "text-xs leading-snug" : "text-sm leading-relaxed",
-                )}
-              >
-                {body}
-              </p>
+      {list.map(({ icon: Icon, title, body }, index) => (
+        <Reveal key={title} delay={staggerDelay(index, 0.05)}>
+          <li
+            className={cn(
+              "rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]",
+              variant === "compact" ? "p-3" : "p-5",
+            )}
+          >
+            <div className="flex items-start gap-3">
+              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--color-primary)_8%,var(--color-surface))] text-[var(--color-primary)]">
+                <Icon className="size-4" aria-hidden />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium leading-snug">{title}</p>
+                <p
+                  className={cn(
+                    "mt-1 text-[var(--color-muted-foreground)]",
+                    variant === "compact" ? "text-xs leading-snug" : "text-sm leading-relaxed",
+                  )}
+                >
+                  {body}
+                </p>
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        </Reveal>
       ))}
     </ul>
   );

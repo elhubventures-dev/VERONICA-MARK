@@ -117,7 +117,7 @@ export function MobileBottomNav() {
                       : item.label
                   }
                   className={cn(
-                    "relative flex h-full flex-col items-center justify-center gap-1 px-1 text-[10px] font-medium tracking-[0.08em] uppercase transition-colors",
+                    "relative flex h-full flex-col items-center justify-center gap-1 px-1 text-[10px] font-medium tracking-[0.08em] uppercase transition-[color,transform,opacity] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.94]",
                     active
                       ? "text-[var(--color-primary)]"
                       : "text-[var(--color-muted-foreground)] hover:text-[var(--color-foreground)]",
@@ -125,7 +125,10 @@ export function MobileBottomNav() {
                 >
                   <span className="relative inline-flex">
                     <Icon
-                      className="size-[1.15rem]"
+                      className={cn(
+                        "size-[1.15rem] transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                        active && "scale-105",
+                      )}
                       strokeWidth={active ? 2.25 : 1.75}
                       aria-hidden
                     />

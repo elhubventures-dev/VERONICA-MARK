@@ -4,32 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
+import {
+  CountdownBlocks,
+  flashSaleCountdownUnits,
+} from "@/components/storefront/countdown-blocks";
 import { MediaScrim } from "@/components/storefront/media-scrim";
+import { Reveal } from "@/components/storefront/reveal";
+import { editorialCtaClass } from "@/lib/motion";
 import { flashSale } from "@/lib/storefront/demo-catalog";
+import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
 
-function remaining() {
-  const now = Date.now();
-  const startsAt = new Date(flashSale.startsAt).getTime();
-  const endsAt = new Date(flashSale.endsAt).getTime();
-  // Before open → count to start; during sale → count to end; after close → hide timer
-  const target = now < startsAt ? startsAt : endsAt;
-  const delta = target - now;
-  if (delta <= 0) return null;
-  return {
-    phase: now < startsAt ? ("upcoming" as const) : ("live" as const),
-    days: Math.floor(delta / 86_400_000),
-    hours: Math.floor((delta / 3_600_000) % 24),
-    minutes: Math.floor((delta / 60_000) % 60),
-    seconds: Math.floor((delta / 1000) % 60),
-  };
-}
-
 export function FlashSaleCountdown() {
-  const [time, setTime] = React.useState<ReturnType<typeof remaining>>();
+  const [time, setTime] = React.useState<ReturnType<typeof getFlashSaleRemaining>>();
 
   React.useEffect(() => {
-    const update = () => setTime(remaining());
+    const update = () => setTime(getFlashSaleRemaining());
     update();
     const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
@@ -45,7 +35,7 @@ export function FlashSaleCountdown() {
         className="-z-20 object-cover"
       />
       <MediaScrim variant="left" />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_auto]">
+      <Reveal className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_auto]">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[var(--color-accent)] uppercase">
             {time?.phase === "upcoming" ? "Opens 1 August" : "Limited opening event"}
@@ -63,45 +53,17 @@ export function FlashSaleCountdown() {
         </div>
         {time ? (
           <div className="flex flex-col items-start gap-4 lg:items-end">
-            <div className="flex flex-wrap gap-3" aria-label="Time remaining">
-              {(
-                [
-                  ["Days", time.days],
-                  ["Hours", time.hours],
-                  ["Mins", time.minutes],
-                  ["Secs", time.seconds],
-                ] as const
-              ).map(([label, value]) => (
-                <div
-                  key={label}
-                  className="min-w-[4.5rem] border px-3 py-3 text-center"
-                  style={{
-                    backgroundColor: "#c7a25a",
-                    color: "#3a013c",
-                    borderColor: "#3a013c",
-                  }}
-                >
-                  <div className="font-display text-2xl tabular-nums">{String(value).padStart(2, "0")}</div>
-                  <div className="mt-1 text-[10px] tracking-[0.16em] uppercase opacity-80">{label}</div>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/flash-sale"
-              className="inline-flex min-h-11 items-center justify-center border border-[var(--color-accent)] bg-[var(--color-brand-deep)] px-6 text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]"
-            >
+            <CountdownBlocks units={flashSaleCountdownUnits(time)} size="md" />
+            <Link href="/flash-sale" className={editorialCtaClass}>
               View the opening edit
             </Link>
           </div>
         ) : (
-          <Link
-            href="/shop"
-            className="inline-flex min-h-11 items-center justify-center border border-[var(--color-accent)] px-6 text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]"
-          >
+          <Link href="/shop" className={editorialCtaClass}>
             Shop the collection
           </Link>
         )}
-      </div>
+      </Reveal>
     </section>
   );
 }

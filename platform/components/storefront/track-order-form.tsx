@@ -3,6 +3,8 @@
 import Link from "next/link";
 import * as React from "react";
 
+import { brandFillCtaClass } from "@/lib/motion";
+
 export function TrackOrderForm() {
   const [message, setMessage] = React.useState("");
 
@@ -42,7 +44,7 @@ export function TrackOrderForm() {
           className="min-h-11 w-full border border-border bg-surface px-4 focus:border-accent focus:outline-none"
         />
       </div>
-      <button type="submit" className="min-h-11 bg-[var(--color-brand-deep)] px-7 font-semibold text-white transition-colors hover:bg-[color-mix(in_srgb,var(--color-brand-deep)_88%,black)]">
+      <button type="submit" className={brandFillCtaClass}>
         Track order
       </button>
       <p aria-live="polite" className="min-h-6 text-sm text-muted-foreground">

@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { submitNewsletterSignupAction } from "@/features/contact/actions";
+import { accentFillCtaClass } from "@/lib/motion";
 
 export function NewsletterForm() {
   const [status, setStatus] = React.useState<"idle" | "error" | "success" | "pending">("idle");
@@ -49,7 +50,7 @@ export function NewsletterForm() {
         <button
           type="submit"
           disabled={status === "pending"}
-          className="min-h-11 bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] transition-colors hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)] disabled:opacity-60"
+          className={`${accentFillCtaClass} disabled:opacity-60`}
         >
           {status === "pending" ? "Joining…" : "Join the list"}
         </button>

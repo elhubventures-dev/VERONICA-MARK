@@ -1,9 +1,13 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { BrandMark } from "@/components/layout/brand-mark";
 import { MediaScrim } from "@/components/storefront/media-scrim";
+import { editorialCtaClass, motionTransition } from "@/lib/motion";
 import { storefrontContact } from "@/lib/storefront/contact";
 import {
   flashSale,
@@ -28,6 +32,7 @@ const panelHighlights = [
 ] as const;
 
 export function AuthShell({ children, title, description, className }: AuthShellProps) {
+  const reduceMotion = useReducedMotion();
   const discount = flashSale.discountPercent ?? OPENING_DISCOUNT_PERCENT;
   const coupon = flashSale.couponCode ?? OPENING_COUPON_CODE;
 
@@ -57,10 +62,14 @@ export function AuthShell({ children, title, description, className }: AuthShell
             priority
           />
 
-          {/* Explicit spacer — keeps Client account clear of the logo */}
           <div aria-hidden className="shrink-0" style={{ height: "7.5rem" }} />
 
-          <div className="max-w-md text-white">
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={motionTransition(reduceMotion, 0.6)}
+            className="max-w-md text-white"
+          >
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase">
               Client account
             </p>
@@ -96,19 +105,16 @@ export function AuthShell({ children, title, description, className }: AuthShell
               </p>
               <Link
                 href="/flash-sale"
-                className="mt-2 inline-flex text-xs font-semibold tracking-[0.12em] text-white/80 uppercase underline-offset-4 hover:text-[var(--color-accent)] hover:underline"
+                className="mt-2 inline-flex text-xs font-semibold tracking-[0.12em] text-white/80 uppercase underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
               >
                 View the opening edit
               </Link>
             </div>
 
-            <Link
-              href="/shop"
-              className="mt-8 inline-flex min-h-11 items-center border border-[var(--color-accent)] px-6 text-sm font-semibold text-[var(--color-accent)] transition-colors hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)]"
-            >
+            <Link href="/shop" className={`mt-8 ${editorialCtaClass}`}>
               Explore the collection
             </Link>
-          </div>
+          </motion.div>
         </div>
       </aside>
 
@@ -124,7 +130,12 @@ export function AuthShell({ children, title, description, className }: AuthShell
           <div className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-brand-deep)_96%,transparent)_0%,color-mix(in_srgb,var(--color-brand-field)_90%,transparent)_48%,color-mix(in_srgb,var(--color-brand-deep)_97%,transparent)_100%)]" />
         </div>
 
-        <header className="relative text-center lg:text-left">
+        <motion.header
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={motionTransition(reduceMotion, 0.5)}
+          className="relative text-center lg:text-left"
+        >
           <BrandMark
             variant="icon"
             withWordmark
@@ -152,7 +163,7 @@ export function AuthShell({ children, title, description, className }: AuthShell
               Private Opening Edit
             </Link>
           </p>
-        </header>
+        </motion.header>
 
         <main
           className={cn(
@@ -171,25 +182,25 @@ export function AuthShell({ children, title, description, className }: AuthShell
           >
             <Link
               href="/"
-              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
+              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] transition-colors hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
             >
               Storefront
             </Link>
             <Link
               href="/auth/sign-in"
-              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
+              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] transition-colors hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
             >
               Sign in
             </Link>
             <Link
               href="/auth/sign-up"
-              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
+              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] transition-colors hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
             >
               Create account
             </Link>
             <Link
               href="/contact"
-              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
+              className="min-h-[var(--touch-target)] leading-[var(--touch-target)] transition-colors hover:text-[var(--color-primary)] max-lg:hover:text-[var(--color-accent)]"
             >
               Contact
             </Link>

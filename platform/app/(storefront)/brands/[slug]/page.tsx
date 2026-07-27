@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { BrandPageHero } from "@/components/storefront/brand-page-hero";
 import { ShopCatalog } from "@/components/storefront/shop-catalog";
-import { MediaScrim } from "@/components/storefront/media-scrim";
 import { getBrandDetail, getBrandProducts, getFilterFacets } from "@/lib/storefront/catalog-queries";
 import { demoBrands, type SortValue } from "@/lib/storefront/demo-catalog";
 
@@ -38,26 +37,7 @@ export default async function BrandPage({ params, searchParams }: BrandPageProps
 
   return (
     <>
-      <div className="relative mx-auto max-w-[1440px] px-5 pt-12 sm:px-8">
-        <div className="relative isolate h-48 overflow-hidden rounded-xl bg-[var(--color-brand-deep)] md:h-64">
-          <Image
-            src={brand.image}
-            alt=""
-            fill
-            className="-z-20 object-cover"
-            sizes="100vw"
-            priority
-          />
-          <MediaScrim variant="left" />
-          <div className="absolute bottom-6 left-6 text-white">
-            <p className="text-xs tracking-[0.16em] text-[var(--color-accent)] uppercase">Maison</p>
-            <h1 className="font-display text-3xl drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] md:text-4xl">
-              {brand.name}
-            </h1>
-          </div>
-        </div>
-        <p className="mt-4 max-w-2xl text-[var(--color-muted-foreground)]">{brand.description}</p>
-      </div>
+      <BrandPageHero name={brand.name} description={brand.description} image={brand.image} />
 
       <Suspense fallback={<div className="px-5 py-16 text-center">Loading…</div>}>
         <ShopCatalog

@@ -267,3 +267,17 @@
     }
   }
 }
+
+@keyframes vm-loading-soft {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.vm-loading-copy {
+  animation: vm-loading-soft 1.8s ease-in-out infinite;
+}

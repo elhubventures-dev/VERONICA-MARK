@@ -190,9 +190,8 @@ async function main() {
       name: "VMA SCENTS",
       description:
         "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
-      logo: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1200&q=85",
-      banner:
-        "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1600&q=85",
+      logo: "/media/brands/vma-scents.png",
+      banner: "/media/brands/vma-scents.png",
     },
     create: {
       name: "VMA SCENTS",
@@ -204,9 +203,8 @@ async function main() {
       status: BrandStatus.ACTIVE,
       contactEmail: "scents@veronicamark.com",
       contactPhone: "+2348000000000",
-      logo: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1200&q=85",
-      banner:
-        "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1600&q=85",
+      logo: "/media/brands/vma-scents.png",
+      banner: "/media/brands/vma-scents.png",
     },
   });
 
