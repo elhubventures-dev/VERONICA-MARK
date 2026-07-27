@@ -10,4 +10,9 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
   additionalPrecacheEntries: [{ url: "/~offline", revision }],
   swSrc: "app/sw.ts",
   useNativeEsbuild: true,
+  // Next's default browserslist (chrome64…) can't downlevel object destructuring in
+  // Serwist/idb. Target modern SW engines that support it natively.
+  esbuildOptions: {
+    target: ["chrome90", "edge90", "firefox90", "safari15"],
+  },
 });
