@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { submitContactEnquiryAction } from "@/features/contact/actions";
 
 const TOPICS = [
   { value: "general", label: "General enquiry" },
@@ -14,7 +15,7 @@ const TOPICS = [
   { value: "other", label: "Something else" },
 ] as const;
 
-type Status = "idle" | "error" | "success";
+type Status = "idle" | "error" | "success" | "pending";
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -24,7 +25,7 @@ export function ContactEnquiryForm() {
   const [status, setStatus] = React.useState<Status>("idle");
   const [error, setError] = React.useState("");
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
@@ -49,13 +50,20 @@ export function ContactEnquiryForm() {
       return;
     }
 
-    setStatus("success");
+    setStatus("pending");
     setError("");
+    const result = await submitContactEnquiryAction({ name, email, topic, message });
+    if (!result.ok) {
+      setStatus("error");
+      setError(result.message);
+      return;
+    }
+    setStatus("success");
     form.reset();
   }
 
   return (
-    <form onSubmit={submit} noValidate className="space-y-5" aria-describedby="enquiry-status">
+    <form onSubmit={(e) => void submit(e)} noValidate className="space-y-5" aria-describedby="enquiry-status">
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="enquiry-name">Full name</Label>
@@ -65,6 +73,7 @@ export function ContactEnquiryForm() {
             autoComplete="name"
             placeholder="Your name"
             required
+            disabled={status === "pending"}
           />
         </div>
         <div className="space-y-2">
@@ -76,6 +85,7 @@ export function ContactEnquiryForm() {
             autoComplete="email"
             placeholder="you@example.com"
             required
+            disabled={status === "pending"}
           />
         </div>
       </div>
@@ -87,6 +97,7 @@ export function ContactEnquiryForm() {
           name="topic"
           required
           defaultValue=""
+          disabled={status === "pending"}
           className="flex h-11 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 text-sm text-[var(--color-foreground)] shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:outline-none"
         >
           <option value="" disabled>
@@ -108,11 +119,12 @@ export function ContactEnquiryForm() {
           rows={5}
           placeholder="How can we help?"
           required
+          disabled={status === "pending"}
         />
       </div>
 
-      <Button type="submit" className="min-w-[10rem]">
-        Send message
+      <Button type="submit" className="min-w-[10rem]" disabled={status === "pending"}>
+        {status === "pending" ? "Sending…" : "Send message"}
       </Button>
 
       <p

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { OrderStatus, type Currency } from "@prisma/client";
 
 import {
+  buildOrderAdminDetails,
   buildOrderEmailVars,
   formatOrderMoney,
   resolveOrderRecipient,
@@ -119,5 +120,14 @@ describe("order email helpers", () => {
     expect(vars.invoiceUrl).toContain("/invoices/VM-2026-0001");
     expect(vars.items?.[0]?.name).toContain("Noir Éclat");
     expect(vars.currencyNote).toContain("include tax");
+  });
+
+  it("builds full admin detail rows including shipping fields", () => {
+    const details = buildOrderAdminDetails(mockOrder(), { statusLabel: "Paid" });
+    const labels = details.map((d) => d.label);
+    expect(labels).toContain("Customer email");
+    expect(labels).toContain("Address line 1");
+    expect(labels).toContain("State");
+    expect(labels).toContain("Total");
   });
 });

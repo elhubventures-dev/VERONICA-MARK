@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { authConfig } from "@/lib/auth/config";
 import { createCsrfToken, CSRF_COOKIE_NAME, setCsrfCookie } from "@/lib/auth/csrf";
 import { ensureGuestId, setGuestCookie } from "@/lib/auth/guest";
-import { hasRequiredRole, matchRoute } from "@/lib/auth/rbac";
+import { getHomePathForRole, hasRequiredRole, matchRoute } from "@/lib/auth/rbac";
 import {
   GEO_COUNTRY_COOKIE,
   GEO_COUNTRY_COOKIE_MAX_AGE,
@@ -75,7 +75,9 @@ export default auth((request) => {
   }
 
   if (!hasRequiredRole(session.user.role, rule.roles)) {
-    return finalize(NextResponse.redirect(new URL("/forbidden", request.nextUrl.origin)));
+    // Wrong portal (e.g. customer hitting /admin) → that role's dashboard, not a dead end.
+    const home = getHomePathForRole(session.user.role);
+    return finalize(NextResponse.redirect(new URL(home, request.nextUrl.origin)));
   }
 
   return finalize(

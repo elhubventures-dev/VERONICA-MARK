@@ -14,7 +14,7 @@ type Story = StoryObj<typeof StatWidget>;
 export const Default: Story = {
   args: {
         "label": "Avg. order value",
-    "value": "€142",
+    "value": "₦213,000",
     "hint": "Across all brands"
   },
 };

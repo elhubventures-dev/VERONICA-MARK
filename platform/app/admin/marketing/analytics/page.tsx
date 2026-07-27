@@ -26,7 +26,7 @@ export default async function MarketingAnalyticsPage() {
       />
 
       <section aria-label="Marketing analytics KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Promo revenue (30d)" value={formatPrice(analytics.promoRevenue30d, "EUR")} icon={<ShoppingBag className="size-4" />} />
+        <KpiCard label="Promo revenue (30d)" value={formatPrice(analytics.promoRevenue30d, "NGN")} icon={<ShoppingBag className="size-4" />} />
         <KpiCard label="Coupon redemptions" value={analytics.couponRedemptions30d.toLocaleString()} icon={<TicketPercent className="size-4" />} />
         <KpiCard label="Email open rate" value={`${analytics.emailOpenRate.toFixed(1)}%`} icon={<Mail className="size-4" />} />
         <KpiCard label="Push open rate" value={`${analytics.pushOpenRate.toFixed(1)}%`} icon={<Bell className="size-4" />} />

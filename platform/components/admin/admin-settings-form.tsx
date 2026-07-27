@@ -121,9 +121,8 @@ export function AdminSettingsForm({ initialSettings }: AdminSettingsFormProps) {
                 <SelectValue placeholder="Choose currency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="EUR">EUR</SelectItem>
+                <SelectItem value="NGN">NGN</SelectItem>
                 <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="AED">AED</SelectItem>
               </SelectContent>
             </Select>
           </div>

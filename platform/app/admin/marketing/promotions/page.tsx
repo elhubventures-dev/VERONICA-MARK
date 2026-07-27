@@ -43,7 +43,7 @@ function formatPromotionValue(type: "PERCENTAGE" | "FIXED_AMOUNT" | "FREE_SHIPPI
     case "PERCENTAGE":
       return `${value}% off`;
     case "FIXED_AMOUNT":
-      return `${formatPrice(value, "EUR")} off`;
+      return `${formatPrice(value, "NGN")} off`;
     case "FREE_SHIPPING":
       return "Free shipping";
     case "BXGY":
@@ -97,7 +97,7 @@ export default async function MarketingPromotionsPage() {
             <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-subtle)]">
               <p className="text-sm text-[var(--color-muted-foreground)]">Attributed revenue</p>
               <p className="mt-2 font-display text-3xl text-[var(--color-foreground)]">
-                {formatPrice(totalRevenue, "EUR")}
+                {formatPrice(totalRevenue, "NGN")}
               </p>
             </article>
           </section>
@@ -153,7 +153,7 @@ export default async function MarketingPromotionsPage() {
                       <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)]/30 p-4">
                         <p className="text-[var(--color-muted-foreground)]">Revenue</p>
                         <p className="mt-1 font-medium text-[var(--color-foreground)]">
-                          {formatPrice(promotion.revenueAttributed, "EUR")}
+                          {formatPrice(promotion.revenueAttributed, "NGN")}
                         </p>
                       </div>
                       <div className="flex flex-wrap gap-2">

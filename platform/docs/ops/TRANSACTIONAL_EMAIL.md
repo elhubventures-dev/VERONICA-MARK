@@ -2,22 +2,36 @@
 
 Templates live in `emails/`. Sends go through Resend via `lib/email/send.ts`.
 
+## Paired client + admin copies
+
+Every customer-facing notification sends **two individually addressed emails**:
+
+1. **Client** — their template, addressed to them  
+2. **Admin** (`sales@veronicamark.com`, or `PLATFORM_ADMIN_EMAIL`) — `admin.event` (or `contact.internal_notify` for forms) with **full submitted details**
+
+Admin auth copies never include verification/reset token links.
+
 ## Live send hooks
 
-| Event | Template | Hook |
+| Event | Client template | Admin |
 |---|---|---|
-| Email verification | `auth.email_verification` | `lib/auth/email.ts` |
-| Password reset | `auth.password_reset` | `lib/auth/email.ts` |
-| Payment success (first finalize only) | `order.confirmation` + `brand.new_order` | `finalizePaystackPayment` |
-| Payment failed | `order.payment_failed` | `finalizePaystackPayment` fail branch |
-| Packed / shipped / OFD / delivered | `order.packed` … `order.delivered` | `updateBrandOrderFulfillmentAction` |
+| Email verification | `auth.email_verification` | `admin.event` (no token) |
+| Password reset | `auth.password_reset` | `admin.event` (no token) |
+| Payment success | `order.confirmation` | `admin.event` (full order + address + lines) |
+| Payment failed | `order.payment_failed` | `admin.event` |
+| Packed → delivered | matching `order.*` | `admin.event` |
+| Brand new order | `brand.new_order` (brand managers) | covered by paid confirmation admin copy |
+| Abandoned cart | `cart.abandoned_1/2` | `admin.event` |
+| Contact enquiry / order support | `contact.auto_reply` | `contact.internal_notify` → sales@ |
+| Newsletter signup | `newsletter.welcome` | `admin.event` |
 
-Idempotency for confirmation: `finalizePaystackPayment` returns early when `payment.status === PAID`, so verify + webhook cannot double-send.
+Idempotency for confirmation: `finalizePaystackPayment` returns early when already PAID.
 
 Email failures are logged and never fail payment or fulfillment.
 
 ## Env
 
 - `RESEND_API_KEY` — required in production
-- `EMAIL_FROM` — e.g. `VERONICA MARK <sales@veronicamark.com>`
+- `EMAIL_FROM` — e.g. `VERONICA MARK <sales@veronicamark.com>` (sender)
+- `PLATFORM_ADMIN_EMAIL` — optional override; defaults to `sales@veronicamark.com`
 - Without a key in development, sends are logged (`email.development_skip`)

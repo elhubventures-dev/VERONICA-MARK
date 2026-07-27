@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { Archive, PencilLine, RotateCcw } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -49,20 +50,16 @@ export function ProductActions({ productId, productName, initialStatus }: Produc
     setPending(false);
   }
 
-  function handleEdit() {
-    toast.message("Product editor", {
-      description: "Full field editing ships next — status changes are live and brand-scoped.",
-    });
-  }
-
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Badge variant={getStatusVariant(status)} className="rounded-lg capitalize">
         Status: {status}
       </Badge>
-      <Button type="button" variant="outline" size="sm" onClick={handleEdit} disabled={pending}>
-        <PencilLine aria-hidden />
-        Edit product
+      <Button asChild variant="outline" size="sm">
+        <Link href={`/brand/products/${productId}/edit`}>
+          <PencilLine aria-hidden />
+          Edit product
+        </Link>
       </Button>
       <Button
         type="button"

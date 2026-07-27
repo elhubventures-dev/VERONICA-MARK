@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { OrderStatusBadge } from "@/components/commerce/order-status-badge";
 import { Price } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { LineChart } from "@/components/charts/line-chart";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { KpiCard } from "@/components/dashboard/kpi-card";
@@ -50,7 +51,7 @@ export default async function BrandDashboardPage() {
       <section aria-label="Key metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           label="Sales today"
-          value={`€${analytics.salesToday.toFixed(2)}`}
+          value={formatPrice(analytics.salesToday, "NGN")}
           change={8}
           icon={<TrendingUp className="size-4" />}
         />

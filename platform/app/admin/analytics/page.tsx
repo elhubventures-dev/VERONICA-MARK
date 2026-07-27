@@ -29,7 +29,7 @@ export default async function AdminAnalyticsPage() {
       <section aria-label="Analytics KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           label="Revenue (30d)"
-          value={formatPrice(analytics.totalRevenue30d, "EUR")}
+          value={formatPrice(analytics.totalRevenue30d, "NGN")}
           change={12}
           icon={<ShoppingBag className="size-4" />}
         />

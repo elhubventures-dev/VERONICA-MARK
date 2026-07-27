@@ -22,7 +22,7 @@ type ProfileFormProps = {
 
 const genderOptions = ["Prefer not to say", "Female", "Male", "Non-binary"];
 const languageOptions = ["English", "French", "German", "Spanish", "Italian"];
-const currencyOptions = ["EUR", "USD", "GBP", "CHF"];
+const currencyOptions = ["NGN", "USD"];
 const timezoneOptions = ["Europe/Paris", "Europe/Berlin", "Europe/Madrid", "Europe/Rome", "UTC"];
 
 export function ProfileForm({ initialProfile }: ProfileFormProps) {

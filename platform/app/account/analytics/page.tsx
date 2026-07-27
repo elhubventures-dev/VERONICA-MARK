@@ -15,10 +15,11 @@ export const metadata: Metadata = {
 };
 
 function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-EU", {
+  return new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
-    minimumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 

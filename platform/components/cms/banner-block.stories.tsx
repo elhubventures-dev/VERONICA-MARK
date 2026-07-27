@@ -14,7 +14,7 @@ type Story = StoryObj<typeof BannerBlock>;
 export const Default: Story = {
   args: {
         "title": "Complimentary shipping",
-    "body": "On orders over €150 from participating brands.",
+    "body": "On orders over ₦225,000 from participating brands.",
     "variant": "info"
   },
 };

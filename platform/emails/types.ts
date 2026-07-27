@@ -39,6 +39,7 @@ export const EMAIL_TEMPLATE_KEYS = [
   "brand.flash_sale_alert",
   "contact.auto_reply",
   "contact.internal_notify",
+  "admin.event",
 ] as const;
 
 export type EmailTemplateKey = (typeof EMAIL_TEMPLATE_KEYS)[number];
@@ -200,7 +201,17 @@ export type ContactEmailVars = BaseEmailVars & {
   subject: string;
   message: string;
   topic?: string;
+  orderNumber?: string;
 };
+
+export type AdminEventVars = BaseEmailVars &
+  Partial<CtaVars> & {
+    eventTitle: string;
+    summary: string;
+    details?: DetailRow[];
+    items?: OrderLineVar[];
+    messageBody?: string;
+  };
 
 export type EmailVarsMap = {
   "auth.email_verification": AuthEmailVars;
@@ -243,6 +254,7 @@ export type EmailVarsMap = {
   "brand.flash_sale_alert": BrandOpsEmailVars;
   "contact.auto_reply": ContactEmailVars & Partial<CtaVars>;
   "contact.internal_notify": ContactEmailVars;
+  "admin.event": AdminEventVars;
 };
 
 export type RenderedEmail = {

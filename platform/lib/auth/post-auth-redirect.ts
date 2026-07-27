@@ -1,6 +1,6 @@
 import type { UserRole } from "@prisma/client";
 
-import { getHomePathForRole } from "@/lib/auth/rbac";
+import { canAccessPath, getHomePathForRole } from "@/lib/auth/rbac";
 
 const AUTH_PATH_PREFIX = "/auth/";
 
@@ -42,7 +42,8 @@ export function sanitizeCallbackPath(
 
 /**
  * Resolve where to send the user after a successful sign-in / sign-up.
- * Explicit safe callbackUrls win; otherwise land on the role home dashboard.
+ * Safe callbackUrls win only when the role may access that path; otherwise role home.
+ * Portal entry (`/admin`, `/brand`, `/account`) therefore lands staff/customers on their dashboard.
  */
 export function resolvePostAuthPath(options: {
   callbackUrl?: string | null;
@@ -51,7 +52,11 @@ export function resolvePostAuthPath(options: {
   origin?: string;
 }): string {
   const fromCallback = sanitizeCallbackPath(options.callbackUrl, options.origin);
-  if (fromCallback) return fromCallback;
+  if (fromCallback) {
+    if (!options.role || canAccessPath(options.role, fromCallback)) {
+      return fromCallback;
+    }
+  }
   if (options.role) return getHomePathForRole(options.role);
   return options.fallback ?? "/account";
 }

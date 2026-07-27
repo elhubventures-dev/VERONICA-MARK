@@ -5,9 +5,9 @@ import { escapeHtml } from "@/emails/layout";
 import { emailPreviewSamples } from "@/emails/preview-samples";
 
 describe("email templates catalog", () => {
-  it("registers all 40 approved template keys", () => {
-    expect(EMAIL_TEMPLATE_KEYS).toHaveLength(40);
-    expect(listEmailTemplates()).toHaveLength(40);
+  it("registers all 41 approved template keys", () => {
+    expect(EMAIL_TEMPLATE_KEYS).toHaveLength(41);
+    expect(listEmailTemplates()).toHaveLength(41);
   });
 
   it("renders every template from preview samples without throwing", () => {
@@ -60,5 +60,24 @@ describe("email templates catalog", () => {
 
     expect(rendered.html).toContain("Update email preferences");
     expect(rendered.text).toContain("Email preferences:");
+  });
+
+  it("renders admin event addressed to client services with full details", () => {
+    const rendered = renderEmail("admin.event", {
+      recipientName: "Client services",
+      eventTitle: "Order Paid · VM-2026-0001",
+      summary: "Camille · customer@example.com · ₦93,500",
+      details: [
+        { label: "Customer email", value: "customer@example.com" },
+        { label: "Address line 1", value: "12 Ada George Rd" },
+      ],
+      items: [{ name: "Noir Éclat", quantity: 1, priceLabel: "₦85,000" }],
+    });
+
+    expect(rendered.subject).toBe("[Admin] Order Paid · VM-2026-0001");
+    expect(rendered.html).toContain("Client services");
+    expect(rendered.html).toContain("customer@example.com");
+    expect(rendered.html).toContain("12 Ada George Rd");
+    expect(rendered.html).toContain("Noir Éclat");
   });
 });

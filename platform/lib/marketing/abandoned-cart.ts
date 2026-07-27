@@ -1,5 +1,6 @@
 import "server-only";
 
+import { notifyAdminEvent } from "@/lib/email/admin";
 import { sendTemplateEmail } from "@/lib/email/send";
 import { getPublicEnv } from "@/lib/env";
 import { logger } from "@/lib/logger";
@@ -283,6 +284,24 @@ export async function processAbandonedCartReminders(): Promise<AbandonedCartWork
         result.errors += 1;
         continue;
       }
+
+      await notifyAdminEvent({
+        clientEmail: vars.email,
+        eventTitle:
+          candidate.reminderCount === 0
+            ? "Abandoned cart · reminder 1"
+            : "Abandoned cart · reminder 2",
+        summary: `${vars.recipientName || "Customer"} (${vars.email}) left items in bag · ${vars.cartTotalLabel || ""}`.trim(),
+        details: [
+          { label: "Customer email", value: vars.email },
+          ...(vars.recipientName ? [{ label: "Name", value: vars.recipientName }] : []),
+          ...(vars.cartTotalLabel ? [{ label: "Bag total", value: vars.cartTotalLabel }] : []),
+          { label: "Reminder", value: String(candidate.reminderCount + 1) },
+        ],
+        items: vars.items,
+        ctaUrl: vars.ctaUrl,
+        ctaLabel: "View bag link",
+      });
 
       await prisma.abandonedCart.update({
         where: { id: candidate.id },

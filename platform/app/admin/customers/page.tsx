@@ -62,7 +62,7 @@ export default async function AdminCustomersPage() {
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <p className="text-sm text-[var(--color-muted-foreground)]">GMV represented</p>
           <p className="mt-2 font-display text-3xl">
-            {formatPrice(customers.reduce((sum, customer) => sum + customer.spend, 0), "EUR")}
+            {formatPrice(customers.reduce((sum, customer) => sum + customer.spend, 0), "NGN")}
           </p>
         </div>
       </section>
@@ -121,7 +121,7 @@ export default async function AdminCustomersPage() {
                     </div>
                     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)]/20 px-4 py-3">
                       <p className="text-sm text-[var(--color-muted-foreground)]">Lifetime spend</p>
-                      <p className="mt-1 font-display text-2xl">{formatPrice(customer.spend, "EUR")}</p>
+                      <p className="mt-1 font-display text-2xl">{formatPrice(customer.spend, "NGN")}</p>
                     </div>
                   </div>
                 </div>

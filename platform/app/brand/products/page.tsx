@@ -149,9 +149,14 @@ export default async function BrandProductsPage() {
                         </td>
                         <td className="px-5 py-4 font-medium">{product.sold30d}</td>
                         <td className="px-5 py-4 text-right">
-                          <Button asChild size="sm" variant="outline">
-                            <Link href={`/brand/products/${product.id}`}>View details</Link>
-                          </Button>
+                          <div className="flex justify-end gap-2">
+                            <Button asChild size="sm" variant="ghost">
+                              <Link href={`/brand/products/${product.id}/edit`}>Edit</Link>
+                            </Button>
+                            <Button asChild size="sm" variant="outline">
+                              <Link href={`/brand/products/${product.id}`}>View details</Link>
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -216,6 +221,9 @@ export default async function BrandProductsPage() {
 
                       <div className="mt-4 flex flex-wrap gap-2">
                         <Button asChild size="sm" variant="outline">
+                          <Link href={`/brand/products/${product.id}/edit`}>Edit</Link>
+                        </Button>
+                        <Button asChild size="sm" variant="ghost">
                           <Link href={`/brand/products/${product.id}`}>View details</Link>
                         </Button>
                         <Button asChild size="sm" variant="ghost">

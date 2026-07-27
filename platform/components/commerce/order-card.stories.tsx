@@ -17,7 +17,8 @@ export const Default: Story = {
     placedAt: "Jul 20, 2026",
     status: "shipped",
     itemCount: 2,
-    total: 370,
+    total: 539_400,
+    currency: "NGN",
     href: "/account/orders/vm-10482",
     previews: [
       {

@@ -18,7 +18,7 @@ export interface CurrencyInputProps {
   className?: string;
 }
 
-export function CurrencyInput({ label, value = 0, onChange, currency = "€", className }: CurrencyInputProps) {
+export function CurrencyInput({ label, value = 0, onChange, currency = "₦", className }: CurrencyInputProps) {
   const [display, setDisplay] = React.useState(String(value));
 
   React.useEffect(() => {

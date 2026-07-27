@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { BrandShell } from "@/components/brand/brand-shell";
 import { auth } from "@/lib/auth";
+import { getHomePathForRole } from "@/lib/auth/rbac";
 import { getBrandWorkspace } from "@/lib/brand/queries";
 
 export default async function BrandLayout({ children }: { children: React.ReactNode }) {
@@ -11,8 +12,8 @@ export default async function BrandLayout({ children }: { children: React.ReactN
     redirect("/auth/sign-in?callbackUrl=/brand");
   }
 
-  if (session.user.role !== "BRAND_MANAGER" && session.user.role !== "SUPER_ADMIN") {
-    redirect("/forbidden");
+  if (session.user.role !== "BRAND_MANAGER") {
+    redirect(getHomePathForRole(session.user.role));
   }
 
   const workspace = await getBrandWorkspace();

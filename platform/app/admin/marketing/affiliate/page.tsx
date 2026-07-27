@@ -71,7 +71,7 @@ export default async function MarketingAffiliatePage() {
             </article>
             <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-subtle)]">
               <p className="text-sm text-[var(--color-muted-foreground)]">Payouts due</p>
-              <p className="mt-2 font-display text-3xl">{formatPrice(totalPayouts, "EUR")}</p>
+              <p className="mt-2 font-display text-3xl">{formatPrice(totalPayouts, "NGN")}</p>
             </article>
           </section>
 

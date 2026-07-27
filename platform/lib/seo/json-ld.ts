@@ -38,7 +38,7 @@ export function productJsonLd(product: StorefrontProduct) {
     offers: {
       "@type": "Offer",
       url: absoluteUrl(`/products/${product.slug}`),
-      priceCurrency: "EUR",
+      priceCurrency: "NGN",
       price: product.price,
       availability: "https://schema.org/InStock",
     },

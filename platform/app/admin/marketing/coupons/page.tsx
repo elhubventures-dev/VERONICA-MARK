@@ -77,7 +77,7 @@ export default async function MarketingCouponsPage() {
                       </p>
                       <p>
                         <span className="font-medium text-[var(--color-foreground)]">Min order:</span>{" "}
-                        {coupon.minOrder > 0 ? formatPrice(coupon.minOrder, "EUR") : "None"}
+                        {coupon.minOrder > 0 ? formatPrice(coupon.minOrder, "NGN") : "None"}
                       </p>
                       <p>
                         <span className="font-medium text-[var(--color-foreground)]">Starts:</span>{" "}

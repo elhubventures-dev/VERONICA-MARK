@@ -1,5 +1,6 @@
 import { greet, resolveAppUrl } from "@/emails/layout";
 import type {
+  AdminEventVars,
   BrandOpsEmailVars,
   ContactEmailVars,
   EmailContent,
@@ -199,6 +200,7 @@ export function buildContactAutoReply(
     details: [
       { label: "Subject", value: vars.subject },
       ...(vars.topic ? [{ label: "Topic", value: vars.topic }] : []),
+      ...(vars.orderNumber ? [{ label: "Order", value: vars.orderNumber }] : []),
     ],
     cta: {
       label: vars.ctaLabel || "Visit VERONICA MARK",
@@ -214,7 +216,8 @@ export function buildContactInternalNotify(vars: ContactEmailVars): EmailContent
     eyebrow: "Internal",
     heading: "New contact form message",
     paragraphs: [
-      "A new message was submitted via the VERONICA MARK contact form.",
+      "Dear Client services,",
+      "A new message was submitted via the VERONICA MARK contact form. Full details are below.",
       vars.message,
     ],
     details: [
@@ -222,6 +225,33 @@ export function buildContactInternalNotify(vars: ContactEmailVars): EmailContent
       { label: "Email", value: vars.senderEmail },
       { label: "Subject", value: vars.subject },
       ...(vars.topic ? [{ label: "Topic", value: vars.topic }] : []),
+      ...(vars.orderNumber ? [{ label: "Order", value: vars.orderNumber }] : []),
     ],
+  };
+}
+
+export function buildAdminEvent(vars: AdminEventVars): EmailContent {
+  const appUrl = resolveAppUrl(vars.appUrl);
+  return {
+    subject: `[Admin] ${vars.eventTitle}`,
+    previewText: vars.summary,
+    eyebrow: "Admin notification",
+    heading: vars.eventTitle,
+    paragraphs: [
+      greet(vars.recipientName || "Client services"),
+      vars.summary,
+      ...(vars.messageBody ? [vars.messageBody] : []),
+    ],
+    details: vars.details,
+    items: vars.items,
+    cta: vars.ctaUrl
+      ? {
+          label: vars.ctaLabel || "Open admin",
+          href: vars.ctaUrl,
+        }
+      : {
+          label: "Open admin",
+          href: `${appUrl}/admin`,
+        },
   };
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { AdminShell } from "@/components/admin/admin-shell";
 import { auth } from "@/lib/auth";
+import { getHomePathForRole } from "@/lib/auth/rbac";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -11,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   if (session.user.role !== "SUPER_ADMIN") {
-    redirect("/forbidden");
+    redirect(getHomePathForRole(session.user.role));
   }
 
   return (

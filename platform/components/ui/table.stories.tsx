@@ -57,7 +57,7 @@ export const WithFooter: Story = {
       <TableBody>
         <TableRow>
           <TableCell>Silk Scarf</TableCell>
-          <TableCell className="text-right">€240</TableCell>
+          <TableCell className="text-right">₦360,000</TableCell>
         </TableRow>
       </TableBody>
     </Table>

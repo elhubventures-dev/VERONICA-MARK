@@ -67,7 +67,7 @@ export default async function AdminBrandsPage() {
         </div>
         <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
           <p className="text-sm text-[var(--color-muted-foreground)]">Revenue (30d)</p>
-          <p className="mt-2 font-display text-3xl">{formatPrice(totals.revenue30d, "EUR")}</p>
+          <p className="mt-2 font-display text-3xl">{formatPrice(totals.revenue30d, "NGN")}</p>
         </div>
       </section>
 
@@ -107,7 +107,7 @@ export default async function AdminBrandsPage() {
                 <div className="flex flex-col gap-4 xl:items-end">
                   <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)]/20 px-4 py-3 xl:min-w-56">
                     <p className="text-sm text-[var(--color-muted-foreground)]">Revenue (30d)</p>
-                    <p className="mt-1 font-display text-2xl">{formatPrice(brand.revenue30d, "EUR")}</p>
+                    <p className="mt-1 font-display text-2xl">{formatPrice(brand.revenue30d, "NGN")}</p>
                   </div>
 
                   <div className="flex flex-wrap gap-2">

@@ -13,7 +13,7 @@ type Story = StoryObj<typeof RevenueWidget>;
 
 export const Default: Story = {
   args: {
-        "amount": "€48,290",
+        "amount": "₦72,435,000",
     "change": 8.2
   },
 };

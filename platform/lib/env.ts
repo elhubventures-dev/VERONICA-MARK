@@ -26,6 +26,8 @@ const serverSchema = z.object({
   USD_NGN_RATE: z.preprocess(emptyToUndefined, z.coerce.number().positive().optional()),
   RESEND_API_KEY: optionalString,
   EMAIL_FROM: optionalString,
+  /** Admin inbox for paired notification copies (defaults to sales@veronicamark.com). */
+  PLATFORM_ADMIN_EMAIL: optionalString,
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
   SENTRY_DSN: optionalUrl,
   SENTRY_ENVIRONMENT: optionalString,
@@ -75,6 +77,7 @@ function createServerEnv(): ServerEnv {
       USD_NGN_RATE: process.env.USD_NGN_RATE ? Number(process.env.USD_NGN_RATE) : undefined,
       RESEND_API_KEY: process.env.RESEND_API_KEY,
       EMAIL_FROM: process.env.EMAIL_FROM,
+      PLATFORM_ADMIN_EMAIL: process.env.PLATFORM_ADMIN_EMAIL,
       LOG_LEVEL: (process.env.LOG_LEVEL as ServerEnv["LOG_LEVEL"]) ?? "info",
       SENTRY_DSN: process.env.SENTRY_DSN,
       SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT,

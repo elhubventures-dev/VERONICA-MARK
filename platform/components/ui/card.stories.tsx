@@ -46,7 +46,7 @@ export const WithAction: Story = {
         </CardAction>
         <CardDescription>Last 30 days</CardDescription>
       </CardHeader>
-      <CardContent>€128,450</CardContent>
+      <CardContent>₦192,675,000</CardContent>
     </Card>
   ),
 };

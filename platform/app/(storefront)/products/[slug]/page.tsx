@@ -66,7 +66,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     offers: {
       "@type": "Offer",
       price: product.price,
-      priceCurrency: "EUR",
+      priceCurrency: "NGN",
       availability: "https://schema.org/InStock",
       url: `${publicEnv.NEXT_PUBLIC_APP_URL}/products/${product.slug}`,
     },

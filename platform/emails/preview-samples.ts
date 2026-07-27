@@ -252,4 +252,20 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
     message: "Looking for a warm evening scent for an anniversary dinner.",
     topic: "Advice",
   },
+  "admin.event": {
+    recipientName: "Client services",
+    eventTitle: "Order Paid · order confirmation · VM-2026-0001",
+    summary: "Camille · customer@example.com · ₦93,500",
+    details: [
+      { label: "Order", value: "VM-2026-0001" },
+      { label: "Customer email", value: "customer@example.com" },
+      { label: "Total", value: "₦93,500" },
+      { label: "Address line 1", value: "12 Ada George Rd" },
+      { label: "City", value: "Port Harcourt" },
+      { label: "State", value: "Rivers" },
+      { label: "Country", value: "NG" },
+    ],
+    items: [{ name: "Noir Éclat Eau de Parfum · 100 ml", quantity: 1, priceLabel: "₦85,000" }],
+    ctaUrl: `${appUrl}/admin/orders/VM-2026-0001`,
+  },
 };

@@ -19,6 +19,56 @@ export type BrandProduct = {
   updatedAt: string;
 };
 
+export type BrandCategoryOption = {
+  id: string;
+  name: string;
+  slug: string;
+};
+
+export type BrandProductEditorVariant = {
+  id: string;
+  sku: string;
+  sizeLabel: string | null;
+  price: number;
+  salePrice: number | null;
+  active: boolean;
+  sortOrder: number;
+  available: number;
+  reserved: number;
+  reorderLevel: number;
+};
+
+export type BrandProductEditorMedia = {
+  id: string;
+  url: string;
+  altText: string | null;
+  sortOrder: number;
+  isPrimary: boolean;
+};
+
+export type BrandProductEditor = {
+  id: string;
+  name: string;
+  slug: string;
+  barcode: string | null;
+  shortDescription: string | null;
+  description: string | null;
+  categoryId: string;
+  categoryName: string;
+  status: BrandProductStatus;
+  featured: boolean;
+  newArrival: boolean;
+  bestSeller: boolean;
+  variants: BrandProductEditorVariant[];
+  media: BrandProductEditorMedia[];
+  seo: {
+    metaTitle: string | null;
+    metaDescription: string | null;
+    canonicalUrl: string | null;
+    keywords: string[];
+  };
+};
+
 export type BrandInventoryRow = {
   id: string;
   /** Present for Prisma-backed rows; required for live stock mutations. */
@@ -118,7 +168,7 @@ export const brandWorkspace = {
   brandSlug: "veronica-mark-atelier",
   managerName: "Amara Okafor",
   managerEmail: "brand.manager@veronicamark.com",
-  currency: "EUR",
+  currency: "NGN",
   timezone: "Europe/Paris",
 };
 
@@ -130,11 +180,11 @@ export const brandProducts: BrandProduct[] = [
     slug: "velvet-iris",
     status: "published",
     category: "Women",
-    price: 165,
+    price: 247500,
     stock: 42,
     reserved: 3,
     sold30d: 28,
-    revenue30d: 4620,
+    revenue30d: 6930000,
     image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=85",
     updatedAt: "2026-07-22T10:00:00+01:00",
   },
@@ -145,12 +195,12 @@ export const brandProducts: BrandProduct[] = [
     slug: "nocturne-oud",
     status: "published",
     category: "Men",
-    price: 210,
-    compareAt: 245,
+    price: 315000,
+    compareAt: 367500,
     stock: 8,
     reserved: 2,
     sold30d: 19,
-    revenue30d: 3990,
+    revenue30d: 5985000,
     image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85",
     updatedAt: "2026-07-21T16:20:00+01:00",
   },
@@ -161,11 +211,11 @@ export const brandProducts: BrandProduct[] = [
     slug: "soleil-neroli",
     status: "published",
     category: "Women",
-    price: 148,
+    price: 222000,
     stock: 56,
     reserved: 1,
     sold30d: 34,
-    revenue30d: 5032,
+    revenue30d: 7548000,
     image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=85",
     updatedAt: "2026-07-20T09:10:00+01:00",
   },
@@ -176,11 +226,11 @@ export const brandProducts: BrandProduct[] = [
     slug: "purple-reign",
     status: "published",
     category: "Perfumes",
-    price: 195,
+    price: 292500,
     stock: 0,
     reserved: 0,
     sold30d: 12,
-    revenue30d: 2340,
+    revenue30d: 3510000,
     image: "https://images.unsplash.com/photo-1610461888750-10bfc601b874?auto=format&fit=crop&w=900&q=85",
     updatedAt: "2026-07-19T14:00:00+01:00",
   },
@@ -191,7 +241,7 @@ export const brandProducts: BrandProduct[] = [
     slug: "santal-minuit",
     status: "draft",
     category: "Men",
-    price: 180,
+    price: 270000,
     stock: 20,
     reserved: 0,
     sold30d: 0,
@@ -206,11 +256,11 @@ export const brandProducts: BrandProduct[] = [
     slug: "figue-dor",
     status: "published",
     category: "Perfumes",
-    price: 155,
+    price: 232500,
     stock: 31,
     reserved: 4,
     sold30d: 15,
-    revenue30d: 2325,
+    revenue30d: 3487500,
     image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=900&q=85",
     updatedAt: "2026-07-17T08:45:00+01:00",
   },
@@ -260,9 +310,9 @@ export const brandOrders: BrandOrder[] = [
     customerName: "Camille Dubois",
     customerEmail: "customer@example.com",
     itemCount: 1,
-    total: 210,
-    currency: "EUR",
-    items: [{ title: "Ambre Soie", variant: "100 ml", quantity: 1, unitPrice: 175 }],
+    total: 315000,
+    currency: "NGN",
+    items: [{ title: "Ambre Soie", variant: "100 ml", quantity: 1, unitPrice: 262500 }],
   },
   {
     orderNumber: "VM-2026-0001",
@@ -271,11 +321,11 @@ export const brandOrders: BrandOrder[] = [
     customerName: "Camille Dubois",
     customerEmail: "customer@example.com",
     itemCount: 2,
-    total: 359.6,
-    currency: "EUR",
+    total: 539400,
+    currency: "NGN",
     items: [
-      { title: "Velvet Iris", variant: "100 ml", quantity: 1, unitPrice: 165 },
-      { title: "Nocturne Oud", variant: "50 ml", quantity: 1, unitPrice: 151 },
+      { title: "Velvet Iris", variant: "100 ml", quantity: 1, unitPrice: 247500 },
+      { title: "Nocturne Oud", variant: "50 ml", quantity: 1, unitPrice: 226500 },
     ],
   },
   {
@@ -285,9 +335,9 @@ export const brandOrders: BrandOrder[] = [
     customerName: "Louis Moreau",
     customerEmail: "louis@example.com",
     itemCount: 1,
-    total: 177.6,
-    currency: "EUR",
-    items: [{ title: "Soleil Néroli", variant: "100 ml", quantity: 1, unitPrice: 148 }],
+    total: 266400,
+    currency: "NGN",
+    items: [{ title: "Soleil Néroli", variant: "100 ml", quantity: 1, unitPrice: 222000 }],
   },
   {
     orderNumber: "VM-2026-0008",
@@ -296,9 +346,9 @@ export const brandOrders: BrandOrder[] = [
     customerName: "Nora Ellis",
     customerEmail: "nora@example.com",
     itemCount: 1,
-    total: 234,
-    currency: "EUR",
-    items: [{ title: "Purple Reign", variant: "100 ml", quantity: 1, unitPrice: 195 }],
+    total: 351000,
+    currency: "NGN",
+    items: [{ title: "Purple Reign", variant: "100 ml", quantity: 1, unitPrice: 292500 }],
   },
   {
     orderNumber: "VM-2026-0006",
@@ -307,11 +357,11 @@ export const brandOrders: BrandOrder[] = [
     customerName: "James Laurent",
     customerEmail: "james@example.com",
     itemCount: 2,
-    total: 402,
-    currency: "EUR",
+    total: 603000,
+    currency: "NGN",
     items: [
-      { title: "Nocturne Oud", variant: "100 ml", quantity: 1, unitPrice: 210 },
-      { title: "Figue d'Or", variant: "100 ml", quantity: 1, unitPrice: 155 },
+      { title: "Nocturne Oud", variant: "100 ml", quantity: 1, unitPrice: 315000 },
+      { title: "Figue d'Or", variant: "100 ml", quantity: 1, unitPrice: 232500 },
     ],
   },
 ];
@@ -376,7 +426,7 @@ export const brandFlashSales: BrandFlashSale[] = [
     endsAt: "2026-08-07T23:59:59+01:00",
     discountPercent: 15,
     productCount: 4,
-    revenue: 12840,
+    revenue: 19260000,
     products: ["Velvet Iris", "Nocturne Oud", "Soleil Néroli", "Purple Reign"],
   },
   {
@@ -398,7 +448,7 @@ export const brandCustomers: BrandCustomer[] = [
     name: "Camille Dubois",
     email: "customer@example.com",
     orders: 4,
-    spend: 973.7,
+    spend: 1460550,
     lastOrderAt: "2026-07-22T09:14:00+01:00",
     city: "Paris",
     country: "France",
@@ -408,7 +458,7 @@ export const brandCustomers: BrandCustomer[] = [
     name: "Louis Moreau",
     email: "louis@example.com",
     orders: 2,
-    spend: 388.2,
+    spend: 582300,
     lastOrderAt: "2026-07-23T18:02:00+01:00",
     city: "Lyon",
     country: "France",
@@ -418,7 +468,7 @@ export const brandCustomers: BrandCustomer[] = [
     name: "Nora Ellis",
     email: "nora@example.com",
     orders: 1,
-    spend: 234,
+    spend: 351000,
     lastOrderAt: "2026-07-18T12:40:00+01:00",
     city: "London",
     country: "United Kingdom",
@@ -428,7 +478,7 @@ export const brandCustomers: BrandCustomer[] = [
     name: "James Laurent",
     email: "james@example.com",
     orders: 3,
-    spend: 712.5,
+    spend: 1068750,
     lastOrderAt: "2026-07-15T09:05:00+01:00",
     city: "Brussels",
     country: "Belgium",
@@ -571,22 +621,22 @@ export const brandReports: BrandReport[] = [
 ];
 
 export const brandAnalytics = {
-  salesToday: 177.6,
+  salesToday: 266400,
   ordersToday: 1,
-  revenue30d: 18307,
+  revenue30d: 27460500,
   orders30d: 48,
-  aov30d: 381.4,
+  aov30d: 572100,
   conversionRate: 3.2,
   pendingShipments: 3,
   inventoryAlerts: brandInventory.filter((row) => row.status !== "healthy").length,
   revenueSeries: [
-    { day: "17 Jul", revenue: 420, orders: 2 },
-    { day: "18 Jul", revenue: 890, orders: 4 },
-    { day: "19 Jul", revenue: 610, orders: 3 },
-    { day: "20 Jul", revenue: 1240, orders: 5 },
-    { day: "21 Jul", revenue: 980, orders: 4 },
-    { day: "22 Jul", revenue: 1510, orders: 6 },
-    { day: "23 Jul", revenue: 760, orders: 3 },
+    { day: "17 Jul", revenue: 630000, orders: 2 },
+    { day: "18 Jul", revenue: 1335000, orders: 4 },
+    { day: "19 Jul", revenue: 915000, orders: 3 },
+    { day: "20 Jul", revenue: 1860000, orders: 5 },
+    { day: "21 Jul", revenue: 1470000, orders: 4 },
+    { day: "22 Jul", revenue: 2265000, orders: 6 },
+    { day: "23 Jul", revenue: 1140000, orders: 3 },
   ],
   categoryMix: [
     { name: "Women", value: 42 },
@@ -594,10 +644,10 @@ export const brandAnalytics = {
     { name: "Perfumes", value: 25 },
   ],
   topProducts: [
-    { name: "Soleil Néroli", units: 34, revenue: 5032 },
-    { name: "Velvet Iris", units: 28, revenue: 4620 },
-    { name: "Nocturne Oud", units: 19, revenue: 3990 },
-    { name: "Purple Reign", units: 12, revenue: 2340 },
+    { name: "Soleil Néroli", units: 34, revenue: 7548000 },
+    { name: "Velvet Iris", units: 28, revenue: 6930000 },
+    { name: "Nocturne Oud", units: 19, revenue: 5985000 },
+    { name: "Purple Reign", units: 12, revenue: 3510000 },
   ],
 };
 
@@ -606,7 +656,7 @@ export const brandSettings = {
   notifyNewOrders: true,
   notifyFlashSale: true,
   autoPublishReviews: false,
-  defaultCurrency: "EUR",
+  defaultCurrency: "NGN",
   fulfillmentSlaHours: 48,
 };
 

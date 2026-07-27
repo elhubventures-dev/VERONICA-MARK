@@ -69,7 +69,7 @@ export default async function MarketingFlashSalesPage() {
             </article>
             <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[var(--shadow-subtle)]">
               <p className="text-sm text-[var(--color-muted-foreground)]">Revenue</p>
-              <p className="mt-2 font-display text-3xl">{formatPrice(totalRevenue, "EUR")}</p>
+              <p className="mt-2 font-display text-3xl">{formatPrice(totalRevenue, "NGN")}</p>
             </article>
           </section>
 
@@ -110,7 +110,7 @@ export default async function MarketingFlashSalesPage() {
                     </div>
                     <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-muted)]/30 p-4">
                       <p className="text-sm text-[var(--color-muted-foreground)]">Revenue</p>
-                      <p className="mt-1 font-medium">{formatPrice(sale.revenue, "EUR")}</p>
+                      <p className="mt-1 font-medium">{formatPrice(sale.revenue, "NGN")}</p>
                     </div>
                   </div>
                 </article>

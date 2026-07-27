@@ -20,14 +20,19 @@ import {
   type BrandInventoryRow,
   type BrandOrder,
   type BrandProduct,
+  type BrandProductEditor,
   type BrandProductStatus,
 } from "@/lib/brand/demo-data";
 import { getSessionBrandId } from "@/lib/data/session-context";
 import { orderBelongsToBrand } from "@/lib/auth/brand-tenancy-rules";
 import { brandRepository } from "@/lib/repositories/brand.repository";
+import { categoryRepository } from "@/lib/repositories/category.repository";
 import { inventoryRepository } from "@/lib/repositories/inventory.repository";
 import { orderRepository, type OrderWithRelations } from "@/lib/repositories/order.repository";
-import { productRepository } from "@/lib/repositories/product.repository";
+import {
+  productRepository,
+  type EditorProduct,
+} from "@/lib/repositories/product.repository";
 import { promotionRepository } from "@/lib/repositories/promotion.repository";
 
 const FALLBACK_IMAGE =
@@ -70,6 +75,94 @@ function mapBrandProduct(
     revenue30d: 0,
     image: media?.url ?? FALLBACK_IMAGE,
     updatedAt: product.updatedAt.toISOString(),
+  };
+}
+
+function mapBrandProductEditor(product: EditorProduct): BrandProductEditor {
+  return {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    barcode: product.barcode,
+    shortDescription: product.shortDescription,
+    description: product.description,
+    categoryId: product.categoryId,
+    categoryName: product.category.name,
+    status: mapProductStatus(product.status),
+    featured: product.featured,
+    newArrival: product.newArrival,
+    bestSeller: product.bestSeller,
+    variants: product.variants.map((variant) => ({
+      id: variant.id,
+      sku: variant.sku,
+      sizeLabel: variant.sizeLabel,
+      price: Number(variant.price),
+      salePrice: variant.salePrice == null ? null : Number(variant.salePrice),
+      active: variant.active,
+      sortOrder: variant.sortOrder,
+      available: variant.inventory?.available ?? 0,
+      reserved: variant.inventory?.reserved ?? 0,
+      reorderLevel: variant.inventory?.reorderLevel ?? 5,
+    })),
+    media: product.media.map((item) => ({
+      id: item.id,
+      url: item.url,
+      altText: item.altText,
+      sortOrder: item.sortOrder,
+      isPrimary: item.isPrimary,
+    })),
+    seo: {
+      metaTitle: product.seo?.metaTitle ?? null,
+      metaDescription: product.seo?.metaDescription ?? null,
+      canonicalUrl: product.seo?.canonicalUrl ?? null,
+      keywords: product.seo?.keywords ?? [],
+    },
+  };
+}
+
+function mapDemoProductEditor(product: BrandProduct): BrandProductEditor {
+  return {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    barcode: null,
+    shortDescription: null,
+    description: null,
+    categoryId: `demo-category-${product.category.toLowerCase().replace(/\s+/g, "-")}`,
+    categoryName: product.category,
+    status: product.status,
+    featured: false,
+    newArrival: false,
+    bestSeller: false,
+    variants: [
+      {
+        id: `${product.id}-variant-100`,
+        sku: product.sku,
+        sizeLabel: "100 ml",
+        price: product.compareAt ?? product.price,
+        salePrice: product.compareAt ? product.price : null,
+        active: true,
+        sortOrder: 0,
+        available: Math.max(0, product.stock - product.reserved),
+        reserved: product.reserved,
+        reorderLevel: 5,
+      },
+    ],
+    media: [
+      {
+        id: `${product.id}-media-1`,
+        url: product.image,
+        altText: product.name,
+        sortOrder: 0,
+        isPrimary: true,
+      },
+    ],
+    seo: {
+      metaTitle: product.name,
+      metaDescription: null,
+      canonicalUrl: `/products/${product.slug}`,
+      keywords: [],
+    },
   };
 }
 
@@ -215,6 +308,51 @@ export async function getBrandProduct(id: string) {
   }
   const products = await getBrandProducts();
   return products.find((p) => p.id === id || p.slug === id) ?? null;
+}
+
+export async function getBrandProductEditor(id: string): Promise<BrandProductEditor | null> {
+  try {
+    const brandId = await getSessionBrandId();
+    if (brandId) {
+      const product = await productRepository.findForBrandEditor(brandId, id);
+      if (product) return mapBrandProductEditor(product);
+
+      const bySlug = await productRepository.listByBrand(brandId, { page: 1, pageSize: 100 });
+      const match = bySlug.items.find((p) => p.slug === id);
+      if (match) {
+        const detailed = await productRepository.findForBrandEditor(brandId, match.id);
+        if (detailed) return mapBrandProductEditor(detailed);
+      }
+      return null;
+    }
+  } catch {
+    // demo fallback
+  }
+
+  const product = brandProducts.find((p) => p.id === id || p.slug === id);
+  return product ? mapDemoProductEditor(product) : null;
+}
+
+export async function getBrandCategoryOptions() {
+  try {
+    const categories = await categoryRepository.list();
+    if (categories.length) {
+      return categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        slug: category.slug,
+      }));
+    }
+  } catch {
+    // demo fallback
+  }
+
+  const names = Array.from(new Set(brandProducts.map((product) => product.category)));
+  return names.map((name) => ({
+    id: `demo-category-${name.toLowerCase().replace(/\s+/g, "-")}`,
+    name,
+    slug: name.toLowerCase().replace(/\s+/g, "-"),
+  }));
 }
 
 export async function getBrandInventory() {

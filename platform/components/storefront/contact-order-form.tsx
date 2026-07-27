@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { submitContactOrderSupportAction } from "@/features/contact/actions";
 
-type Status = "idle" | "error" | "success";
+type Status = "idle" | "error" | "success" | "pending";
 
 function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -18,16 +19,16 @@ export function ContactOrderForm() {
   const [status, setStatus] = React.useState<Status>("idle");
   const [error, setError] = React.useState("");
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
     const name = String(data.get("name") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
-    const order = String(data.get("order") ?? "").trim();
+    const orderNumber = String(data.get("order") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
 
-    if (!name || !email || !order || !message) {
+    if (!name || !email || !orderNumber || !message) {
       setStatus("error");
       setError("Please complete all required fields, including your order reference.");
       return;
@@ -38,17 +39,40 @@ export function ContactOrderForm() {
       return;
     }
 
-    setStatus("success");
+    setStatus("pending");
     setError("");
+    const result = await submitContactOrderSupportAction({
+      name,
+      email,
+      orderNumber,
+      message,
+    });
+    if (!result.ok) {
+      setStatus("error");
+      setError(result.message);
+      return;
+    }
+    setStatus("success");
     form.reset();
   }
 
   return (
-    <form onSubmit={submit} noValidate className="space-y-5" aria-describedby="order-support-status">
+    <form
+      onSubmit={(e) => void submit(e)}
+      noValidate
+      className="space-y-5"
+      aria-describedby="order-support-status"
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="order-support-name">Full name</Label>
-          <Input id="order-support-name" name="name" autoComplete="name" required />
+          <Input
+            id="order-support-name"
+            name="name"
+            autoComplete="name"
+            required
+            disabled={status === "pending"}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="order-support-email">Email used at checkout</Label>
@@ -58,6 +82,7 @@ export function ContactOrderForm() {
             type="email"
             autoComplete="email"
             required
+            disabled={status === "pending"}
           />
         </div>
       </div>
@@ -70,6 +95,7 @@ export function ContactOrderForm() {
           placeholder="VM-2026-0001"
           autoComplete="off"
           required
+          disabled={status === "pending"}
         />
       </div>
 
@@ -81,12 +107,13 @@ export function ContactOrderForm() {
           rows={4}
           placeholder="Delivery update, change of address, product question…"
           required
+          disabled={status === "pending"}
         />
       </div>
 
       <div className="flex flex-wrap items-center gap-4">
-        <Button type="submit" className="min-w-[10rem]">
-          Submit request
+        <Button type="submit" className="min-w-[10rem]" disabled={status === "pending"}>
+          {status === "pending" ? "Sending…" : "Submit request"}
         </Button>
         <Link
           href="/track-order"

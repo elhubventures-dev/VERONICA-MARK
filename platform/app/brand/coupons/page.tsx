@@ -37,7 +37,7 @@ function formatCouponValue(type: "PERCENTAGE" | "FIXED_AMOUNT" | "FREE_SHIPPING"
     case "PERCENTAGE":
       return `${value}% off`;
     case "FIXED_AMOUNT":
-      return `€${value} off`;
+      return `₦${value.toLocaleString("en-NG")} off`;
     default:
       return "Free shipping";
   }

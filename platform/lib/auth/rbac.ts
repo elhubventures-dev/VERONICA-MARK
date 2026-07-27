@@ -23,7 +23,7 @@ export const protectedRoutes: RouteAccessRule[] = [
   },
   {
     pattern: /^\/brand(\/.*)?$/,
-    roles: ["BRAND_MANAGER", "SUPER_ADMIN"],
+    roles: ["BRAND_MANAGER"],
   },
   {
     pattern: /^\/admin(\/.*)?$/,
@@ -34,6 +34,7 @@ export const protectedRoutes: RouteAccessRule[] = [
     roles: ["SUPER_ADMIN"],
   },
   {
+    // Admin tooling may call brand APIs with an explicit brandId; UI stays BM-only.
     pattern: /^\/api\/brand(\/.*)?$/,
     roles: ["BRAND_MANAGER", "SUPER_ADMIN"],
   },
@@ -88,4 +89,12 @@ export function isBrandScopedRole(role: UserRole): boolean {
 
 export function getHomePathForRole(role: UserRole): string {
   return ROLE_HOME_PATHS[role];
+}
+
+/** Whether the role may open this pathname under `protectedRoutes` (public paths are allowed). */
+export function canAccessPath(role: UserRole, pathname: string): boolean {
+  const pathOnly = pathname.split("?")[0]?.split("#")[0] || pathname;
+  const rule = matchRoute(pathOnly);
+  if (!rule) return true;
+  return hasRequiredRole(role, rule.roles);
 }

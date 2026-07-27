@@ -33,9 +33,9 @@ export default async function BrandAnalyticsPage() {
       />
 
       <section aria-label="Key metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Revenue (30 days)" value={formatPrice(analytics.revenue30d, "EUR")} icon={<Banknote className="size-4" />} />
+        <KpiCard label="Revenue (30 days)" value={formatPrice(analytics.revenue30d, "NGN")} icon={<Banknote className="size-4" />} />
         <KpiCard label="Orders (30 days)" value={String(analytics.orders30d)} icon={<ShoppingBag className="size-4" />} />
-        <KpiCard label="AOV (30 days)" value={formatPrice(analytics.aov30d, "EUR")} icon={<Receipt className="size-4" />} />
+        <KpiCard label="AOV (30 days)" value={formatPrice(analytics.aov30d, "NGN")} icon={<Receipt className="size-4" />} />
         <KpiCard label="Conversion rate" value={`${analytics.conversionRate.toFixed(1)}%`} icon={<Percent className="size-4" />} />
       </section>
 
@@ -136,7 +136,7 @@ export default async function BrandAnalyticsPage() {
                   <td className="py-4 font-medium text-[var(--color-foreground)]">{product.name}</td>
                   <td className="py-4">{product.units}</td>
                   <td className="py-4">
-                    <Price amount={product.revenue} currency="EUR" />
+                    <Price amount={product.revenue} currency="NGN" />
                   </td>
                 </tr>
               ))}

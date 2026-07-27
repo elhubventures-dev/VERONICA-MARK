@@ -12,9 +12,9 @@ const columns: ColumnDef<BrandRow>[] = [
 ];
 
 const data: BrandRow[] = [
-  { id: "1", brand: "Atelier Lumière", orders: 128, revenue: "€18,420" },
-  { id: "2", brand: "Maison Velours", orders: 94, revenue: "€12,880" },
-  { id: "3", brand: "Nocturne Atelier", orders: 76, revenue: "€9,640" },
+  { id: "1", brand: "Atelier Lumière", orders: 128, revenue: "₦27,630,000" },
+  { id: "2", brand: "Maison Velours", orders: 94, revenue: "₦19,320,000" },
+  { id: "3", brand: "Nocturne Atelier", orders: 76, revenue: "₦14,460,000" },
 ];
 
 const meta = {

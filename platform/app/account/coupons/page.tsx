@@ -30,7 +30,7 @@ function getCouponValueLabel(
     case "PERCENTAGE":
       return `${coupon.value}% off`;
     case "FIXED_AMOUNT":
-      return `€${coupon.value.toFixed(0)} off`;
+      return `₦${coupon.value.toLocaleString("en-NG")} off`;
     case "FREE_SHIPPING":
       return "Free shipping";
     default:

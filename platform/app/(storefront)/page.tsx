@@ -50,6 +50,10 @@ export default async function HomePage() {
         description="Thoughtfully added fragrances chosen for craftsmanship and character."
         products={products}
         bannerSrc={siteMedia.newArrivalBanner}
+        bannerTitle="Discover Your Signature Scent"
+        bannerDescription="Where elegance meets exceptional craftsmanship."
+        bannerCtaLabel="Browse Fragrances"
+        bannerCtaHref="/categories/perfumes"
       />
       <div className="bg-muted">
         <ProductRail
@@ -58,6 +62,10 @@ export default async function HomePage() {
           description="Compositions our clients return to — refined, authentic, timeless."
           products={[...products].reverse()}
           bannerSrc={siteMedia.bestSellerSection}
+          bannerTitle="Every Fragrance Tells a Story"
+          bannerDescription="Find the scent that defines yours"
+          bannerCtaLabel="Shop Luxury Perfumes"
+          bannerCtaHref="/categories/perfumes"
         />
       </div>
 

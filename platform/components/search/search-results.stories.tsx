@@ -21,7 +21,7 @@ export const Default: Story = {
             "title": "Maison Noir EDP",
             "brand": "Atelier Lumière",
             "href": "/shop/maison-noir",
-            "price": "€185"
+            "price": "₦277,500"
         }
     ]
   },

@@ -78,7 +78,7 @@ export function ProductCard({
         className,
       )}
     >
-      <div className="relative aspect-[3/4] overflow-hidden bg-[var(--color-muted)]">
+      <div className="relative aspect-square overflow-hidden bg-[var(--color-muted)]">
         <Link href={href} className="block size-full">
           <Image
             src={imageSrc}

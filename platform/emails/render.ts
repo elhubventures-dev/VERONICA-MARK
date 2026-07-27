@@ -26,6 +26,7 @@ import {
   buildBrandNewOrder,
   buildContactAutoReply,
   buildContactInternalNotify,
+  buildAdminEvent,
   buildMarketingFlashSale,
   buildMarketingNewsletter,
   buildMarketingPromotion,
@@ -101,6 +102,7 @@ const builders: BuilderMap = {
   "brand.flash_sale_alert": buildBrandFlashSaleAlert,
   "contact.auto_reply": buildContactAutoReply,
   "contact.internal_notify": buildContactInternalNotify,
+  "admin.event": buildAdminEvent,
 };
 
 export const emailTemplateMeta: Record<EmailTemplateKey, EmailMeta> = {
@@ -405,6 +407,13 @@ export const emailTemplateMeta: Record<EmailTemplateKey, EmailMeta> = {
     key: "contact.internal_notify",
     name: "Contact internal notify",
     description: "Internal notify to client services.",
+    channel: "operational",
+    audience: "internal",
+  },
+  "admin.event": {
+    key: "admin.event",
+    name: "Admin event copy",
+    description: "Individually addressed admin copy of platform events with full submitted details.",
     channel: "operational",
     audience: "internal",
   },

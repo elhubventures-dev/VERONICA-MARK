@@ -39,7 +39,7 @@ type SettingRowProps = {
   ariaLabel: string;
 };
 
-const currencyOptions = ["EUR", "USD", "GBP", "CHF"];
+const currencyOptions = ["NGN", "USD"];
 
 function SettingRow({ title, description, checked, onCheckedChange, ariaLabel }: SettingRowProps) {
   return (

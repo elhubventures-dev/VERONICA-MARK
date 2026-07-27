@@ -17,7 +17,7 @@ import {
 describe("rbac", () => {
   it("protects admin and brand routes", () => {
     expect(matchRoute("/admin/orders")?.roles).toEqual(["SUPER_ADMIN"]);
-    expect(matchRoute("/brand/products")?.roles).toEqual(["BRAND_MANAGER", "SUPER_ADMIN"]);
+    expect(matchRoute("/brand/products")?.roles).toEqual(["BRAND_MANAGER"]);
     expect(matchRoute("/account")?.roles).toContain("CUSTOMER");
   });
 
@@ -79,5 +79,15 @@ describe("post-auth redirect", () => {
     expect(resolvePostAuthPath({ callbackUrl: "/checkout", role: "CUSTOMER" })).toBe(
       "/checkout",
     );
+  });
+
+  it("honors portal callbacks only for the matching role", () => {
+    expect(resolvePostAuthPath({ callbackUrl: "/admin", role: "SUPER_ADMIN" })).toBe("/admin");
+    expect(resolvePostAuthPath({ callbackUrl: "/brand", role: "BRAND_MANAGER" })).toBe("/brand");
+    expect(resolvePostAuthPath({ callbackUrl: "/account", role: "CUSTOMER" })).toBe("/account");
+    expect(resolvePostAuthPath({ callbackUrl: "/admin", role: "CUSTOMER" })).toBe("/account");
+    expect(resolvePostAuthPath({ callbackUrl: "/admin", role: "BRAND_MANAGER" })).toBe("/brand");
+    expect(resolvePostAuthPath({ callbackUrl: "/brand", role: "SUPER_ADMIN" })).toBe("/admin");
+    expect(resolvePostAuthPath({ callbackUrl: "/brand", role: "CUSTOMER" })).toBe("/account");
   });
 });

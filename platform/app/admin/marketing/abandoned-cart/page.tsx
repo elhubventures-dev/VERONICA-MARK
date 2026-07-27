@@ -54,7 +54,7 @@ export default async function MarketingAbandonedCartPage() {
       <section aria-label="Abandoned cart KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard label="Open carts" value={openCarts.length.toLocaleString()} icon={<ShoppingCart className="size-4" />} />
         <KpiCard label="Recovered carts" value={recoveredCarts.length.toLocaleString()} icon={<RotateCcw className="size-4" />} />
-        <KpiCard label="Open cart value" value={formatPrice(openValue, "EUR")} icon={<Wallet className="size-4" />} />
+        <KpiCard label="Open cart value" value={formatPrice(openValue, "NGN")} icon={<Wallet className="size-4" />} />
         <KpiCard label="Reminders sent" value={totalReminders.toLocaleString()} icon={<BellRing className="size-4" />} />
       </section>
 

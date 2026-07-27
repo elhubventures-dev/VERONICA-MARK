@@ -6,11 +6,14 @@ import { z } from "zod";
 
 import { requireBrandContext } from "@/lib/auth/brand-tenancy";
 import { notifyCustomerOrderStatus } from "@/lib/email/order-notifications";
+import { env } from "@/lib/env";
 import { toErrorResponse } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { inventoryRepository } from "@/lib/repositories/inventory.repository";
 import { orderRepository } from "@/lib/repositories/order.repository";
 import { productRepository } from "@/lib/repositories/product.repository";
+import { createSignedUploadUrl } from "@/lib/storage/supabase";
+import { updateBrandProductSchema } from "@/lib/validations/brand-product";
 
 export type BrandActionResult =
   | { ok: true; message: string; data?: Record<string, unknown> }
@@ -40,12 +43,30 @@ const fulfillOrderSchema = z.object({
   status: z.enum(["packed", "shipped", "out_for_delivery", "delivered"]),
 });
 
+const signedUploadSchema = z.object({
+  productId: z.string().uuid(),
+  fileName: z.string().trim().min(1).max(180),
+  contentType: z
+    .string()
+    .trim()
+    .regex(/^image\/(jpeg|jpg|png|webp|gif)$/i, "Only JPEG, PNG, WebP, or GIF images are allowed"),
+});
+
 const FULFILLMENT_STATUS_MAP = {
   packed: OrderStatus.PACKED,
   shipped: OrderStatus.SHIPPED,
   out_for_delivery: OrderStatus.OUT_FOR_DELIVERY,
   delivered: OrderStatus.DELIVERED,
 } as const;
+
+function sanitizeFileName(fileName: string) {
+  return fileName
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+}
 
 /**
  * Brand Manager inventory adjustment — scoped to BrandManagerProfile.brandId.
@@ -111,6 +132,7 @@ export async function updateBrandProductStatusAction(input: {
 
     revalidatePath("/brand/products");
     revalidatePath(`/brand/products/${parsed.productId}`);
+    revalidatePath(`/brand/products/${parsed.productId}/edit`);
     revalidatePath("/brand");
 
     return {
@@ -120,6 +142,81 @@ export async function updateBrandProductStatusAction(input: {
     };
   } catch (error) {
     logger.warn({ err: error }, "brand.product.status_failed");
+    return failure(error);
+  }
+}
+
+/**
+ * Full product field editor — name, copy, category, variants, media, SEO.
+ */
+export async function updateBrandProductAction(input: unknown): Promise<BrandActionResult> {
+  try {
+    const parsed = updateBrandProductSchema.parse(input);
+    const ctx = await requireBrandContext();
+
+    const product = await productRepository.saveEditorForBrand(ctx.brandId, parsed, ctx.userId);
+
+    revalidatePath("/brand/products");
+    revalidatePath(`/brand/products/${parsed.productId}`);
+    revalidatePath(`/brand/products/${parsed.productId}/edit`);
+    revalidatePath(`/products/${product.slug}`);
+    revalidatePath("/brand/inventory");
+    revalidatePath("/brand");
+
+    return {
+      ok: true,
+      message: "Product saved",
+      data: {
+        productId: product.id,
+        slug: product.slug,
+        variantCount: product.variants.length,
+        mediaCount: product.media.length,
+      },
+    };
+  } catch (error) {
+    logger.warn({ err: error }, "brand.product.update_failed");
+    return failure(error);
+  }
+}
+
+/**
+ * Mint a brand-scoped signed upload URL for product imagery.
+ */
+export async function createBrandProductImageUploadAction(input: {
+  productId: string;
+  fileName: string;
+  contentType: string;
+}): Promise<BrandActionResult> {
+  try {
+    const parsed = signedUploadSchema.parse(input);
+    const ctx = await requireBrandContext();
+
+    const product = await productRepository.findForBrandEditor(ctx.brandId, parsed.productId);
+    if (!product) {
+      return { ok: false, message: "Product not found for this brand", code: "NOT_FOUND" };
+    }
+
+    const safeName = sanitizeFileName(parsed.fileName) || "image.jpg";
+    const path = `brands/${ctx.brandId}/products/${product.slug}/${Date.now()}-${safeName}`;
+    const signed = await createSignedUploadUrl(path);
+    const bucket = env.server.SUPABASE_STORAGE_BUCKET;
+    const supabaseUrl = env.client.NEXT_PUBLIC_SUPABASE_URL;
+    const publicUrl = supabaseUrl
+      ? `${supabaseUrl.replace(/\/$/, "")}/storage/v1/object/public/${bucket}/${path}`
+      : `/${path}`;
+
+    return {
+      ok: true,
+      message: "Upload URL ready",
+      data: {
+        path,
+        token: signed.token,
+        signedUrl: signed.signedUrl,
+        publicUrl,
+      },
+    };
+  } catch (error) {
+    logger.warn({ err: error }, "brand.product.signed_upload_failed");
     return failure(error);
   }
 }
