@@ -1,6 +1,6 @@
 "use client";
 
-import { Flame, Gift, Sparkles, Tag, Zap } from "lucide-react";
+import { Flame, Gift, Sparkles, Tag, Zap, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -8,7 +8,7 @@ const MESSAGE = "20% off · Code VM5AUG-20 · August Grand Opening";
 const COPIES = 8;
 const SPEED_PX_PER_SEC = 55;
 
-const SEPARATORS = [Zap, Sparkles, Tag, Flame, Gift] as const;
+const SEPARATORS: LucideIcon[] = [Zap, Sparkles, Tag, Flame, Gift];
 
 function TickerSegment() {
   return (
