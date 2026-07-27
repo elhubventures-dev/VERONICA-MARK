@@ -277,7 +277,7 @@ export async function getProductDetail(slug: string): Promise<StorefrontProductD
   return getDemoProductBySlug(slug) ?? null;
 }
 
-const HOUSE_BRAND_SLUG = "veronica-mark-atelier";
+const HOUSE_BRAND_SLUG = "vma-scents";
 
 function sortHouseBrandFirst(brands: StorefrontBrand[]): StorefrontBrand[] {
   return [...brands].sort((a, b) => {

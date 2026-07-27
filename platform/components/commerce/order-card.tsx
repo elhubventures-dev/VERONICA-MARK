@@ -67,7 +67,7 @@ export function OrderCard({
               key={`${preview.imageSrc}-${index}`}
               className="relative size-12 overflow-hidden rounded-xl border-2 border-[var(--color-surface)] bg-[var(--color-muted)]"
             >
-              <Image src={preview.imageSrc} alt={preview.imageAlt} fill sizes="48px" className="object-cover" />
+              <Image src={preview.imageSrc} alt={preview.imageAlt} fill sizes="48px" className="object-contain" />
             </div>
           ))}
           {itemCount > previews.length ? (

@@ -60,13 +60,13 @@ export default async function AccountWishlistPage() {
                 href={`/products/${product.slug}`}
                 className="group overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-shadow hover:shadow-[var(--shadow-subtle)]"
               >
-                <div className="relative aspect-[4/5] bg-[var(--color-muted)]">
+                <div className="relative w-full bg-[var(--color-muted)]" style={{ aspectRatio: "1 / 1" }}>
                   <Image
                     src={product.image}
                     alt={`${product.brand} ${product.name}`}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                   />
                 </div>
                 <div className="space-y-3 p-5">

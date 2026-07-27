@@ -81,12 +81,12 @@ export default async function BrandProductDetailPage({
 
       <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
         <section className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]">
-          <div className="relative aspect-[4/3] bg-[var(--color-muted)]">
+          <div className="relative w-full bg-[var(--color-muted)]" style={{ aspectRatio: "1 / 1" }}>
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover"
+              className="object-contain"
               sizes="(min-width: 1280px) 55vw, 100vw"
             />
           </div>

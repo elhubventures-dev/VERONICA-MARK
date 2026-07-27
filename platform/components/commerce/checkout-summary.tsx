@@ -55,7 +55,7 @@ export function CheckoutSummary({
           {items.map((item) => (
             <li key={item.id} className="flex gap-3">
               <div className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-[var(--color-muted)]">
-                <Image src={item.imageSrc} alt={item.imageAlt} fill sizes="56px" className="object-cover" />
+                <Image src={item.imageSrc} alt={item.imageAlt} fill sizes="56px" className="object-contain" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{item.title}</p>

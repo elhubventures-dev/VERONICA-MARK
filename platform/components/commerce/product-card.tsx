@@ -78,26 +78,29 @@ export function ProductCard({
         className,
       )}
     >
-      <div className="relative aspect-square overflow-hidden bg-[var(--color-muted)]">
-        <Link href={href} className="block size-full">
+      <div
+        className="relative w-full shrink-0 overflow-hidden bg-[var(--color-muted)]"
+        style={{ aspectRatio: "1 / 1" }}
+      >
+        <Link href={href} className="absolute inset-0 block">
           <Image
             src={imageSrc}
             alt={imageAlt}
             fill
             sizes="(max-width:768px) 50vw, 320px"
             className={cn(
-              "object-cover transition-transform duration-500 group-hover:scale-[1.03]",
+              "object-contain transition-transform duration-500 group-hover:scale-[1.03]",
               !inStock && "grayscale-[0.35]",
             )}
           />
         </Link>
         {displayBadge ? (
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-3 left-3 z-10">
             <ProductBadge variant={displayBadge} />
           </div>
         ) : null}
         {onAddToWishlist ? (
-          <div className="absolute top-3 right-3 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+          <div className="absolute top-3 right-3 z-10 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
             <WishlistButton active={wishlisted} onToggle={onAddToWishlist} size="sm" />
           </div>
         ) : null}

@@ -77,17 +77,20 @@ export default async function BrandMediaPage() {
               className="overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)]"
             >
               {asset.type === "image" ? (
-                <div className="relative aspect-[4/3] bg-[var(--color-muted)]">
+                <div className="relative w-full bg-[var(--color-muted)]" style={{ aspectRatio: "1 / 1" }}>
                   <Image
                     src={asset.url}
                     alt={asset.name}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="(min-width: 1280px) 30vw, (min-width: 640px) 45vw, 100vw"
                   />
                 </div>
               ) : (
-                <div className="flex aspect-[4/3] items-center justify-center bg-[var(--color-muted)]">
+                <div
+                  className="flex w-full items-center justify-center bg-[var(--color-muted)]"
+                  style={{ aspectRatio: "1 / 1" }}
+                >
                   <div className="text-center">
                     {asset.type === "video" ? (
                       <Video className="mx-auto size-10 text-[var(--color-muted-foreground)]" aria-hidden />

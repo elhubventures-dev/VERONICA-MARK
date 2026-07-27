@@ -59,8 +59,8 @@ export async function getStorefrontBrands(): Promise<StorefrontBrand[]> {
     });
 
     return [...brands].sort((a, b) => {
-      if (a.slug === "veronica-mark-atelier") return -1;
-      if (b.slug === "veronica-mark-atelier") return 1;
+      if (a.slug === "vma-scents") return -1;
+      if (b.slug === "vma-scents") return 1;
       return a.name.localeCompare(b.name);
     });
   } catch {

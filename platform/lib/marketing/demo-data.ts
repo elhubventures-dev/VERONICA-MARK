@@ -466,7 +466,7 @@ export const marketingPush: MarketingPushCampaign[] = [
 export const marketingEmailCampaigns: MarketingEmailCampaign[] = [
   {
     id: "em-1",
-    name: "August Grand Opening announce",
+    name: "August Grand Opening announcement",
     status: "scheduled",
     templateKey: "marketing.flash_sale",
     audience: "Marketing consented",
@@ -658,7 +658,7 @@ export const marketingSchedule: MarketingScheduleItem[] = [
   {
     id: "sch-2",
     campaignType: "email",
-    title: "August Grand Opening announce",
+    title: "August Grand Opening announcement",
     startsAt: "2026-07-30T09:00:00+01:00",
     endsAt: "2026-07-30T09:30:00+01:00",
     owner: "Platform Marketing",

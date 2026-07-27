@@ -157,8 +157,8 @@ export const adminPlatform = {
 export const adminBrands: AdminBrand[] = [
   {
     id: "b1",
-    name: "VERONICA MARK Atelier",
-    slug: "veronica-mark-atelier",
+    name: "VMA SCENTS",
+    slug: "vma-scents",
     status: "active",
     managers: 1,
     products: 12,
@@ -282,7 +282,7 @@ export const adminOrders: AdminOrder[] = [
     placedAt: "2026-07-20T14:32:00+01:00",
     status: "processing",
     customerName: "Camille Dubois",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     total: 539400,
     currency: "NGN",
     paymentStatus: "paid",
@@ -680,7 +680,7 @@ export const adminAnalytics = {
     { day: "23 Jul", revenue: 12370500, orders: 20 },
   ],
   brandMix: [
-    { name: "Atelier", value: 38 },
+    { name: "VMA SCENTS", value: 38 },
     { name: "Maison Violette", value: 27 },
     { name: "Atelier Noir", value: 22 },
     { name: "Other", value: 13 },

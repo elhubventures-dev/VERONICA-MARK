@@ -2,7 +2,7 @@
  * Provision or upgrade a Brand Manager account.
  * Usage: pnpm tsx scripts/provision-brand-manager.ts <email> [password] [brand-slug]
  *
- * Defaults brand-slug to veronica-mark-atelier (house brand).
+ * Defaults brand-slug to vma-scents (house brand).
  */
 import { randomBytes } from "node:crypto";
 
@@ -11,7 +11,7 @@ import { Currency, PrismaClient, UserRole } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const DEFAULT_BRAND_SLUG = "veronica-mark-atelier";
+const DEFAULT_BRAND_SLUG = "vma-scents";
 
 function generatePassword(): string {
   const base = randomBytes(12).toString("base64url");

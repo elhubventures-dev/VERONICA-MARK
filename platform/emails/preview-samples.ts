@@ -33,7 +33,7 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
   "staff.brand_manager_invite": {
     recipientName: "Ifeoma",
     roleLabel: "Brand Manager",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     inviterName: "Platform Ops",
     ctaUrl: `${appUrl}/auth/accept-invite?token=preview`,
   },
@@ -156,7 +156,7 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
   "wishlist.back_in_stock": {
     recipientName: "Camille",
     productName: "Velvet Iris Eau de Parfum",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     priceLabel: "₦72,000",
     ctaUrl: `${appUrl}/products/velvet-iris`,
   },
@@ -215,7 +215,7 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
   },
   "brand.low_stock": {
     recipientName: "Ifeoma",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     productName: "Noir Éclat · 100 ml",
     sku: "VM-NE-100",
     stockLevel: 3,
@@ -224,14 +224,14 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
   },
   "brand.new_order": {
     recipientName: "Ifeoma",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     orderNumber: "VM-2026-0001",
     orderTotalLabel: "₦85,000",
     appUrl,
   },
   "brand.flash_sale_alert": {
     recipientName: "Ifeoma",
-    brandName: "VERONICA MARK Atelier",
+    brandName: "VMA SCENTS",
     flashSaleName: "August Grand Opening",
     metricLabel: "Units sold",
     metricValue: "48 in 2 hours",

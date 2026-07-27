@@ -597,7 +597,7 @@ export function ProductEditorForm({
                     src={item.url}
                     alt={item.altText || name || "Product image"}
                     fill
-                    className="object-cover"
+                    className="object-contain"
                     sizes="120px"
                     unoptimized={item.url.startsWith("http")}
                   />

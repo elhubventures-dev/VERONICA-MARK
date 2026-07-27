@@ -113,7 +113,7 @@ export default async function BrandProductsPage() {
                                 src={product.image}
                                 alt={product.name}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                                 sizes="64px"
                               />
                             </div>
@@ -178,7 +178,7 @@ export default async function BrandProductsPage() {
                 >
                   <div className="flex gap-4">
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-[var(--color-border)]">
-                      <Image src={product.image} alt={product.name} fill className="object-cover" sizes="80px" />
+                      <Image src={product.image} alt={product.name} fill className="object-contain" sizes="80px" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-start justify-between gap-2">

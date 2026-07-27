@@ -207,7 +207,7 @@ export default async function AccountOrderDetailPage({
                     alt={item.title}
                     fill
                     sizes="(max-width: 640px) 96px, 128px"
-                    className="object-cover"
+                    className="object-contain"
                   />
                 </div>
                 <div className="min-w-0 flex-1">

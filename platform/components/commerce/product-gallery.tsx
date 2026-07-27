@@ -66,7 +66,7 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
                     : "border-transparent hover:border-[var(--color-border)]",
                 )}
               >
-                <Image src={image.src} alt="" fill sizes="88px" className="object-cover" />
+                <Image src={image.src} alt="" fill sizes="88px" className="object-contain" />
               </button>
             </li>
           ))}
@@ -77,7 +77,8 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
           initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={motionTransition(reduceMotion, 0.25)}
-          className="relative order-1 aspect-[3/4] overflow-hidden rounded-xl bg-[var(--color-muted)] md:order-2"
+          className="relative order-1 w-full overflow-hidden rounded-xl bg-[var(--color-muted)] md:order-2"
+          style={{ aspectRatio: "1 / 1" }}
         >
           <Image
             src={active.src}
@@ -87,7 +88,7 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
             fetchPriority="high"
             quality={75}
             sizes="(max-width:768px) 100vw, 50vw"
-            className="object-cover"
+            className="object-contain"
           />
           <button
             type="button"

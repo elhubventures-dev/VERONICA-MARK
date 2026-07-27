@@ -47,21 +47,24 @@ async function main() {
   console.log(`Importing ${INVOICE_PRODUCTS.length} invoice products…`);
 
   const brand = await prisma.brand.upsert({
-    where: { slug: "veronica-mark-atelier" },
+    where: { slug: "vma-scents" },
     update: {
+      name: "VMA SCENTS",
       status: BrandStatus.ACTIVE,
       featured: true,
       country: "NG",
+      description:
+        "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
     },
     create: {
-      name: "VERONICA MARK Atelier",
-      slug: "veronica-mark-atelier",
+      name: "VMA SCENTS",
+      slug: "vma-scents",
       description:
         "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
       country: "NG",
       featured: true,
       status: BrandStatus.ACTIVE,
-      contactEmail: "atelier@veronicamark.com",
+      contactEmail: "scents@veronicamark.com",
       contactPhone: "+2348000000000",
     },
   });

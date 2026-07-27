@@ -32,7 +32,7 @@ export function ImageThumbnail({ src, alt, selected, onClick, className }: Image
         className,
       )}
     >
-      <Image src={src} alt={alt} fill className="object-cover transition-transform group-hover:scale-105" sizes="200px" />
+      <Image src={src} alt={alt} fill className="object-contain transition-transform group-hover:scale-105" sizes="200px" />
       {onClick ? (
         <span className="absolute inset-0 bg-[color-mix(in_srgb,var(--color-neutral)_0%,transparent)] transition-colors group-hover:bg-[color-mix(in_srgb,var(--color-neutral)_25%,transparent)]" aria-hidden />
       ) : null}

@@ -164,8 +164,8 @@ export type BrandReport = {
 
 export const brandWorkspace = {
   brandId: "brand-atelier",
-  brandName: "VERONICA MARK Atelier",
-  brandSlug: "veronica-mark-atelier",
+  brandName: "VMA SCENTS",
+  brandSlug: "vma-scents",
   managerName: "Amara Okafor",
   managerEmail: "brand.manager@veronicamark.com",
   currency: "NGN",

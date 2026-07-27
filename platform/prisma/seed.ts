@@ -185,21 +185,24 @@ async function main() {
   await assignRole(customer.id, roles.CUSTOMER!);
 
   const brand = await prisma.brand.upsert({
-    where: { slug: "veronica-mark-atelier" },
+    where: { slug: "vma-scents" },
     update: {
+      name: "VMA SCENTS",
+      description:
+        "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
       logo: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1200&q=85",
       banner:
         "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1600&q=85",
     },
     create: {
-      name: "VERONICA MARK Atelier",
-      slug: "veronica-mark-atelier",
+      name: "VMA SCENTS",
+      slug: "vma-scents",
       description:
         "House brand for curated luxury fragrances — managed exclusively by VERONICA MARK.",
       country: "NG",
       featured: true,
       status: BrandStatus.ACTIVE,
-      contactEmail: "atelier@veronicamark.com",
+      contactEmail: "scents@veronicamark.com",
       contactPhone: "+2348000000000",
       logo: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?auto=format&fit=crop&w=1200&q=85",
       banner:
@@ -326,9 +329,9 @@ async function main() {
         },
       ],
       seo: {
-        metaTitle: "Noir Éclat Eau de Parfum | VERONICA MARK Atelier",
+        metaTitle: "Noir Éclat Eau de Parfum | VMA SCENTS",
         metaDescription:
-          "Discover Noir Éclat — a velvet rose and oud fragrance curated by VERONICA MARK Atelier.",
+          "Discover Noir Éclat — a velvet rose and oud fragrance curated by VMA SCENTS.",
         canonicalUrl: "/shop/noir-eclat-edp",
       },
     },
@@ -363,9 +366,9 @@ async function main() {
         },
       ],
       seo: {
-        metaTitle: "Sable Meridian Cologne | VERONICA MARK Atelier",
+        metaTitle: "Sable Meridian Cologne | VMA SCENTS",
         metaDescription:
-          "Sable Meridian — coastal citrus and cedar cologne from VERONICA MARK Atelier.",
+          "Sable Meridian — coastal citrus and cedar cologne from VMA SCENTS.",
         canonicalUrl: "/shop/sable-meridian-cologne",
       },
     },

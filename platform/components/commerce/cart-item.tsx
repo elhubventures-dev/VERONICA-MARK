@@ -47,7 +47,7 @@ export function CartItem({
   return (
     <article className={cn("flex gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4", className)}>
       <div className="relative size-24 shrink-0 overflow-hidden rounded-xl bg-[var(--color-muted)]">
-        <Image src={imageSrc} alt={imageAlt} fill sizes="96px" className="object-cover" />
+        <Image src={imageSrc} alt={imageAlt} fill sizes="96px" className="object-contain" />
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col gap-2">
