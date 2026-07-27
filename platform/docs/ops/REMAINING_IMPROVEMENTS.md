@@ -16,7 +16,7 @@ Prioritized backlog after Stage 10 / Version 1.0 release.
 8. ~~Add axe-core assertions to Playwright critical flows (checkout, account nav).~~ **Done.** See `tests/e2e/a11y.spec.ts`.
 9. ~~Real OG default image asset + Twitter cards on all marketing pages.~~ **Done** (`public/brand/og-default.webp` + `buildPageMetadata`).
 10. ~~Sitemap `lastModified` from DB timestamps.~~ **Done.** See `app/sitemap.ts`.
-11. ~~Abandoned-cart automation workers (email/push) on a queue/cron.~~ **Done (email via hourly cron).** See [ABANDONED_CART.md](./ABANDONED_CART.md). Push deferred.
+11. ~~Abandoned-cart automation workers (email/push) on a queue/cron.~~ **Done (email via daily cron on Hobby; Pro unlocks hourly).** See [ABANDONED_CART.md](./ABANDONED_CART.md). Push deferred.
 12. Affiliate Prisma models + payout ledger if partner program is confirmed.
 
 ## P2 — Scale & ops

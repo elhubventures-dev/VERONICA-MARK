@@ -1,6 +1,6 @@
 # Abandoned cart recovery
 
-Hourly Vercel Cron hits `/api/cron/abandoned-cart` (see `vercel.json`).
+Daily Vercel Cron (09:00 UTC) hits `/api/cron/abandoned-cart` (see `vercel.json`). Hobby plans only allow once-per-day schedules; upgrade to Pro for hourly.
 
 ## Flow
 
