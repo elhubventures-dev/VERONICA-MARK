@@ -1,0 +1,80 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Design System/Introduction" />
+
+# VERONICA MARK Design System
+
+Welcome to the design system for **VERONICA MARK** — a luxury managed-brand marketplace where curated perfume houses are onboarded and presented with editorial care.
+
+This is not an open vendor marketplace. Every surface should feel **considered, premium, and trustworthy**: generous whitespace, confident typography, and restrained motion.
+
+## Design language
+
+### Color
+
+Our palette is intentionally small:
+
+- **Royal Purple** (`#4B246A`) — primary brand and calls to action (~25%)
+- **Luxury Cream** (`#F8F4EC`) — default canvas; warm, not sterile (~65%)
+- **Champagne Gold** (`#C7A25A`) — accent details and focus states (premium only)
+- **Charcoal Black** (`#1A1A1A`) — body copy and strong contrast
+
+See `docs/brand/COLORS.md` for logo metallic ranges vs these flat UI tokens.
+
+Semantic colors (success, warning, error, info) support commerce and admin workflows without diluting the brand.
+
+### Typography
+
+Three families divide labor:
+
+| Family | Role |
+| ------ | ---- |
+| **Playfair Display** | Display headings — editorial, luxury |
+| **Inter** | UI and body — clarity at small sizes |
+| **Manrope** | Alternate sans for metrics and compact labels |
+
+Headings use tighter line height (`1.2`); body copy uses `1.5` for readability.
+
+### Shape & depth
+
+- **12px** corner radius on cards, inputs, and buttons (`rounded-xl`)
+- Soft shadows (`shadow-subtle`, `shadow-md`) — never harsh drop shadows
+- Surfaces stack: cream background → white cards → elevated modals
+
+### Motion
+
+Animations use a shared luxury easing curve (`cubic-bezier(0.22, 1, 0.36, 1)`) and short durations (150–400ms). All motion defers to **`prefers-reduced-motion`**.
+
+## Component architecture
+
+Components live under `components/` by domain:
+
+- **UI** — Radix/shadcn primitives styled for VERONICA MARK
+- **Layout & Navigation** — shells, grids, nav patterns
+- **Commerce** — product, cart, checkout, orders
+- **Dashboard & Charts** — brand-manager analytics
+- **CMS, Search, Media, Profile, Data, Forms** — feature-specific building blocks
+
+Import from `@/components` or browse stories in the sidebar. Each story includes **autodocs** and the **Accessibility** panel.
+
+## Themes
+
+Use the toolbar to switch **light** and **dark** themes. Dark mode shifts surfaces to charcoal while keeping purple and gold accents stable — suitable for admin dashboards and evening browsing.
+
+## Tokens
+
+All values are defined in `app/globals.css`. See repository docs:
+
+- `docs/design-system/TOKENS.md`
+- `docs/design-system/ACCESSIBILITY.md`
+- `docs/design-system/COMPONENT_CATALOG.md`
+
+## Contributing
+
+When adding a component:
+
+1. Match existing naming and file structure (`kebab-case.tsx` + `.stories.tsx`)
+2. Use design tokens — no hard-coded hex outside stories
+3. Meet **44px** touch targets on primary controls
+4. Add a Storybook story with autodocs tag
+5. Run the a11y panel and fix violations before merge

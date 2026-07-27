@@ -1,0 +1,269 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   VERONICA MARK Design Tokens
+   Deep Plum #3A013C · Luxury Cream · Champagne Gold · Charcoal
+   Playfair · Inter · Manrope | docs/brand/COLORS.md
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* Brand — logo deep plum field #3A013C */
+  --color-primary: #3a013c;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f8f4ec;
+  --color-secondary-foreground: #1a1a1a;
+  --color-accent: #c7a25a;
+  --color-accent-foreground: #1a1a1a;
+  --color-neutral: #1a1a1a;
+  --color-white: #ffffff;
+
+  /* Logo-faithful brand panels */
+  --color-brand-deep: #3a013c; /* textured purple ground */
+  --color-brand-field: #510354; /* lighter plum for gradient mids */
+  --color-brand-ink: #2a002c; /* darkest vignette only */
+  --color-accent-bright: #efb12e; /* logo mid-gold gleam — decorative only */
+
+  /* Gray scale */
+  --color-gray-50: #fafaf9;
+  --color-gray-100: #f5f5f4;
+  --color-gray-200: #e7e5e4;
+  --color-gray-300: #d6d3d1;
+  --color-gray-400: #a8a29e;
+  --color-gray-500: #78716c;
+  --color-gray-600: #57534e;
+  --color-gray-700: #44403c;
+  --color-gray-800: #292524;
+  --color-gray-900: #1c1917;
+
+  /* Semantic */
+  --color-success: #16a34a;
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-foreground: #1a1a1a;
+  --color-error: #dc2626;
+  --color-error-foreground: #ffffff;
+  --color-info: #2563eb;
+  --color-info-foreground: #ffffff;
+
+  /* Surfaces — ~65% cream canvas */
+  --color-background: #f8f4ec;
+  --color-foreground: #1a1a1a;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-muted: #f1eee6;
+  --color-muted-foreground: #5c5c5c;
+  --color-border: #e4dfd3;
+  --color-ring: #c7a25a;
+  --color-overlay: rgb(26 26 26 / 0.48);
+
+  /* Typography scale (px → rem) */
+  --font-size-xs: 0.75rem; /* 12 */
+  --font-size-sm: 0.875rem; /* 14 */
+  --font-size-base: 1rem; /* 16 */
+  --font-size-lg: 1.125rem; /* 18 */
+  --font-size-xl: 1.25rem; /* 20 */
+  --font-size-2xl: 1.5rem; /* 24 */
+  --font-size-3xl: 1.875rem; /* 30 */
+  --font-size-4xl: 2.25rem; /* 36 */
+  --font-size-5xl: 3rem; /* 48 */
+  --font-size-6xl: 3.75rem; /* 60 */
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-alt: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --content-max: 1440px;
+  --touch-target: 2.75rem; /* 44px */
+
+  /* Radii — 12px standard */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.75rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: 0 8px 24px rgb(26 26 26 / 0.06);
+  --shadow-md: 0 12px 32px rgb(26 26 26 / 0.08);
+  --shadow-lg: 0 20px 48px rgb(26 26 26 / 0.12);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+  --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Z-index */
+  --z-dropdown: 50;
+  --z-sticky: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+}
+
+.dark {
+  --color-background: #121212;
+  --color-foreground: #f5f5f5;
+  --color-surface: #1a1a1a;
+  --color-surface-elevated: #222222;
+  --color-muted: #222222;
+  --color-muted-foreground: #b3b3b3;
+  --color-border: #2e2e2e;
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #f5f5f5;
+  --color-neutral: #f5f5f5;
+  --color-overlay: rgb(0 0 0 / 0.64);
+  --shadow-subtle: 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 12px 32px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 20px 48px rgb(0 0 0 / 0.5);
+}
+
+@theme inline {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-alt: var(--font-alt);
+
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-accent-bright: var(--color-accent-bright);
+  --color-brand-deep: var(--color-brand-deep);
+  --color-brand-field: var(--color-brand-field);
+  --color-brand-ink: var(--color-brand-ink);
+  --color-neutral: var(--color-neutral);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+  --color-info: var(--color-info);
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-surface: var(--color-surface);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-border: var(--color-border);
+  --color-ring: var(--color-ring);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --shadow-subtle: var(--shadow-subtle);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+}
+
+/* Sticky left nav + main content (FAQ, Privacy, Terms) */
+.page-split {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2.5rem;
+}
+
+.page-split__nav {
+  width: 100%;
+}
+
+.page-split__main {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 768px) {
+  .page-split {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .page-split__nav {
+    position: sticky;
+    top: 7rem;
+    z-index: 10;
+    width: 15rem;
+    flex: 0 0 15rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .page-split {
+    gap: 3.5rem;
+  }
+
+  .page-split__nav {
+    width: 16.5rem;
+    flex: 0 0 16.5rem;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-body);
+    min-height: 100svh;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    line-height: var(--line-height-heading);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

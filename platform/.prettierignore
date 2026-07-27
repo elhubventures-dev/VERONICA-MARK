@@ -1,0 +1,12 @@
+.vercel
+.next
+coverage
+playwright-report
+test-results
+node_modules
+pnpm-lock.yaml
+*.log
+docker/data
+.env
+.env.*
+prisma/migrations

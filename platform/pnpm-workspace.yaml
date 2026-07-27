@@ -1,0 +1,13 @@
+packages:
+  - "."
+
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+  - "@prisma/engines"
+  - prisma
+  - esbuild
+  - "@parcel/watcher"
+  - "@swc/core"
+
+ignoreWorkspaceRootCheck: true

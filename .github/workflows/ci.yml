@@ -1,0 +1,186 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SKIP_ENV_VALIDATION: "true"
+  DATABASE_URL: postgresql://veronica:veronica@localhost:5432/veronica_mark?schema=public
+  DATABASE_URL_UNPOOLED: postgresql://veronica:veronica@localhost:5432/veronica_mark?schema=public
+  AUTH_SECRET: ci-test-secret-must-be-at-least-32-characters
+  NEXT_PUBLIC_APP_URL: http://localhost:3000
+  NEXT_PUBLIC_APP_NAME: VERONICA MARK
+  LOG_LEVEL: error
+
+jobs:
+  quality:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: veronica
+          POSTGRES_PASSWORD: veronica
+          POSTGRES_DB: veronica_mark
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U veronica -d veronica_mark"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: platform
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma Client
+        working-directory: platform
+        run: pnpm db:generate
+
+      - name: Validate Prisma schema
+        working-directory: platform
+        run: pnpm exec prisma validate
+
+      - name: Typecheck
+        working-directory: platform
+        run: pnpm typecheck
+
+      - name: Lint
+        working-directory: platform
+        run: pnpm lint
+
+      - name: Format check
+        working-directory: platform
+        run: pnpm format:check
+
+      - name: Unit tests
+        working-directory: platform
+        run: pnpm test
+
+      - name: Dependency audit
+        working-directory: platform
+        run: pnpm audit --prod --audit-level=high
+        continue-on-error: true
+
+      - name: Apply migrations
+        working-directory: platform
+        run: pnpm exec prisma migrate deploy
+
+      - name: Build
+        working-directory: platform
+        run: pnpm build
+
+  e2e:
+    name: Playwright Smoke
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SKIP_ENV_VALIDATION: "true"
+      DATABASE_URL: postgresql://veronica:veronica@localhost:5432/veronica_mark?schema=public
+      DATABASE_URL_UNPOOLED: postgresql://veronica:veronica@localhost:5432/veronica_mark?schema=public
+      AUTH_SECRET: ci-test-secret-must-be-at-least-32-characters
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+      NEXT_PUBLIC_APP_NAME: VERONICA MARK
+      LOG_LEVEL: error
+      CI: "true"
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: veronica
+          POSTGRES_PASSWORD: veronica
+          POSTGRES_DB: veronica_mark
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U veronica -d veronica_mark"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: platform
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        working-directory: platform
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Generate Prisma Client
+        working-directory: platform
+        run: pnpm db:generate
+
+      - name: Apply migrations
+        working-directory: platform
+        run: pnpm exec prisma migrate deploy
+
+      - name: Seed demo data
+        working-directory: platform
+        run: pnpm db:seed
+        continue-on-error: true
+
+      - name: Build production app
+        working-directory: platform
+        run: pnpm build
+
+      - name: Run Playwright smoke
+        working-directory: platform
+        run: pnpm test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+
+  deploy-preview:
+    name: Vercel Preview Gate
+    needs: [quality, e2e]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Preview deployment note
+        run: |
+          echo "Vercel Git integration creates preview deployments for PRs."
+          echo "Ensure Vercel project root is set to /platform."

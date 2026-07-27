@@ -1,0 +1,27 @@
+
+VERONICA MARK
+Brand Guidelines — Volume II
+Visual Identity System
+Logo System
+Primary Logo• Custom VM Monogram + VERONICA MARK wordmark• Primary usage on website, packaging, documents and marketing.Secondary Logo• Wordmark only for narrow spaces and editorial layouts.Icon-only Logo• VM monogram for app icon, favicon, authentication seal, social avatars and embossing.Minimum clear space: equal to the width of the 'V' stem.Minimum digital size: 24px icon, 120px full logo.
+Official Brand Colors
+Royal PurpleHEX: #4B246ALuxury CreamHEX: #F8F4ECCharcoal BlackHEX: #1A1A1AChampagne GoldHEX: #C7A25AUse these values consistently across all digital and print materials.
+Color Usage
+65% Luxury Cream25% Royal Purple10% Charcoal Black and Champagne Gold accentsPurple is the signature brand color.Gold is reserved for premium highlights and luxury finishes.
+Typography
+Primary Display: Playfair DisplayPrimary UI: InterSupporting Typeface: ManropeHeadings should use elegant spacing and restrained weight.Body text should prioritize readability.
+Logo Usage Rules
+Always preserve proportions.Never stretch, rotate or distort.Never change official colors.Never place on busy backgrounds without sufficient contrast.Prefer cream or white space around the logo.
+Monogram Usage
+The VM monogram is the universal recognition symbol for VERONICA MARK.Approved uses:• Mobile App Icon• Website Favicon• Social Media Avatar• Product Authentication Seal• Packaging Foil Stamp• Loyalty Cards• Gift Boxes• Watermarks
+Brand Pattern
+Develop a repeating pattern derived from the VM monogram.Applications:• Tissue paper• Shopping bags• Gift boxes• Website backgrounds• Premium stationery• Packaging interiors
+Photography Style
+Luxury editorial style.Soft natural lighting.Minimal backgrounds.Neutral colour palette.High-resolution imagery.Focus on craftsmanship and product detail.
+Iconography
+Use a consistent outline icon family.Rounded corners.Minimal styling.24px base grid.Consistent stroke width throughout the interface.
+Motion Principles
+Elegant and restrained.Soft fades.Smooth page transitions.Subtle hover animations.No excessive motion or distracting effects.
+Accessibility
+Maintain WCAG 2.2 AA contrast.Ensure logo remains legible in dark and light themes.Provide monochrome versions where required.
+

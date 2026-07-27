@@ -1,0 +1,29 @@
+# Development-only Docker Compose for local PostgreSQL.
+# Production uses Neon PostgreSQL — do not use this compose file in prod.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: veronica-mark-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: veronica
+      POSTGRES_PASSWORD: veronica
+      POSTGRES_DB: veronica_mark
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U veronica -d veronica_mark"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:v1.21
+    container_name: veronica-mark-mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"
+      - "1025:1025"

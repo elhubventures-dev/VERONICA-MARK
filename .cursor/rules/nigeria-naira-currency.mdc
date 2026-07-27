@@ -1,0 +1,39 @@
+---
+description: VERONICA MARK is a Nigerian storefront — all money must be NGN (Naira)
+alwaysApply: true
+---
+
+# Currency & commerce — Nigeria (NGN)
+
+VERONICA MARK is a **Nigerian** project. Catalog, orders, and Paystack charges use **Nigerian Naira (NGN / ₦)**.
+
+## Rules
+
+- Catalog / DB / Paystack amounts are always **NGN**.
+- Visitors **in Nigeria** see NGN.
+- Visitors **outside Nigeria** (geo: Vercel/CF IP country) see **USD** at a fixed rate of **$1 = ₦1,500** (`lib/commerce/fx.ts`, `USD_NGN_RATE`).
+- Do not invent other FX rates or multi-currency storefront switching beyond this geo rule.
+- Format via shared `Price` (region-aware). Explicit `currency` on `Price` means the amount is already in that currency (e.g. international shipping $50).
+
+## Tax (client-provided)
+
+- **Displayed product prices are tax-inclusive.** Do not add a separate tax amount on top at bag/checkout.
+- Indicate via `Price` (`incl. tax`) and cart/checkout note (`All product prices include tax.`).
+- See `lib/commerce/tax.ts`.
+
+## Shipping rates (client-provided)
+
+Hub: **Port Harcourt, Rivers State**.
+
+| Method | When | Fee |
+|---|---|---|
+| Intra-city drop | Nigeria · **Rivers** only | ₦3,500 |
+| Interstate shipping | Nigeria · other states (not Rivers) | ₦8,000 |
+| Express courier | Nigeria | ₦10,000 |
+| International shipping | Country ≠ Nigeria (auto for non-NG geo) | **$50 USD** |
+
+International shipping converts to NGN for Paystack at the same **₦1,500/$1** rate.
+
+## Local geo testing
+
+Set `GEO_COUNTRY_OVERRIDE=US` in `.env.local` (or rely on `x-vercel-ip-country` in production).

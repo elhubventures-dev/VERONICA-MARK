@@ -1,0 +1,53 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+jobs:
+  production:
+    name: Production Release Checklist
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify release package
+        working-directory: platform
+        run: |
+          node -e "const pkg=require('./package.json'); if(pkg.version!=='1.0.0'){console.error('Expected version 1.0.0, got', pkg.version); process.exit(1)} console.log('Version', pkg.version)"
+
+      - name: Document production deploy contract
+        run: |
+          cat <<'EOF'
+          VERONICA MARK v1.0 — Production deploy (Vercel + Neon + Supabase)
+
+          Vercel project:
+          - Root Directory: platform
+          - Install: pnpm install
+          - Build: pnpm exec prisma generate && pnpm exec prisma migrate deploy && pnpm build
+          - Output: .next
+          - Node: 20.x
+
+          Required secrets:
+          - DATABASE_URL (Neon pooled)
+          - DATABASE_URL_UNPOOLED (Neon direct, for migrate)
+          - AUTH_SECRET (>=32 chars)
+          - AUTH_URL / NEXT_PUBLIC_APP_URL (production origin)
+          - NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY
+          - SUPABASE_SERVICE_ROLE_KEY
+          - UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN (rate limits)
+          Optional: SENTRY_DSN, payment keys
+
+          Post-deploy:
+          1. Hit /api/health expecting status ok
+          2. Confirm /robots.txt and /sitemap.xml
+          3. Smoke sign-in with seeded admin (rotate password immediately)
+          4. Verify Neon PITR / backups enabled
+          EOF
