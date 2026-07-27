@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

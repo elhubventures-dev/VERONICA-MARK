@@ -20,9 +20,12 @@ import {
 } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
+import { assertSeedAllowed, resolveSeedPassword } from "../lib/db/seed-guard";
+
 const prisma = new PrismaClient();
 
-const PASSWORD = "ChangeMeNow!1";
+assertSeedAllowed();
+const PASSWORD = resolveSeedPassword();
 
 async function seedRolesAndPermissions() {
   const roleDefinitions = [
@@ -647,6 +650,38 @@ async function main() {
     },
   });
 
+  const pwaFlagEnvironments: Array<{
+    environment: FeatureFlagEnvironment;
+    enabled: boolean;
+  }> = [
+    { environment: FeatureFlagEnvironment.DEVELOPMENT, enabled: true },
+    { environment: FeatureFlagEnvironment.STAGING, enabled: false },
+    { environment: FeatureFlagEnvironment.PRODUCTION, enabled: false },
+  ];
+
+  for (const { environment, enabled } of pwaFlagEnvironments) {
+    await prisma.featureFlag.upsert({
+      where: {
+        key_environment: {
+          key: "storefront.pwa",
+          environment,
+        },
+      },
+      update: {
+        enabled,
+        description: "PWA install prompt and offline shell",
+        rollout: enabled ? 100 : 0,
+      },
+      create: {
+        key: "storefront.pwa",
+        enabled,
+        environment,
+        description: "PWA install prompt and offline shell",
+        rollout: enabled ? 100 : 0,
+      },
+    });
+  }
+
   await prisma.systemSetting.upsert({
     where: { key: "default_currency" },
     update: { value: "NGN" },
@@ -925,6 +960,7 @@ async function main() {
     categories: { perfumes: perfumes.id, women: women.id, men: men.id },
     promotionId: promotion.id,
     sampleOrder: sampleVariant ? "VM-SEED-0001" : null,
+    note: "Rotate seeded account passwords immediately on any shared environment.",
   });
 }
 

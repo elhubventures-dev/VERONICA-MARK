@@ -84,6 +84,8 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
             alt={active.alt}
             fill
             priority
+            fetchPriority="high"
+            quality={75}
             sizes="(max-width:768px) 100vw, 50vw"
             className="object-cover"
           />

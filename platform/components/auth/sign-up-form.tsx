@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { AuthAlert } from "@/components/auth/auth-alert";
@@ -14,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PASSWORD_MIN_LENGTH } from "@/lib/auth/constants";
-import { signIn } from "@/lib/auth/client";
+import { getSession, signIn } from "@/lib/auth/client";
+import { navigateAfterAuth, resolvePostAuthPath } from "@/lib/auth/post-auth-redirect";
 
 type SignUpFormProps = {
   csrfToken: string;
@@ -27,8 +27,7 @@ const accountPerks = [
   "Opening edit and launch updates",
 ] as const;
 
-export function SignUpForm({ csrfToken, callbackUrl = "/account" }: SignUpFormProps) {
-  const router = useRouter();
+export function SignUpForm({ csrfToken, callbackUrl }: SignUpFormProps) {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -58,25 +57,35 @@ export function SignUpForm({ csrfToken, callbackUrl = "/account" }: SignUpFormPr
 
       if (!result.success) {
         setError(result.error.message);
+        setLoading(false);
         return;
       }
 
       setSuccess("Your account has been created. Signing you in…");
 
+      const provisionalDestination = resolvePostAuthPath({ callbackUrl });
       const signInResult = await signIn("credentials", {
         email: email.trim().toLowerCase(),
         password,
         redirect: false,
-        callbackUrl,
+        callbackUrl: provisionalDestination,
       });
 
-      if (!signInResult?.error) {
-        router.push(signInResult?.url ?? callbackUrl);
-        router.refresh();
+      if (signInResult?.error) {
+        setError("Account created, but we could not sign you in automatically. Please sign in.");
+        setSuccess(null);
+        setLoading(false);
+        return;
       }
+
+      const session = await getSession();
+      const destination = resolvePostAuthPath({
+        callbackUrl,
+        role: session?.user?.role,
+      });
+      navigateAfterAuth(destination);
     } catch {
       setError("We could not create your account. Please try again.");
-    } finally {
       setLoading(false);
     }
   }

@@ -57,3 +57,6 @@ docker/data
 .vercel
 storybook-static
 storybook-build.log
+
+.vercel
+.env*

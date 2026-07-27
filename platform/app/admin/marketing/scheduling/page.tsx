@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarDays, Clock3, Radio, TimerReset } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
@@ -10,6 +8,7 @@ import { BrandComplianceChecklist } from "@/components/marketing/brand-complianc
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMarketingSchedule } from "@/lib/marketing/queries";
+import { CalendarDays, Clock3, Radio, TimerReset } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Campaign Scheduling",
@@ -76,10 +75,10 @@ export default async function MarketingSchedulingPage() {
       <BrandComplianceChecklist compact storageKey="vm-schedule-compliance" />
 
       <section aria-label="Campaign schedule KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Calendar items" value={schedule.length.toLocaleString()} icon={CalendarDays} />
-        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={Clock3} />
-        <KpiCard label="Live" value={liveCount.toLocaleString()} icon={Radio} />
-        <KpiCard label="Owners" value={owners.toLocaleString()} icon={TimerReset} />
+        <KpiCard label="Calendar items" value={schedule.length.toLocaleString()} icon={<CalendarDays className="size-4" />} />
+        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={<Clock3 className="size-4" />} />
+        <KpiCard label="Live" value={liveCount.toLocaleString()} icon={<Radio className="size-4" />} />
+        <KpiCard label="Owners" value={owners.toLocaleString()} icon={<TimerReset className="size-4" />} />
       </section>
 
       {grouped.length ? (

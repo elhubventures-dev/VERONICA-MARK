@@ -34,8 +34,8 @@
 | Affiliate model missing | Marketing UI only — no affiliate payouts |
 
 ### Open actions before broad public launch
-1. Complete external penetration test (see PENETRATION_TEST_PLAN.md).
-2. Enable Sentry (or equivalent) with alert routing.
+1. Complete external penetration test — ops checklist: [PENETRATION_TEST_CHECKLIST.md](./PENETRATION_TEST_CHECKLIST.md).
+2. ~~Enable Sentry~~ **Done** — set production DSNs + alert routing ([SENTRY.md](./SENTRY.md)).
 3. Confirm Upstash rate limits active in production.
 4. Review Supabase storage RLS policies with least privilege.
 5. Rotate `AUTH_SECRET` and OAuth secrets for production.
@@ -48,12 +48,12 @@ pnpm audit:deps:full   # all severities
 ```
 CI runs `pnpm audit --prod --audit-level=high` with `continue-on-error` so known advisories are visible without blocking hotfixes; treat failures as release blockers for public launch.
 
-### v1.0 audit snapshot (2026-07-24)
-`pnpm audit:deps` reported advisories primarily in transitive chains:
-- `next-auth@5` beta / `@auth/core` (monitor stable Auth.js releases)
-- `postcss` via `next@15.5.21` (await Next patch ≥ postcss 8.5.12)
+### v1.0 audit snapshot (updated 2026-07-27)
+- Cleared Auth.js Critical/High by upgrading to `next-auth@5.0.0-beta.32`.
+- Pinned `brace-expansion@5.0.8` (Sentry/glob chain).
+- Residual High via `next@15.5.21` transitive `postcss@8.4.31` and `sharp@<0.35` — await Next patch; documented exception until then.
 
-Track upgrades in `REMAINING_IMPROVEMENTS.md` P0/P1. Do not ignore Critical/High without a written exception.
+CI runs `pnpm audit --prod --audit-level=high` with `continue-on-error` so known residual advisories are visible without blocking hotfixes; treat new Critical/High as release blockers for public launch.
 
 ## Auth residual checks (from Stage 4)
 - Guest checkout remains intentionally ungated.

@@ -1,12 +1,11 @@
 /**
  * Client-side exception capture for error boundaries.
- * Logs to console in all environments; integrates with Sentry when DSN is present.
+ * Always logs locally; forwards to Sentry when a DSN is configured.
  */
 export function captureClientException(
   error: Error,
   context: Record<string, unknown> = {},
 ) {
-  // Prefer structured console payload for Vercel log drains before Sentry is wired.
   console.error("[client-error]", {
     message: error.message,
     name: error.name,
@@ -14,7 +13,15 @@ export function captureClientException(
     ...context,
   });
 
-  if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_SENTRY_DSN) {
-    // Optional: window.Sentry?.captureException(error, { extra: context });
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN && !process.env.SENTRY_DSN) {
+    return;
   }
+
+  void import("@sentry/nextjs")
+    .then((Sentry) => {
+      Sentry.captureException(error, { extra: context });
+    })
+    .catch(() => {
+      // SDK unavailable — console log above is enough.
+    });
 }

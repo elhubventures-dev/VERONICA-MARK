@@ -26,6 +26,8 @@ export function ProductRail({ eyebrow, title, description, products, bannerSrc }
               alt=""
               fill
               sizes="100vw"
+              loading="lazy"
+              quality={70}
               className="-z-20 object-cover"
             />
             <MediaScrim variant="left" />

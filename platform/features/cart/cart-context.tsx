@@ -1,10 +1,13 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import * as React from "react";
 
+import { syncCartLines } from "@/features/cart/actions";
 import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 
 const CART_STORAGE_KEY = "vm-guest-cart";
+const SERVER_SYNC_DEBOUNCE_MS = 1200;
 
 export type CartProductSnapshot = {
   slug: string;
@@ -86,6 +89,7 @@ function readStoredCoupon(): string | null {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
   const [lines, setLines] = React.useState<CartLine[]>([]);
   const [couponCode, setCouponCodeState] = React.useState<string | null>(null);
   const [hydrated, setHydrated] = React.useState(false);
@@ -107,6 +111,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!hydrated) return;
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(lines));
   }, [lines, hydrated]);
+
+  React.useEffect(() => {
+    if (!hydrated || status !== "authenticated" || !session?.user?.id) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      void syncCartLines(
+        lines.map((line) => ({
+          variantId: line.variantId,
+          quantity: line.quantity,
+          unitPrice: line.product.price,
+        })),
+      );
+    }, SERVER_SYNC_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [lines, hydrated, status, session?.user?.id]);
 
   const setCouponCode = React.useCallback((code: string | null) => {
     setCouponCodeState(code);

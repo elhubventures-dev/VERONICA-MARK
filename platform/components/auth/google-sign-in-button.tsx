@@ -5,10 +5,11 @@ import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth/client";
+import { resolvePostAuthPath } from "@/lib/auth/post-auth-redirect";
 import { cn } from "@/lib/utils";
 
 type GoogleSignInButtonProps = {
-  callbackUrl: string;
+  callbackUrl?: string;
   className?: string;
   disabled?: boolean;
 };
@@ -42,7 +43,9 @@ export function GoogleSignInButton({ callbackUrl, className, disabled }: GoogleS
   async function handleClick() {
     setLoading(true);
     try {
-      await signIn("google", { callbackUrl });
+      await signIn("google", {
+        callbackUrl: resolvePostAuthPath({ callbackUrl }),
+      });
     } finally {
       setLoading(false);
     }

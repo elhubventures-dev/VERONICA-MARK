@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { BellRing, RotateCcw, ShoppingCart, Wallet } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingAbandonedCarts } from "@/lib/marketing/queries";
+import { BellRing, RotateCcw, ShoppingCart, Wallet } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Abandoned Cart Recovery",
@@ -53,10 +52,10 @@ export default async function MarketingAbandonedCartPage() {
       />
 
       <section aria-label="Abandoned cart KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Open carts" value={openCarts.length.toLocaleString()} icon={ShoppingCart} />
-        <KpiCard label="Recovered carts" value={recoveredCarts.length.toLocaleString()} icon={RotateCcw} />
-        <KpiCard label="Open cart value" value={formatPrice(openValue, "EUR")} icon={Wallet} />
-        <KpiCard label="Reminders sent" value={totalReminders.toLocaleString()} icon={BellRing} />
+        <KpiCard label="Open carts" value={openCarts.length.toLocaleString()} icon={<ShoppingCart className="size-4" />} />
+        <KpiCard label="Recovered carts" value={recoveredCarts.length.toLocaleString()} icon={<RotateCcw className="size-4" />} />
+        <KpiCard label="Open cart value" value={formatPrice(openValue, "EUR")} icon={<Wallet className="size-4" />} />
+        <KpiCard label="Reminders sent" value={totalReminders.toLocaleString()} icon={<BellRing className="size-4" />} />
       </section>
 
       {carts.length ? (

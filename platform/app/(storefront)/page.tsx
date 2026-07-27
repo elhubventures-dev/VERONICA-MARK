@@ -67,10 +67,12 @@ export default async function HomePage() {
           alt=""
           fill
           sizes="100vw"
+          loading="lazy"
+          quality={70}
           className="-z-20 object-cover"
         />
         <MediaScrim variant="left" />
-        <div className="mx-auto flex min-h-[520px] max-w-[1440px] items-center px-5 sm:px-8 lg:px-12">
+        <div className="relative mx-auto flex min-h-[520px] max-w-[1440px] items-center px-5 sm:px-8 lg:px-12">
           <div className="max-w-xl">
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase">
               Featured collection
@@ -137,7 +139,7 @@ export default async function HomePage() {
           className="-z-20 object-cover"
         />
         <MediaScrim variant="left" />
-        <div className="mx-auto flex min-h-[420px] max-w-[1440px] items-center px-5 py-20 sm:px-8 lg:px-12">
+        <div className="relative mx-auto flex min-h-[420px] max-w-[1440px] items-center px-5 py-20 sm:px-8 lg:px-12">
           <div className="max-w-xl">
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase">
               The perfume edit

@@ -21,8 +21,8 @@ function formatTimestamp(value: string) {
   });
 }
 
-function getChannelVariant(channel: "transactional" | "marketing") {
-  return channel === "transactional" ? "secondary" : "accent";
+function getChannelVariant(channel: "transactional" | "marketing" | "operational") {
+  return channel === "transactional" ? "secondary" : channel === "marketing" ? "accent" : "outline";
 }
 
 export default async function AdminEmailTemplatesPage() {

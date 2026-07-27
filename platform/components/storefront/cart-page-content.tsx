@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { CartItem } from "@/components/commerce/cart-item";
@@ -12,6 +11,7 @@ import { ShippingEstimator } from "@/components/commerce/shipping-estimator";
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/features/cart/cart-context";
+import { useProceedToCheckout } from "@/hooks/use-proceed-to-checkout";
 import { shippingFeeNgn, type ShippingMethodId } from "@/lib/commerce/shipping-rates";
 import { demoCoupons } from "@/lib/storefront/demo-catalog";
 import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
@@ -28,7 +28,7 @@ type BagShippingQuote = {
 };
 
 export function CartPageContent() {
-  const router = useRouter();
+  const { proceedToCheckout, isReady } = useProceedToCheckout();
   const { lines, subtotal, updateQuantity, removeItem, couponCode, setCouponCode } = useCart();
   const [couponError, setCouponError] = React.useState<string>();
   const [couponLoading, setCouponLoading] = React.useState(false);
@@ -90,7 +90,7 @@ export function CartPageContent() {
     <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
       <h1 className="font-display text-3xl sm:text-4xl">Your Bag</h1>
       <p className="mt-2 text-[var(--color-muted-foreground)]">
-        {lines.length} {lines.length === 1 ? "item" : "items"} · Guest checkout available
+        {lines.length} {lines.length === 1 ? "item" : "items"} · Sign in to complete your order
       </p>
 
       <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
@@ -161,7 +161,7 @@ export function CartPageContent() {
             shippingCurrency={shippingQuote?.currency === "USD" ? "USD" : undefined}
             total={totals.total}
           />
-          <Button className="w-full" size="lg" onClick={() => router.push("/checkout")}>
+          <Button className="w-full" size="lg" disabled={!isReady} onClick={proceedToCheckout}>
             Proceed to secure checkout
           </Button>
           <Button asChild variant="outline" className="w-full">

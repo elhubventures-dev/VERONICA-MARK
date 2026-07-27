@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { ShopCatalog } from "@/components/storefront/shop-catalog";
-import { getFilterFacets, queryCatalog } from "@/lib/storefront/catalog-queries";
+import {
+  getFilterFacets,
+  queryCatalog,
+  sanitizeCatalogPriceFilters,
+} from "@/lib/storefront/catalog-queries";
 import type { SortValue } from "@/lib/storefront/demo-catalog";
 
 export const metadata: Metadata = {
@@ -26,12 +30,18 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   const params = await searchParams;
   const facets = await getFilterFacets();
   const page = Number(params.page ?? 1);
+  const priceFilters = sanitizeCatalogPriceFilters(
+    {
+      priceMin: params.priceMin ? Number(params.priceMin) : undefined,
+      priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    },
+    facets.priceRange,
+  );
 
   const result = await queryCatalog({
     brand: params.brand?.split(",").filter(Boolean),
     category: params.category?.split(",").filter(Boolean),
-    priceMin: params.priceMin ? Number(params.priceMin) : undefined,
-    priceMax: params.priceMax ? Number(params.priceMax) : undefined,
+    ...priceFilters,
     sort: (params.sort as SortValue) ?? "featured",
     page,
   });

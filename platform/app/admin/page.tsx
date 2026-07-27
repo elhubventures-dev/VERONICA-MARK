@@ -1,17 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Activity,
-  Building2,
-  HeartPulse,
-  Package,
-  ShieldAlert,
-  ShoppingBag,
-  Users,
-} from "lucide-react";
-
+import { HeartPulse, ShieldAlert } from "lucide-react";
 import { LineChart } from "@/components/charts/line-chart";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { ProgressRing } from "@/components/dashboard/progress-ring";
@@ -20,6 +11,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getAdminDashboard } from "@/lib/admin/queries";
+import { Activity, Building2, Package, ShoppingBag, Users } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Global Dashboard",
@@ -62,11 +54,11 @@ export default async function AdminDashboardPage() {
           label="Total revenue (30d)"
           value={formatPrice(analytics.totalRevenue30d, "EUR")}
           change={12}
-          icon={ShoppingBag}
+          icon={<ShoppingBag className="size-4" />}
         />
-        <KpiCard label="Orders (30d)" value={String(analytics.orders30d)} icon={Package} />
-        <KpiCard label="Customers" value={analytics.customersTotal.toLocaleString()} icon={Users} />
-        <KpiCard label="Active brands" value={String(analytics.brandsActive)} icon={Building2} />
+        <KpiCard label="Orders (30d)" value={String(analytics.orders30d)} icon={<Package className="size-4" />} />
+        <KpiCard label="Customers" value={analytics.customersTotal.toLocaleString()} icon={<Users className="size-4" />} />
+        <KpiCard label="Active brands" value={String(analytics.brandsActive)} icon={<Building2 className="size-4" />} />
       </section>
 
       <section aria-label="Admin widgets" className="grid gap-4 md:grid-cols-3">
@@ -126,7 +118,7 @@ export default async function AdminDashboardPage() {
             title: log.summary,
             description: `${log.actor} · ${log.action}`,
             timestamp: formatDate(log.createdAt),
-            icon: Activity,
+            icon: <Activity className="size-4" />,
           }))}
         />
       </div>

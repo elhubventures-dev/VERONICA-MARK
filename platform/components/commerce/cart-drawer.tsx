@@ -13,6 +13,7 @@ import { CartItem, type CartItemProps } from "@/components/commerce/cart-item";
 import { CartSummary } from "@/components/commerce/cart-summary";
 import { EmptyCart } from "@/components/commerce/empty-cart";
 import { Button } from "@/components/ui/button";
+import { useProceedToCheckout } from "@/hooks/use-proceed-to-checkout";
 import { focusRingClass, motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +36,8 @@ export function CartDrawer({
 }: CartDrawerProps) {
   const reduceMotion = useReducedMotion();
   const panelId = React.useId();
+  const { proceedToCheckout, isReady } = useProceedToCheckout();
+  const handleCheckout = onCheckout ?? proceedToCheckout;
 
   React.useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -105,7 +108,7 @@ export function CartDrawer({
             {items.length > 0 ? (
               <div className="space-y-4 border-t border-[var(--color-border)] p-5">
                 <CartSummary subtotal={subtotal} total={total} shipping={0} shippingLabel="Complimentary shipping" />
-                <Button className="w-full" size="lg" onClick={onCheckout}>
+                <Button className="w-full" size="lg" disabled={!isReady} onClick={handleCheckout}>
                   Proceed to Checkout
                 </Button>
               </div>

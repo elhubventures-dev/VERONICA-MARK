@@ -84,8 +84,8 @@ function buildItems(
       },
       {
         icon: ShieldCheck,
-        title: "Guest checkout",
-        body: "No account required. Create one later to track orders, invoices and rewards.",
+        title: "Member checkout",
+        body: "Sign in or create an account to place your order and track delivery in one place.",
       },
       {
         icon: PackageCheck,

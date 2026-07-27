@@ -1,13 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  AlertTriangle,
-  Package,
-  ShoppingBag,
-  TrendingUp,
-  Truck,
-} from "lucide-react";
-
 import { OrderStatusBadge } from "@/components/commerce/order-status-badge";
 import { Price } from "@/components/commerce/price";
 import { LineChart } from "@/components/charts/line-chart";
@@ -17,6 +9,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getBrandDashboard } from "@/lib/brand/queries";
+import { AlertTriangle, Package, ShoppingBag, TrendingUp, Truck } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Brand Dashboard",
@@ -59,18 +52,18 @@ export default async function BrandDashboardPage() {
           label="Sales today"
           value={`€${analytics.salesToday.toFixed(2)}`}
           change={8}
-          icon={TrendingUp}
+          icon={<TrendingUp className="size-4" />}
         />
-        <KpiCard label="Orders today" value={String(analytics.ordersToday)} icon={ShoppingBag} />
+        <KpiCard label="Orders today" value={String(analytics.ordersToday)} icon={<ShoppingBag className="size-4" />} />
         <KpiCard
           label="Pending shipments"
           value={String(data.pendingShipments)}
-          icon={Truck}
+          icon={<Truck className="size-4" />}
         />
         <KpiCard
           label="Inventory alerts"
           value={String(analytics.inventoryAlerts)}
-          icon={AlertTriangle}
+          icon={<AlertTriangle className="size-4" />}
         />
       </section>
 
@@ -95,7 +88,7 @@ export default async function BrandDashboardPage() {
             title: log.summary,
             description: `${log.actor} · ${log.action}`,
             timestamp: formatDate(log.createdAt),
-            icon: Package,
+            icon: <Package className="size-4" />,
           }))}
         />
       </div>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingAffiliates } from "@/lib/marketing/queries";

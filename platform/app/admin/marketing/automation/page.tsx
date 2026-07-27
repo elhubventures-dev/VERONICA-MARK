@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { PauseCircle, PlayCircle, Radar, Workflow } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingAutomations } from "@/lib/marketing/queries";
+import { PauseCircle, PlayCircle, Radar, Workflow } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Marketing Automation",
@@ -35,10 +34,10 @@ export default async function MarketingAutomationPage() {
       />
 
       <section aria-label="Automation KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Automations" value={automations.length.toLocaleString()} icon={Workflow} />
-        <KpiCard label="Active" value={activeCount.toLocaleString()} icon={PlayCircle} />
-        <KpiCard label="Paused" value={pausedCount.toLocaleString()} icon={PauseCircle} />
-        <KpiCard label="Runs (30d)" value={totalRuns.toLocaleString()} icon={Radar} />
+        <KpiCard label="Automations" value={automations.length.toLocaleString()} icon={<Workflow className="size-4" />} />
+        <KpiCard label="Active" value={activeCount.toLocaleString()} icon={<PlayCircle className="size-4" />} />
+        <KpiCard label="Paused" value={pausedCount.toLocaleString()} icon={<PauseCircle className="size-4" />} />
+        <KpiCard label="Runs (30d)" value={totalRuns.toLocaleString()} icon={<Radar className="size-4" />} />
       </section>
 
       {automations.length ? (

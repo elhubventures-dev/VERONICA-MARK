@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Banknote, Percent, Receipt, ShoppingBag } from "lucide-react";
-
 import { DonutChart } from "@/components/charts/donut-chart";
 import { LineChart } from "@/components/charts/line-chart";
-import { Price, formatPrice } from "@/components/commerce/price";
+import { Price } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { getBrandAnalytics } from "@/lib/brand/queries";
+import { Banknote, Percent, Receipt, ShoppingBag } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Brand Analytics",
@@ -33,10 +33,10 @@ export default async function BrandAnalyticsPage() {
       />
 
       <section aria-label="Key metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Revenue (30 days)" value={formatPrice(analytics.revenue30d, "EUR")} icon={Banknote} />
-        <KpiCard label="Orders (30 days)" value={String(analytics.orders30d)} icon={ShoppingBag} />
-        <KpiCard label="AOV (30 days)" value={formatPrice(analytics.aov30d, "EUR")} icon={Receipt} />
-        <KpiCard label="Conversion rate" value={`${analytics.conversionRate.toFixed(1)}%`} icon={Percent} />
+        <KpiCard label="Revenue (30 days)" value={formatPrice(analytics.revenue30d, "EUR")} icon={<Banknote className="size-4" />} />
+        <KpiCard label="Orders (30 days)" value={String(analytics.orders30d)} icon={<ShoppingBag className="size-4" />} />
+        <KpiCard label="AOV (30 days)" value={formatPrice(analytics.aov30d, "EUR")} icon={<Receipt className="size-4" />} />
+        <KpiCard label="Conversion rate" value={`${analytics.conversionRate.toFixed(1)}%`} icon={<Percent className="size-4" />} />
       </section>
 
       <div className="grid gap-8 xl:grid-cols-[1.7fr_1fr]">

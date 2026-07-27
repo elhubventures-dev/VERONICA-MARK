@@ -3,6 +3,11 @@ import { cn } from "@/lib/utils";
 /**
  * Hero-strength overlays so white/gold copy stays readable over photography.
  * Inline gradients (not Tailwind arbitrary classes) so color-mix always paints.
+ *
+ * Stacking contract (parent must be `relative isolate`):
+ * - Photo: `-z-20`
+ * - MediaScrim: `-z-10` (this component)
+ * - Copy: `relative` (or higher)
  */
 export type MediaScrimVariant = "left" | "right" | "bottom" | "center";
 
@@ -28,13 +33,13 @@ export function MediaScrim({ variant = "left", withAccent = true, className }: M
     <>
       <div
         aria-hidden
-        className={cn("absolute inset-0", className)}
+        className={cn("pointer-events-none absolute inset-0 -z-10", className)}
         style={{ background: SCRIMS[variant] }}
       />
       {withAccent ? (
         <div
           aria-hidden
-          className="absolute inset-0"
+          className="pointer-events-none absolute inset-0 -z-10"
           style={{
             background:
               "radial-gradient(circle at 78% 22%, color-mix(in srgb, var(--color-accent-bright) 18%, transparent), transparent 32%)",

@@ -1,18 +1,19 @@
+import * as Sentry from "@sentry/nextjs";
+
 import { logger } from "@/lib/logger";
 
 type ObservabilityContext = Record<string, unknown>;
 
 /**
  * Server-side exception capture.
- * When SENTRY_DSN is configured, wire @sentry/nextjs here without changing call sites.
+ * Logs via Pino and forwards to Sentry when SENTRY_DSN is configured.
  */
 export function captureException(error: unknown, context: ObservabilityContext = {}) {
   const err = error instanceof Error ? error : new Error(String(error));
   logger.error({ err, ...context }, err.message);
 
-  if (process.env.SENTRY_DSN) {
-    // Optional integration point for Sentry Node SDK.
-    console.error("[observability]", err.message, context);
+  if (process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.captureException(err, { extra: context });
   }
 
   return err;
@@ -20,6 +21,10 @@ export function captureException(error: unknown, context: ObservabilityContext =
 
 export function captureMessage(message: string, context: ObservabilityContext = {}) {
   logger.info({ ...context }, message);
+
+  if (process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN) {
+    Sentry.captureMessage(message, { extra: context });
+  }
 }
 
 export function startSpan<T>(name: string, fn: () => T): T {

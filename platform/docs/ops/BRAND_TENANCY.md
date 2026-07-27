@@ -24,7 +24,7 @@ Brand Managers may only read/mutate data for the brand on `BrandManagerProfile.b
 
 - Inventory stock adjust (`adjustBrandInventoryAction`)
 - Product archive / restore (`updateBrandProductStatusAction`)
-- Order packed / shipped (`updateBrandOrderFulfillmentAction`)
+- Order packed / shipped / out for delivery / delivered (`updateBrandOrderFulfillmentAction`) — each step sends the matching customer status email
 
 Each action calls `requireBrandContext()` then a `*ForBrand` repository method that re-checks ownership before write.
 

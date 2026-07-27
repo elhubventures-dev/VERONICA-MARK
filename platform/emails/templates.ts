@@ -1,3 +1,7 @@
+/**
+ * @deprecated Prefer `renderEmail` from `@/emails` for branded templates.
+ * Kept for backwards compatibility with early plain-text helpers.
+ */
 export type EmailTemplateProps = {
   previewText: string;
   heading: string;
@@ -6,10 +10,6 @@ export type EmailTemplateProps = {
   ctaHref?: string;
 };
 
-/**
- * Transactional email templates will render from this module (Phase 3+).
- * Keep copy localization-ready for EN/FR/AR/ES/HA/IG/YO.
- */
 export function buildPlainTextEmail(props: EmailTemplateProps): string {
   const lines = [props.heading, "", props.body];
   if (props.ctaLabel && props.ctaHref) {

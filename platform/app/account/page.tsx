@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Bell,
-  Gift,
-  Heart,
-  ShoppingBag,
-  Ticket,
-  Wallet,
-} from "lucide-react";
 
 import { OrderCard } from "@/components/commerce/order-card";
 import { Price } from "@/components/commerce/price";
-import { KpiCard } from "@/components/dashboard/kpi-card";
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
+import { KpiCard } from "@/components/dashboard/kpi-card";
+import { Bell, Gift, Heart, ShoppingBag, Ticket, Wallet } from "@/components/icons";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
 import { getAccountOverview } from "@/lib/account/queries";
@@ -48,13 +41,30 @@ export default async function AccountDashboardPage() {
       />
 
       <section aria-label="Key metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Reward points" value={data.rewardsBalance.toLocaleString()} icon={Gift} />
-        <KpiCard label="Wishlist" value={String(data.wishlistCount)} icon={Heart} />
-        <KpiCard label="Open coupons" value={String(data.availableCoupons)} icon={Ticket} />
+        <KpiCard
+          label="Reward points"
+          value={data.rewardsBalance.toLocaleString()}
+          icon={<Gift className="size-4" />}
+        />
+        <KpiCard
+          label="Wishlist"
+          value={String(data.wishlistCount)}
+          icon={<Heart className="size-4" />}
+        />
+        <KpiCard
+          label="Open coupons"
+          value={String(data.availableCoupons)}
+          icon={<Ticket className="size-4" />}
+        />
         <KpiCard
           label="Wallet"
-          value={`€${data.walletBalance.toFixed(2)}`}
-          icon={Wallet}
+          value={data.walletBalance.toLocaleString("en-NG", {
+            style: "currency",
+            currency: "NGN",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+          icon={<Wallet className="size-4" />}
         />
       </section>
 
@@ -102,21 +112,21 @@ export default async function AccountDashboardPage() {
                 title: `${data.unreadNotifications} unread notification${data.unreadNotifications === 1 ? "" : "s"}`,
                 description: "Order and offer updates",
                 timestamp: "Inbox",
-                icon: Bell,
+                icon: <Bell className="size-4" />,
               },
               {
                 id: "a2",
                 title: `${data.rewardsTier} member`,
                 description: `${data.rewardsBalance.toLocaleString()} points available`,
                 timestamp: "Rewards",
-                icon: Gift,
+                icon: <Gift className="size-4" />,
               },
               {
                 id: "a3",
                 title: "Continue browsing",
                 description: "Return to the fragrance edit",
                 timestamp: "Shop",
-                icon: ShoppingBag,
+                icon: <ShoppingBag className="size-4" />,
               },
             ]}
           />
@@ -129,14 +139,16 @@ export default async function AccountDashboardPage() {
               Quick links
             </h2>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-              {([
-                ["/account/invoices", "Invoices"],
-                ["/account/returns", "Returns"],
-                ["/account/coupons", "Coupons"],
-                ["/account/referral", "Referral"],
-                ["/account/addresses", "Addresses"],
-                ["/account/settings", "Settings"],
-              ] as const).map(([href, label]) => (
+              {(
+                [
+                  ["/account/invoices", "Invoices"],
+                  ["/account/returns", "Returns"],
+                  ["/account/coupons", "Coupons"],
+                  ["/account/referral", "Referral"],
+                  ["/account/addresses", "Addresses"],
+                  ["/account/settings", "Settings"],
+                ] as const
+              ).map(([href, label]) => (
                 <li key={href}>
                   <Link
                     href={href}

@@ -28,14 +28,14 @@
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase | Server uploads |
 | `UPSTASH_REDIS_REST_URL` / `TOKEN` | Upstash | Rate limits |
 
-Optional: Google OAuth, Paystack/SquadCo keys, `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN`.
+Optional: Google OAuth, Paystack/SquadCo keys, `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` (see [SENTRY.md](./SENTRY.md)), `CRON_SECRET`, `SEED_DEFAULT_PASSWORD` (non-prod only).
 
 ### Post-deploy smoke
 1. `GET /api/health` → `{ status: "ok" }`
 2. `/robots.txt` and `/sitemap.xml` return 200
 3. Storefront home + `/shop` render
 4. `/account` redirects unauthenticated users to sign-in
-5. Rotate all seeded passwords immediately
+5. Never run `pnpm db:seed` against production (blocked in seed guard). Rotate any staging seed passwords immediately.
 
 ## 2. Neon PostgreSQL
 
@@ -81,7 +81,8 @@ See [SECURITY_AUDIT_STAGE10.md](./SECURITY_AUDIT_STAGE10.md) and [PENETRATION_TE
 - **Logging:** Pino JSON to stdout (Vercel log drains)
 - **Health:** `/api/health` (DB probe)
 - **Error boundaries:** `app/error.tsx`, `app/global-error.tsx` → `captureClientException`
-- **Server capture:** `lib/observability/server.ts` (Sentry-ready)
+- **Server capture:** `lib/observability/server.ts` (Sentry SDK; see [SENTRY.md](./SENTRY.md))
+- **Client capture:** `lib/observability/client.ts` + error boundaries
 - Wire `@sentry/nextjs` when DSNs are provisioned (env already accepted)
 
 ## 8. Testing & CI/CD

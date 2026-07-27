@@ -28,6 +28,9 @@ import {
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=85";
 
+/** Fallback catalog price ceiling when the live catalog has no priced products (NGN). */
+const NGN_PRICE_FACET_FALLBACK_MAX = 500_000;
+
 export type CatalogFilters = {
   brand?: string[];
   category?: string[];
@@ -38,6 +41,29 @@ export type CatalogFilters = {
   page?: number;
   pageSize?: number;
 };
+
+/**
+ * Drop price bounds that cannot match any catalog amount (e.g. leftover EUR-scale
+ * `priceMax=300` against NGN prices in the tens of thousands).
+ */
+export function sanitizeCatalogPriceFilters(
+  filters: Pick<CatalogFilters, "priceMin" | "priceMax">,
+  priceRange: { min: number; max: number },
+): Pick<CatalogFilters, "priceMin" | "priceMax"> {
+  const span = priceRange.max - priceRange.min;
+  const min = filters.priceMin;
+  const max = filters.priceMax;
+  const minOk =
+    min === undefined ||
+    (Number.isFinite(min) && min >= priceRange.min - span && min <= priceRange.max);
+  const maxOk =
+    max === undefined ||
+    (Number.isFinite(max) && max >= priceRange.min && max <= priceRange.max + span);
+  return {
+    priceMin: minOk ? min : undefined,
+    priceMax: maxOk ? max : undefined,
+  };
+}
 
 export type CatalogResult = {
   items: StorefrontProduct[];
@@ -470,7 +496,7 @@ export async function getFilterFacets() {
         })),
         priceRange: {
           min: prices.length ? Math.min(...prices) : 0,
-          max: prices.length ? Math.max(...prices) : 300,
+          max: prices.length ? Math.max(...prices) : NGN_PRICE_FACET_FALLBACK_MAX,
         },
       };
     }
@@ -478,6 +504,7 @@ export async function getFilterFacets() {
     // demo fallback
   }
 
+  const demoPrices = demoProducts.map((p) => p.price);
   return {
     brands: demoBrands.map((b) => ({
       value: b.slug,
@@ -489,6 +516,9 @@ export async function getFilterFacets() {
       label: c.name,
       count: demoProducts.filter((p) => p.categorySlug === c.slug).length,
     })),
-    priceRange: { min: 0, max: 300 },
+    priceRange: {
+      min: demoPrices.length ? Math.min(...demoPrices) : 0,
+      max: demoPrices.length ? Math.max(...demoPrices) : NGN_PRICE_FACET_FALLBACK_MAX,
+    },
   };
 }

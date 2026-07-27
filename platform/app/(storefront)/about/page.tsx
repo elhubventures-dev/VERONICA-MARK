@@ -69,7 +69,7 @@ export default function AboutPage() {
             alt=""
             fill
             sizes="100vw"
-            className="object-cover"
+            className="-z-20 object-cover"
           />
           <MediaScrim variant="center" />
           <p className="relative mx-auto max-w-4xl px-5 py-16 text-center font-display text-2xl text-white drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] sm:px-8 sm:text-3xl lg:py-20 lg:text-4xl">
@@ -135,7 +135,7 @@ export default function AboutPage() {
           alt=""
           fill
           sizes="100vw"
-          className="object-cover"
+          className="-z-20 object-cover"
         />
         <MediaScrim variant="center" />
         <div className="relative mx-auto flex min-h-[420px] max-w-3xl flex-col items-center justify-center px-5 py-20 text-center sm:min-h-[520px] sm:px-8">

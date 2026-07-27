@@ -1,23 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Bell,
-  Gauge,
-  MessageSquareWarning,
-  ShoppingCart,
-  Sparkles,
-  Timer,
-  Zap,
-} from "lucide-react";
-
+import { Bell } from "lucide-react";
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { LineChart } from "@/components/charts/line-chart";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMarketingDashboard } from "@/lib/marketing/queries";
+import { Gauge, MessageSquareWarning, ShoppingCart, Sparkles, Timer, Zap } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Marketing Platform",
@@ -56,12 +48,12 @@ export default async function MarketingDashboardPage() {
       />
 
       <section aria-label="Marketing KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <KpiCard label="Active promotions" value={String(data.activePromotions)} icon={Sparkles} />
-        <KpiCard label="Live flash sales" value={String(data.liveFlashSales)} icon={Zap} />
-        <KpiCard label="Open abandoned carts" value={String(data.openAbandonedCarts)} icon={ShoppingCart} />
-        <KpiCard label="Pending reviews" value={String(data.pendingReviews.length)} icon={MessageSquareWarning} />
-        <KpiCard label="Scheduled campaigns" value={String(data.scheduledCampaigns)} icon={Timer} />
-        <KpiCard label="Active automations" value={String(data.activeAutomations)} icon={Gauge} />
+        <KpiCard label="Active promotions" value={String(data.activePromotions)} icon={<Sparkles className="size-4" />} />
+        <KpiCard label="Live flash sales" value={String(data.liveFlashSales)} icon={<Zap className="size-4" />} />
+        <KpiCard label="Open abandoned carts" value={String(data.openAbandonedCarts)} icon={<ShoppingCart className="size-4" />} />
+        <KpiCard label="Pending reviews" value={String(data.pendingReviews.length)} icon={<MessageSquareWarning className="size-4" />} />
+        <KpiCard label="Scheduled campaigns" value={String(data.scheduledCampaigns)} icon={<Timer className="size-4" />} />
+        <KpiCard label="Active automations" value={String(data.activeAutomations)} icon={<Gauge className="size-4" />} />
       </section>
 
       <div className="grid gap-8 xl:grid-cols-[1.5fr_1fr]">

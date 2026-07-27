@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Bot, MousePointerClick, Sparkles, ToggleLeft } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingRecommendations } from "@/lib/marketing/queries";
+import { Bot, MousePointerClick, Sparkles, ToggleLeft } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Recommendations",
@@ -35,10 +34,10 @@ export default async function MarketingRecommendationsPage() {
       />
 
       <section aria-label="Recommendation KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Placements" value={configs.length.toLocaleString()} icon={Sparkles} />
-        <KpiCard label="Enabled" value={enabledCount.toLocaleString()} icon={ToggleLeft} />
-        <KpiCard label="Disabled" value={disabledCount.toLocaleString()} icon={Bot} />
-        <KpiCard label="Average CTR" value={`${averageCtr.toFixed(1)}%`} icon={MousePointerClick} />
+        <KpiCard label="Placements" value={configs.length.toLocaleString()} icon={<Sparkles className="size-4" />} />
+        <KpiCard label="Enabled" value={enabledCount.toLocaleString()} icon={<ToggleLeft className="size-4" />} />
+        <KpiCard label="Disabled" value={disabledCount.toLocaleString()} icon={<Bot className="size-4" />} />
+        <KpiCard label="Average CTR" value={`${averageCtr.toFixed(1)}%`} icon={<MousePointerClick className="size-4" />} />
       </section>
 
       {configs.length ? (

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { CheckCircle2, MessageSquareQuote, ShieldCheck, XCircle } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingReviews } from "@/lib/marketing/queries";
+import { CheckCircle2, MessageSquareQuote, ShieldCheck, XCircle } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Review System",
@@ -46,10 +45,10 @@ export default async function MarketingReviewsPage() {
       />
 
       <section aria-label="Review system KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Pending" value={pendingCount.toLocaleString()} icon={MessageSquareQuote} />
-        <KpiCard label="Approved" value={approvedCount.toLocaleString()} icon={CheckCircle2} />
-        <KpiCard label="Rejected" value={rejectedCount.toLocaleString()} icon={XCircle} />
-        <KpiCard label="Verified purchases" value={verifiedCount.toLocaleString()} icon={ShieldCheck} />
+        <KpiCard label="Pending" value={pendingCount.toLocaleString()} icon={<MessageSquareQuote className="size-4" />} />
+        <KpiCard label="Approved" value={approvedCount.toLocaleString()} icon={<CheckCircle2 className="size-4" />} />
+        <KpiCard label="Rejected" value={rejectedCount.toLocaleString()} icon={<XCircle className="size-4" />} />
+        <KpiCard label="Verified purchases" value={verifiedCount.toLocaleString()} icon={<ShieldCheck className="size-4" />} />
       </section>
 
       {reviews.length ? (

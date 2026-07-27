@@ -212,7 +212,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
         <>
           <h1 className="font-display text-3xl sm:text-4xl">Checkout</h1>
           <p className="mt-2 text-[var(--color-muted-foreground)]">
-            Guest checkout · Secure payment · Clear delivery updates
+            Secure payment · Clear delivery updates
           </p>
         </>
       ) : null}

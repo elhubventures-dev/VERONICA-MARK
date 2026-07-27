@@ -50,3 +50,6 @@ prisma/*.db-journal
 
 # Private / local docs not needed in app repo
 Perfume Invoice.pdf
+
+.vercel
+.env*

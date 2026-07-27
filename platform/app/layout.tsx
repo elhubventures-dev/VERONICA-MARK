@@ -42,6 +42,14 @@ export const metadata: Metadata = {
   description:
     "Curated for the Exceptional. VERONICA MARK is a luxury managed-brand marketplace launching with premium perfumes.",
   applicationName: "VERONICA MARK",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "VERONICA MARK",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: [{ url: "/brand/vm-icon.svg", type: "image/svg+xml" }],
     apple: [{ url: "/brand/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],

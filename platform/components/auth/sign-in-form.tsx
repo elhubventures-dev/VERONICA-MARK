@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import * as React from "react";
 
 import { AuthAlert } from "@/components/auth/auth-alert";
@@ -12,15 +11,15 @@ import { PasswordInput } from "@/components/forms/password-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "@/lib/auth/client";
+import { getSession, signIn } from "@/lib/auth/client";
+import { navigateAfterAuth, resolvePostAuthPath } from "@/lib/auth/post-auth-redirect";
 
 type SignInFormProps = {
   csrfToken: string;
   callbackUrl?: string;
 };
 
-export function SignInForm({ csrfToken, callbackUrl = "/account" }: SignInFormProps) {
-  const router = useRouter();
+export function SignInForm({ csrfToken, callbackUrl }: SignInFormProps) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
@@ -32,23 +31,28 @@ export function SignInForm({ csrfToken, callbackUrl = "/account" }: SignInFormPr
     setLoading(true);
 
     try {
+      const provisionalDestination = resolvePostAuthPath({ callbackUrl });
       const result = await signIn("credentials", {
         email: email.trim().toLowerCase(),
         password,
         redirect: false,
-        callbackUrl,
+        callbackUrl: provisionalDestination,
       });
 
       if (result?.error) {
         setError("The email or password you entered is incorrect.");
+        setLoading(false);
         return;
       }
 
-      router.push(result?.url ?? callbackUrl);
-      router.refresh();
+      const session = await getSession();
+      const destination = resolvePostAuthPath({
+        callbackUrl,
+        role: session?.user?.role,
+      });
+      navigateAfterAuth(destination);
     } catch {
       setError("We could not sign you in. Please try again.");
-    } finally {
       setLoading(false);
     }
   }

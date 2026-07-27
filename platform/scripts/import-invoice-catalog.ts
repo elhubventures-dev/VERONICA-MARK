@@ -6,8 +6,12 @@
  * - stock = invoice Qty
  * - currency defaults remain NGN
  *
- * Usage: pnpm exec tsx scripts/import-invoice-catalog.ts
+ * Usage: pnpm db:import-invoice
  */
+import { config as loadEnv } from "dotenv";
+loadEnv({ path: ".env.local" });
+loadEnv();
+
 import {
   BrandStatus,
   InventoryStatus,

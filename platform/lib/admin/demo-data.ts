@@ -86,9 +86,11 @@ export type AdminEmailTemplate = {
   id: string;
   key: string;
   name: string;
-  channel: "transactional" | "marketing";
+  channel: "transactional" | "marketing" | "operational";
   locale: string;
   updatedAt: string;
+  description?: string;
+  audience?: string;
 };
 
 export type AdminAuditLog = {
@@ -449,40 +451,8 @@ export const adminLocales: AdminLocale[] = [
   { code: "ar", name: "Arabic", enabled: false, coveragePercent: 18, defaultCurrency: "AED" },
 ];
 
-export const adminEmailTemplates: AdminEmailTemplate[] = [
-  {
-    id: "et-1",
-    key: "order.confirmation",
-    name: "Order confirmation",
-    channel: "transactional",
-    locale: "en",
-    updatedAt: "2026-07-05T10:00:00+01:00",
-  },
-  {
-    id: "et-2",
-    key: "order.shipped",
-    name: "Order shipped",
-    channel: "transactional",
-    locale: "en",
-    updatedAt: "2026-07-05T10:05:00+01:00",
-  },
-  {
-    id: "et-3",
-    key: "auth.reset_password",
-    name: "Password reset",
-    channel: "transactional",
-    locale: "en",
-    updatedAt: "2026-06-20T09:00:00+01:00",
-  },
-  {
-    id: "et-4",
-    key: "marketing.flash_sale",
-    name: "Flash sale announcement",
-    channel: "marketing",
-    locale: "en",
-    updatedAt: "2026-07-19T15:00:00+01:00",
-  },
-];
+/** Fallback list — prefer `listEmailTemplates()` from `@/emails` in queries. */
+export const adminEmailTemplates: AdminEmailTemplate[] = [];
 
 export const adminAuditLogs: AdminAuditLog[] = [
   {

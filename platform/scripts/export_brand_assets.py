@@ -18,8 +18,10 @@ from PIL import Image, ImageDraw
 ROOT = Path(r"c:\Users\User\Desktop\VERONICA MARK")
 LOGO = ROOT / "logo"
 OUT = ROOT / "platform" / "public" / "brand"
+PWA_OUT = OUT / "pwa"
 APP = ROOT / "platform" / "app"
 OUT.mkdir(parents=True, exist_ok=True)
+PWA_OUT.mkdir(parents=True, exist_ok=True)
 
 DATA_URI_RE = re.compile(
     r"xlink:href=\"(data:image/(?:png|jpeg|jpg);base64,([^\"]+))\"",
@@ -92,6 +94,27 @@ def save_webp(im: Image.Image, dest: Path, max_side: int, quality: int = 90) -> 
     print(f"wrote {dest.name} ({dest.stat().st_size // 1024} KB)")
 
 
+def save_pwa_icon(im: Image.Image, dest: Path, size: int) -> None:
+    sized = resize_max(im, int(size * 0.82))
+    bg = Image.new("RGBA", (size, size), (75, 36, 106, 255))
+    x = (size - sized.width) // 2
+    y = (size - sized.height) // 2
+    bg.alpha_composite(sized, (x, y))
+    bg.convert("RGB").save(dest, "PNG", optimize=True)
+    print(f"wrote {dest.name} ({dest.stat().st_size // 1024} KB)")
+
+
+def save_maskable_icon(im: Image.Image, dest: Path, size: int = 512) -> None:
+    """Maskable icon with safe-zone padding for Android adaptive icons."""
+    sized = resize_max(im, int(size * 0.62))
+    bg = Image.new("RGBA", (size, size), (75, 36, 106, 255))
+    x = (size - sized.width) // 2
+    y = (size - sized.height) // 2
+    bg.alpha_composite(sized, (x, y))
+    bg.convert("RGB").save(dest, "PNG", optimize=True)
+    print(f"wrote {dest.name} ({dest.stat().st_size // 1024} KB)")
+
+
 def save_apple_touch(im: Image.Image, dest: Path) -> None:
     sized = resize_max(im, 180)
     bg = Image.new("RGBA", (180, 180), (75, 36, 106, 255))
@@ -153,6 +176,9 @@ def main() -> None:
     save_webp(mono, OUT / "vm-monogram-512.webp", 512)
     save_webp(lockup, OUT / "vm-lockup-1024.webp", 1024)
     save_apple_touch(icon, OUT / "apple-touch-icon.png")
+    save_pwa_icon(icon, PWA_OUT / "icon-192.png", 192)
+    save_pwa_icon(icon, PWA_OUT / "icon-512.png", 512)
+    save_maskable_icon(icon, PWA_OUT / "maskable-512.png", 512)
     save_og(icon, OUT / "og-default.webp")
 
     # Next.js app icon (same as brand icon)

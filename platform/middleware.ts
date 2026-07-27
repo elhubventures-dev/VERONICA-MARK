@@ -68,9 +68,10 @@ export default auth((request) => {
   const session = request.auth;
 
   if (!session?.user) {
-    const signInUrl = new URL("/auth/sign-in", request.nextUrl.origin);
-    signInUrl.searchParams.set("callbackUrl", pathname);
-    return finalize(NextResponse.redirect(signInUrl));
+    const authPath = pathname === "/checkout" ? "/auth/sign-up" : "/auth/sign-in";
+    const authUrl = new URL(authPath, request.nextUrl.origin);
+    authUrl.searchParams.set("callbackUrl", pathname);
+    return finalize(NextResponse.redirect(authUrl));
   }
 
   if (!hasRequiredRole(session.user.role, rule.roles)) {

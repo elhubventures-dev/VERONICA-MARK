@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { SignInForm } from "@/components/auth/sign-in-form";
+import { auth } from "@/lib/auth";
 import { getServerCsrfToken } from "@/lib/auth/get-server-csrf";
+import { resolvePostAuthPath } from "@/lib/auth/post-auth-redirect";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -14,8 +17,19 @@ type SignInPageProps = {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
   const params = await searchParams;
+  const callbackUrl = params.callbackUrl;
+  const session = await auth();
+
+  if (session?.user) {
+    redirect(
+      resolvePostAuthPath({
+        callbackUrl,
+        role: session.user.role,
+      }),
+    );
+  }
+
   const csrfToken = await getServerCsrfToken();
-  const callbackUrl = params.callbackUrl ?? "/account";
 
   return (
     <>

@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Bell, Mail, ShoppingBag, TicketPercent } from "lucide-react";
-
 import { DonutChart } from "@/components/charts/donut-chart";
 import { LineChart } from "@/components/charts/line-chart";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingAnalytics } from "@/lib/marketing/queries";
+import { Bell, Mail, ShoppingBag, TicketPercent } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Marketing Analytics",
@@ -27,10 +26,10 @@ export default async function MarketingAnalyticsPage() {
       />
 
       <section aria-label="Marketing analytics KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Promo revenue (30d)" value={formatPrice(analytics.promoRevenue30d, "EUR")} icon={ShoppingBag} />
-        <KpiCard label="Coupon redemptions" value={analytics.couponRedemptions30d.toLocaleString()} icon={TicketPercent} />
-        <KpiCard label="Email open rate" value={`${analytics.emailOpenRate.toFixed(1)}%`} icon={Mail} />
-        <KpiCard label="Push open rate" value={`${analytics.pushOpenRate.toFixed(1)}%`} icon={Bell} />
+        <KpiCard label="Promo revenue (30d)" value={formatPrice(analytics.promoRevenue30d, "EUR")} icon={<ShoppingBag className="size-4" />} />
+        <KpiCard label="Coupon redemptions" value={analytics.couponRedemptions30d.toLocaleString()} icon={<TicketPercent className="size-4" />} />
+        <KpiCard label="Email open rate" value={`${analytics.emailOpenRate.toFixed(1)}%`} icon={<Mail className="size-4" />} />
+        <KpiCard label="Push open rate" value={`${analytics.pushOpenRate.toFixed(1)}%`} icon={<Bell className="size-4" />} />
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">

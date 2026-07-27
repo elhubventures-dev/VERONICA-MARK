@@ -13,10 +13,9 @@ type Story = StoryObj<typeof PriceRangeFilter>;
 
 export const Default: Story = {
   args: {
-        "value": [
-        50,
-        200
-    ],
-    "onChange": () => undefined
+    min: 0,
+    max: 500_000,
+    value: [50_000, 200_000],
+    onChange: () => undefined,
   },
 };

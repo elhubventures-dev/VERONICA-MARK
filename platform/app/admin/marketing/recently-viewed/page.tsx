@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Eye, MousePointerClick, ScanSearch, TrendingUp } from "lucide-react";
-
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { getMarketingRecentlyViewed } from "@/lib/marketing/queries";
+import { Eye, MousePointerClick, ScanSearch, TrendingUp } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Recently Viewed",
@@ -27,13 +26,13 @@ export default async function MarketingRecentlyViewedPage() {
       />
 
       <section aria-label="Recently viewed KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Tracked products" value={items.length.toLocaleString()} icon={Eye} />
-        <KpiCard label="Total views" value={totalViews.toLocaleString()} icon={ScanSearch} />
-        <KpiCard label="Average add-to-cart" value={`${averageAddToCartRate.toFixed(1)}%`} icon={MousePointerClick} />
+        <KpiCard label="Tracked products" value={items.length.toLocaleString()} icon={<Eye className="size-4" />} />
+        <KpiCard label="Total views" value={totalViews.toLocaleString()} icon={<ScanSearch className="size-4" />} />
+        <KpiCard label="Average add-to-cart" value={`${averageAddToCartRate.toFixed(1)}%`} icon={<MousePointerClick className="size-4" />} />
         <KpiCard
           label="Top product"
           value={topProduct ? topProduct.productName : "N/A"}
-          icon={TrendingUp}
+          icon={<TrendingUp className="size-4" />}
           className="sm:col-span-2 xl:col-span-1"
         />
       </section>

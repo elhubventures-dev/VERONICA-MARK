@@ -37,6 +37,11 @@ export const protectedRoutes: RouteAccessRule[] = [
     pattern: /^\/api\/brand(\/.*)?$/,
     roles: ["BRAND_MANAGER", "SUPER_ADMIN"],
   },
+  {
+    pattern: /^\/checkout$/,
+    roles: ["CUSTOMER", "BRAND_MANAGER", "SUPER_ADMIN"],
+    authenticatedOnly: true,
+  },
 ];
 
 export const guestAllowedRoutes: RegExp[] = [
@@ -50,7 +55,8 @@ export const guestAllowedRoutes: RegExp[] = [
   /^\/search(\/.*)?$/,
   /^\/flash-sale(\/.*)?$/,
   /^\/cart(\/.*)?$/,
-  /^\/checkout(\/.*)?$/,
+  /^\/checkout\/callback(\/.*)?$/,
+  /^\/checkout\/confirmation(\/.*)?$/,
   /^\/wishlist(\/.*)?$/,
   /^\/compare(\/.*)?$/,
   /^\/about(\/.*)?$/,

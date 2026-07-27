@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { SignUpForm } from "@/components/auth/sign-up-form";
+import { auth } from "@/lib/auth";
 import { getServerCsrfToken } from "@/lib/auth/get-server-csrf";
+import { resolvePostAuthPath } from "@/lib/auth/post-auth-redirect";
 
 export const metadata: Metadata = {
   title: "Create Account",
@@ -15,8 +18,19 @@ type SignUpPageProps = {
 
 export default async function SignUpPage({ searchParams }: SignUpPageProps) {
   const params = await searchParams;
+  const callbackUrl = params.callbackUrl;
+  const session = await auth();
+
+  if (session?.user) {
+    redirect(
+      resolvePostAuthPath({
+        callbackUrl,
+        role: session.user.role,
+      }),
+    );
+  }
+
   const csrfToken = await getServerCsrfToken();
-  const callbackUrl = params.callbackUrl ?? "/account";
 
   return (
     <>

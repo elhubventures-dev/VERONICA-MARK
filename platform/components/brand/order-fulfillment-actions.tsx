@@ -15,6 +15,8 @@ type OrderFulfillmentActionsProps = {
   initialStatus: OrderStatus;
 };
 
+type FulfillmentAction = "packed" | "shipped" | "out_for_delivery" | "delivered";
+
 const packableStatuses: OrderStatus[] = ["confirmed", "paid", "processing"];
 
 export function OrderFulfillmentActions({
@@ -22,12 +24,14 @@ export function OrderFulfillmentActions({
   initialStatus,
 }: OrderFulfillmentActionsProps) {
   const [status, setStatus] = React.useState<OrderStatus>(initialStatus);
-  const [pendingAction, setPendingAction] = React.useState<"packed" | "shipped" | null>(null);
+  const [pendingAction, setPendingAction] = React.useState<FulfillmentAction | null>(null);
 
   const canMarkPacked = packableStatuses.includes(status);
   const canMarkShipped = status === "packed";
+  const canMarkOutForDelivery = status === "shipped";
+  const canMarkDelivered = status === "out_for_delivery";
 
-  async function runAction(nextStatus: "packed" | "shipped") {
+  async function runAction(nextStatus: FulfillmentAction) {
     setPendingAction(nextStatus);
     const previous = status;
 
@@ -53,6 +57,7 @@ export function OrderFulfillmentActions({
           <h2 className="font-display text-xl">Fulfillment actions</h2>
           <p className="mt-1 text-sm text-[var(--color-muted-foreground)]">
             Advance packing and shipping for orders that include your brand&apos;s products.
+            Customers receive a status email at each step.
           </p>
         </div>
         <OrderStatusBadge status={status} />
@@ -73,6 +78,21 @@ export function OrderFulfillmentActions({
           onClick={() => void runAction("shipped")}
         >
           {pendingAction === "shipped" ? "Marking shipped..." : "Mark shipped"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={!canMarkOutForDelivery || pendingAction !== null}
+          onClick={() => void runAction("out_for_delivery")}
+        >
+          {pendingAction === "out_for_delivery" ? "Updating..." : "Out for delivery"}
+        </Button>
+        <Button
+          type="button"
+          disabled={!canMarkDelivered || pendingAction !== null}
+          onClick={() => void runAction("delivered")}
+        >
+          {pendingAction === "delivered" ? "Updating..." : "Mark delivered"}
         </Button>
       </div>
 

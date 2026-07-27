@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requireAuth } from "@/lib/auth/session";
 import { toErrorResponse } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { initializePaystackCheckout } from "@/lib/payments/checkout-paystack.service";
@@ -40,6 +41,8 @@ const bodySchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    await requireAuth();
+
     const json = await request.json();
     const parsed = bodySchema.safeParse(json);
     if (!parsed.success) {

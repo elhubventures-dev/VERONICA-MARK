@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingWallet } from "@/lib/marketing/queries";

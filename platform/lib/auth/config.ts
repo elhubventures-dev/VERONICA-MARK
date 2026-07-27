@@ -17,7 +17,8 @@ export const authConfig = {
     signIn: "/auth/sign-in",
     error: "/auth/error",
     verifyRequest: "/auth/verify-email",
-    newUser: "/auth/verify-email",
+    // Do not set `newUser` — Auth.js would send first-time OAuth users to that page
+    // instead of the intended callbackUrl (account / checkout / role home).
   },
   cookies: {
     sessionToken: {
@@ -55,6 +56,15 @@ export const authConfig = {
         }
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      try {
+        if (new URL(url).origin === baseUrl) return url;
+      } catch {
+        // fall through
+      }
+      return `${baseUrl}/account`;
     },
   },
   trustHost: true,

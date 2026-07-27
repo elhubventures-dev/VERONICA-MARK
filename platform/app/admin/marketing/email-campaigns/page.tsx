@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Clock3, Mail, MousePointerClick, ScrollText } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
@@ -10,6 +8,7 @@ import { BrandComplianceChecklist } from "@/components/marketing/brand-complianc
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMarketingEmailCampaigns } from "@/lib/marketing/queries";
+import { Clock3, Mail, MousePointerClick, ScrollText } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Email Campaigns",
@@ -72,10 +71,10 @@ export default async function MarketingEmailCampaignsPage() {
       />
 
       <section aria-label="Email campaign KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Campaigns" value={campaigns.length.toLocaleString()} icon={Mail} />
-        <KpiCard label="Drafts" value={draftCount.toLocaleString()} icon={ScrollText} />
-        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={Clock3} />
-        <KpiCard label="Average click rate" value={`${averageClickRate.toFixed(1)}%`} icon={MousePointerClick} />
+        <KpiCard label="Campaigns" value={campaigns.length.toLocaleString()} icon={<Mail className="size-4" />} />
+        <KpiCard label="Drafts" value={draftCount.toLocaleString()} icon={<ScrollText className="size-4" />} />
+        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={<Clock3 className="size-4" />} />
+        <KpiCard label="Average click rate" value={`${averageClickRate.toFixed(1)}%`} icon={<MousePointerClick className="size-4" />} />
       </section>
 
       {campaigns.length ? (

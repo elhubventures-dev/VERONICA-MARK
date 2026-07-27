@@ -56,8 +56,22 @@ export function ShopCatalog({
   const selectedBrands = parseArray(searchParams.get("brand"));
   const selectedCategories = parseArray(searchParams.get("category"));
   const sort = (searchParams.get("sort") as SortValue) ?? "featured";
-  const priceMin = Number(searchParams.get("priceMin") ?? facets.priceRange.min);
-  const priceMax = Number(searchParams.get("priceMax") ?? facets.priceRange.max);
+  const rawPriceMin = searchParams.get("priceMin");
+  const rawPriceMax = searchParams.get("priceMax");
+  const parsedPriceMin = rawPriceMin !== null ? Number(rawPriceMin) : undefined;
+  const parsedPriceMax = rawPriceMax !== null ? Number(rawPriceMax) : undefined;
+  const priceMinInRange =
+    parsedPriceMin !== undefined &&
+    Number.isFinite(parsedPriceMin) &&
+    parsedPriceMin >= facets.priceRange.min &&
+    parsedPriceMin <= facets.priceRange.max;
+  const priceMaxInRange =
+    parsedPriceMax !== undefined &&
+    Number.isFinite(parsedPriceMax) &&
+    parsedPriceMax >= facets.priceRange.min &&
+    parsedPriceMax <= facets.priceRange.max;
+  const priceMin = priceMinInRange ? parsedPriceMin : facets.priceRange.min;
+  const priceMax = priceMaxInRange ? parsedPriceMax : facets.priceRange.max;
 
   const updateParams = React.useCallback(
     (updates: Record<string, string | null>) => {
@@ -72,9 +86,21 @@ export function ShopCatalog({
       if (!("page" in updates)) {
         params.delete("page");
       }
-      router.push(`${basePath}?${params.toString()}`);
+      const qs = params.toString();
+      router.push(qs ? `${basePath}?${qs}` : basePath);
     },
     [basePath, router, searchParams],
+  );
+
+  const setPriceRange = React.useCallback(
+    ([min, max]: [number, number]) => {
+      const atFullRange = min <= facets.priceRange.min && max >= facets.priceRange.max;
+      updateParams({
+        priceMin: atFullRange ? null : String(min),
+        priceMax: atFullRange ? null : String(max),
+      });
+    },
+    [facets.priceRange.max, facets.priceRange.min, updateParams],
   );
 
   const activeFilters = [
@@ -129,7 +155,7 @@ export function ShopCatalog({
             min={facets.priceRange.min}
             max={facets.priceRange.max}
             value={[priceMin, priceMax]}
-            onChange={([min, max]) => updateParams({ priceMin: String(min), priceMax: String(max) })}
+            onChange={setPriceRange}
           />
         </FilterPanel>
 

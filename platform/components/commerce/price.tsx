@@ -11,6 +11,7 @@ import * as React from "react";
 
 import { useRegion } from "@/features/storefront/region-context";
 import { convertCatalogAmount, type StoreCurrency } from "@/lib/commerce/fx";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { TAX_INCLUSIVE_PRICE_HINT } from "@/lib/commerce/tax";
 import { cn } from "@/lib/utils";
 
@@ -27,16 +28,6 @@ export interface PriceProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: "sm" | "md" | "lg";
   from?: boolean;
   taxInclusive?: boolean;
-}
-
-function formatAmount(amount: number, currency: string): string {
-  const locale = currency === "NGN" ? "en-NG" : currency === "USD" ? "en-US" : "en-GB";
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: currency === "NGN" ? 0 : 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
 }
 
 const sizeClasses = {
@@ -83,11 +74,11 @@ export function Price({
           onSale ? "text-[var(--color-error)]" : "text-[var(--color-foreground)]",
         )}
       >
-        {formatAmount(resolvedAmount, display)}
+        {formatPrice(resolvedAmount, display)}
       </span>
       {onSale && resolvedCompare !== undefined ? (
         <span className="text-sm text-[var(--color-muted-foreground)] line-through">
-          {formatAmount(resolvedCompare, display)}
+          {formatPrice(resolvedCompare, display)}
         </span>
       ) : null}
       {showTaxHint ? (
@@ -99,4 +90,4 @@ export function Price({
   );
 }
 
-export { formatAmount as formatPrice };
+export { formatPrice };

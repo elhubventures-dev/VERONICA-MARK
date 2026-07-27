@@ -1,12 +1,13 @@
 /**
- * @file KpiCard — primary metric tile for brand performance dashboards.
- * Displays label, value, trend delta, and optional icon with motion entrance.
+ * @file KpiCard — primary metric tile for dashboards (client).
+ * Accepts rendered icon nodes — never Lucide component references from Server Components.
  */
 
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDownRight, ArrowUpRight, type LucideIcon } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motionTransition } from "@/lib/motion";
@@ -17,11 +18,12 @@ export interface KpiCardProps {
   value: string;
   change?: number;
   changeLabel?: string;
-  icon?: LucideIcon;
+  /** Pre-rendered icon element (e.g. `<Gift className="size-4" />`), not a component reference. */
+  icon?: ReactNode;
   className?: string;
 }
 
-export function KpiCard({ label, value, change, changeLabel, icon: Icon, className }: KpiCardProps) {
+export function KpiCard({ label, value, change, changeLabel, icon, className }: KpiCardProps) {
   const reduceMotion = useReducedMotion();
   const positive = change !== undefined && change >= 0;
 
@@ -34,9 +36,9 @@ export function KpiCard({ label, value, change, changeLabel, icon: Icon, classNa
       <Card className={cn("overflow-hidden", className)}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium text-[var(--color-muted-foreground)]">{label}</CardTitle>
-          {Icon ? (
+          {icon ? (
             <span className="rounded-xl bg-[var(--color-muted)] p-2 text-[var(--color-primary)]" aria-hidden>
-              <Icon className="size-4" />
+              {icon}
             </span>
           ) : null}
         </CardHeader>

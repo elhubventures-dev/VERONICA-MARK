@@ -50,6 +50,7 @@
     "docker",
     ".storybook",
     "storybook-static",
+    "app/sw.ts",
     "**/*.stories.ts",
     "**/*.stories.tsx",
     "**/*.mdx"

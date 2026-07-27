@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireBrandContext } from "@/lib/auth/brand-tenancy";
+import { notifyCustomerOrderStatus } from "@/lib/email/order-notifications";
 import { toErrorResponse } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { inventoryRepository } from "@/lib/repositories/inventory.repository";
@@ -36,8 +37,15 @@ const productStatusSchema = z.object({
 
 const fulfillOrderSchema = z.object({
   orderNumber: z.string().min(1),
-  status: z.enum(["packed", "shipped"]),
+  status: z.enum(["packed", "shipped", "out_for_delivery", "delivered"]),
 });
+
+const FULFILLMENT_STATUS_MAP = {
+  packed: OrderStatus.PACKED,
+  shipped: OrderStatus.SHIPPED,
+  out_for_delivery: OrderStatus.OUT_FOR_DELIVERY,
+  delivered: OrderStatus.DELIVERED,
+} as const;
 
 /**
  * Brand Manager inventory adjustment — scoped to BrandManagerProfile.brandId.
@@ -117,18 +125,18 @@ export async function updateBrandProductStatusAction(input: {
 }
 
 /**
- * Mark order packed/shipped when the order contains this brand's lines.
+ * Advance fulfillment when the order contains this brand's lines.
+ * Sends the matching customer status email (packed / shipped / OFD / delivered).
  */
 export async function updateBrandOrderFulfillmentAction(input: {
   orderNumber: string;
-  status: "packed" | "shipped";
+  status: "packed" | "shipped" | "out_for_delivery" | "delivered";
 }): Promise<BrandActionResult> {
   try {
     const parsed = fulfillOrderSchema.parse(input);
     const ctx = await requireBrandContext();
 
-    const nextStatus =
-      parsed.status === "packed" ? OrderStatus.PACKED : OrderStatus.SHIPPED;
+    const nextStatus = FULFILLMENT_STATUS_MAP[parsed.status];
 
     const order = await orderRepository.updateStatusForBrand(
       ctx.brandId,
@@ -139,6 +147,8 @@ export async function updateBrandOrderFulfillmentAction(input: {
         changedBy: ctx.userId,
       },
     );
+
+    await notifyCustomerOrderStatus(order, nextStatus);
 
     revalidatePath("/brand/orders");
     revalidatePath(`/brand/orders/${parsed.orderNumber}`);

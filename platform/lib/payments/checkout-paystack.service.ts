@@ -3,7 +3,18 @@ import "server-only";
 import { Currency, OrderStatus, PaymentProvider, PaymentStatus, UserRole, type Prisma } from "@prisma/client";
 import { randomUUID } from "node:crypto";
 
+import {
+  isNigeriaCountry,
+  isShippingMethodId,
+  quoteShipping,
+  shippingFeeNgn,
+} from "@/lib/commerce/shipping-rates";
 import { withTransaction } from "@/lib/db/transactions";
+import {
+  notifyBrandManagersNewOrder,
+  notifyCustomerOrderStatus,
+  notifyCustomerPaymentFailed,
+} from "@/lib/email/order-notifications";
 import { AppError, ValidationError } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import {
@@ -16,12 +27,6 @@ import { prisma } from "@/lib/prisma";
 import { InventoryRepository } from "@/lib/repositories/inventory.repository";
 import { orderRepository } from "@/lib/repositories/order.repository";
 import { paymentRepository } from "@/lib/repositories/payment.repository";
-import {
-  isNigeriaCountry,
-  isShippingMethodId,
-  quoteShipping,
-  shippingFeeNgn,
-} from "@/lib/commerce/shipping-rates";
 import { recomputeTotals } from "@/lib/services/checkout.service";
 import { absoluteUrl } from "@/lib/seo/metadata";
 
@@ -382,6 +387,14 @@ export async function finalizePaystackPayment(reference: string) {
       }
     });
 
+    const failedOrder = await orderRepository.findById(payment.orderId);
+    if (failedOrder) {
+      await notifyCustomerPaymentFailed(
+        failedOrder,
+        verified.gatewayResponse || "Payment was not successful",
+      );
+    }
+
     throw new AppError(verified.gatewayResponse || "Payment was not successful", {
       code: "PAYMENT_FAILED",
       statusCode: 402,
@@ -406,7 +419,7 @@ export async function finalizePaystackPayment(reference: string) {
     payload: verified.raw as Prisma.InputJsonValue,
   });
 
-  await orderRepository.updateStatus(payment.orderId, OrderStatus.PAID, {
+  const paidOrder = await orderRepository.updateStatus(payment.orderId, OrderStatus.PAID, {
     note: "Payment confirmed via Paystack",
     fromStatus: payment.order.status,
   });
@@ -424,6 +437,17 @@ export async function finalizePaystackPayment(reference: string) {
       await inventoryRepo.commitSale(variantId, quantity, payment.orderId, tx);
     }
   });
+
+  // First successful finalize only (alreadyPaid short-circuits above) — verify + webhook share this path.
+  await notifyCustomerOrderStatus(paidOrder, OrderStatus.PAID);
+  await notifyBrandManagersNewOrder(paidOrder);
+
+  try {
+    const { markCustomerAbandonedCartsRecovered } = await import("@/lib/marketing/abandoned-cart");
+    await markCustomerAbandonedCartsRecovered(payment.order.customerId);
+  } catch (error) {
+    logger.warn({ err: error, orderId: payment.orderId }, "abandoned_cart.recover_on_paid_failed");
+  }
 
   logger.info({ reference, orderNumber: payment.order.orderNumber }, "Paystack payment finalized");
 

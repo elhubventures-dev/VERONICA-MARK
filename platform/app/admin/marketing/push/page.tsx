@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Bell, CalendarClock, Send, Users } from "lucide-react";
-
 import { AdminDemoButton } from "@/components/admin/admin-demo-button";
 import { AdminEmptyState } from "@/components/admin/admin-empty-state";
 import { KpiCard } from "@/components/dashboard/kpi-card";
@@ -10,6 +8,7 @@ import { BrandComplianceChecklist } from "@/components/marketing/brand-complianc
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMarketingPush } from "@/lib/marketing/queries";
+import { Bell, CalendarClock, Send, Users } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Push Notifications",
@@ -69,10 +68,10 @@ export default async function MarketingPushPage() {
       <BrandComplianceChecklist compact storageKey="vm-push-campaign-compliance" />
 
       <section aria-label="Push notification KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={CalendarClock} />
-        <KpiCard label="Sent campaigns" value={sentCount.toLocaleString()} icon={Bell} />
-        <KpiCard label="Sent recipients" value={totalRecipients.toLocaleString()} icon={Send} />
-        <KpiCard label="Average open rate" value={`${averageOpenRate.toFixed(1)}%`} icon={Users} />
+        <KpiCard label="Scheduled" value={scheduledCount.toLocaleString()} icon={<CalendarClock className="size-4" />} />
+        <KpiCard label="Sent campaigns" value={sentCount.toLocaleString()} icon={<Bell className="size-4" />} />
+        <KpiCard label="Sent recipients" value={totalRecipients.toLocaleString()} icon={<Send className="size-4" />} />
+        <KpiCard label="Average open rate" value={`${averageOpenRate.toFixed(1)}%`} icon={<Users className="size-4" />} />
       </section>
 
       {campaigns.length ? (

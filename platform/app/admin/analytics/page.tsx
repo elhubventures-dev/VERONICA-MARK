@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { BarChart3, CreditCard, ShoppingBag, Store } from "lucide-react";
-
 import { DonutChart } from "@/components/charts/donut-chart";
 import { LineChart } from "@/components/charts/line-chart";
-import { formatPrice } from "@/components/commerce/price";
+import { formatPrice } from "@/lib/commerce/format-price";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getAdminAnalytics } from "@/lib/admin/queries";
+import { BarChart3, CreditCard, ShoppingBag, Store } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Admin Analytics",
@@ -32,11 +31,11 @@ export default async function AdminAnalyticsPage() {
           label="Revenue (30d)"
           value={formatPrice(analytics.totalRevenue30d, "EUR")}
           change={12}
-          icon={ShoppingBag}
+          icon={<ShoppingBag className="size-4" />}
         />
-        <KpiCard label="Orders (30d)" value={analytics.orders30d.toLocaleString()} change={9} icon={BarChart3} />
-        <KpiCard label="Customers" value={analytics.customersTotal.toLocaleString()} change={7} icon={CreditCard} />
-        <KpiCard label="Active brands" value={String(analytics.brandsActive)} change={3} icon={Store} />
+        <KpiCard label="Orders (30d)" value={analytics.orders30d.toLocaleString()} change={9} icon={<BarChart3 className="size-4" />} />
+        <KpiCard label="Customers" value={analytics.customersTotal.toLocaleString()} change={7} icon={<CreditCard className="size-4" />} />
+        <KpiCard label="Active brands" value={String(analytics.brandsActive)} change={3} icon={<Store className="size-4" />} />
       </section>
 
       <LineChart

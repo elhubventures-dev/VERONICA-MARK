@@ -2,6 +2,7 @@ import "server-only";
 
 import type { BrandStatus, PaymentStatus as PrismaPaymentStatus } from "@prisma/client";
 
+import { listEmailTemplates } from "@/emails";
 import {
   adminAnalytics,
   adminAuditLogs,
@@ -304,6 +305,19 @@ export async function getAdminLocales() {
 }
 
 export async function getAdminEmailTemplates() {
+  const catalog = listEmailTemplates();
+  if (catalog.length) {
+    return catalog.map((template, index) => ({
+      id: `et-${index + 1}`,
+      key: template.key,
+      name: template.name,
+      channel: template.channel,
+      locale: "en",
+      updatedAt: "2026-07-27T05:00:00+01:00",
+      description: template.description,
+      audience: template.audience,
+    }));
+  }
   return adminEmailTemplates;
 }
 

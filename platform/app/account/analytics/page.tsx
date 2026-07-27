@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, BarChart3, Gift, RotateCcw, ShoppingBag } from "lucide-react";
-
+import { RotateCcw } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAccountAnalytics } from "@/lib/account/queries";
+import { ArrowUpRight, BarChart3, Gift, ShoppingBag } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Analytics",
@@ -45,10 +45,10 @@ export default async function AccountAnalyticsPage() {
       />
 
       <section aria-label="Analytics summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Orders placed" value={String(analytics.ordersPlaced)} icon={ShoppingBag} />
-        <KpiCard label="Spend YTD" value={formatCurrency(analytics.spendYtd)} icon={BarChart3} />
-        <KpiCard label="Average order" value={formatCurrency(analytics.avgOrderValue)} icon={ArrowUpRight} />
-        <KpiCard label="Points earned" value={analytics.pointsEarned.toLocaleString()} icon={Gift} />
+        <KpiCard label="Orders placed" value={String(analytics.ordersPlaced)} icon={<ShoppingBag className="size-4" />} />
+        <KpiCard label="Spend YTD" value={formatCurrency(analytics.spendYtd)} icon={<BarChart3 className="size-4" />} />
+        <KpiCard label="Average order" value={formatCurrency(analytics.avgOrderValue)} icon={<ArrowUpRight className="size-4" />} />
+        <KpiCard label="Points earned" value={analytics.pointsEarned.toLocaleString()} icon={<Gift className="size-4" />} />
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">

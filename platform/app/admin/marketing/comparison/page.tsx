@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { GitCompareArrows, ShoppingBag, TrendingUp, Users } from "lucide-react";
-
+import { ShoppingBag } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { getMarketingComparison } from "@/lib/marketing/queries";
+import { GitCompareArrows, TrendingUp, Users } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Product Comparison",
@@ -23,13 +23,13 @@ export default async function MarketingComparisonPage() {
       />
 
       <section aria-label="Comparison KPIs" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <KpiCard label="Comparison sessions" value={comparison.sessions.toLocaleString()} icon={Users} />
+        <KpiCard label="Comparison sessions" value={comparison.sessions.toLocaleString()} icon={<Users className="size-4" />} />
         <KpiCard
           label="Average products compared"
           value={comparison.productsComparedAvg.toFixed(1)}
-          icon={GitCompareArrows}
+          icon={<GitCompareArrows className="size-4" />}
         />
-        <KpiCard label="Conversion lift" value={`${comparison.conversionLift.toFixed(1)}%`} icon={TrendingUp} />
+        <KpiCard label="Conversion lift" value={`${comparison.conversionLift.toFixed(1)}%`} icon={<TrendingUp className="size-4" />} />
       </section>
 
       <section className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-subtle)]">

@@ -32,7 +32,7 @@ export function AboutHero() {
       <MediaScrim variant="center" />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
             "linear-gradient(to top, color-mix(in srgb, var(--color-brand-deep) 70%, transparent) 0%, transparent 55%)",
