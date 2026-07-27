@@ -1,6 +1,6 @@
 "use client";
 
-import { Flame, Gift, Sparkles, Tag, Zap, type LucideIcon } from "lucide-react";
+import { Flame, Gift, Sparkles, Tag, Zap } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -8,20 +8,32 @@ const MESSAGE = "20% off · Code VM5AUG-20 · August Grand Opening";
 const COPIES = 8;
 const SPEED_PX_PER_SEC = 55;
 
-const SEPARATORS: LucideIcon[] = [Zap, Sparkles, Tag, Flame, Gift];
+const iconClassName = "size-3.5 shrink-0 text-[var(--color-accent)]";
+
+function Separator({ index }: { index: number }) {
+  switch (index % 5) {
+    case 0:
+      return <Zap className={iconClassName} strokeWidth={2} aria-hidden />;
+    case 1:
+      return <Sparkles className={iconClassName} strokeWidth={2} aria-hidden />;
+    case 2:
+      return <Tag className={iconClassName} strokeWidth={2} aria-hidden />;
+    case 3:
+      return <Flame className={iconClassName} strokeWidth={2} aria-hidden />;
+    default:
+      return <Gift className={iconClassName} strokeWidth={2} aria-hidden />;
+  }
+}
 
 function TickerSegment() {
   return (
     <span className="flex shrink-0 items-center">
-      {Array.from({ length: COPIES }, (_, i) => {
-        const Icon = SEPARATORS[i % SEPARATORS.length];
-        return (
-          <span key={i} className="inline-flex shrink-0 items-center gap-5 px-8 whitespace-nowrap">
-            <span>{MESSAGE}</span>
-            <Icon className="size-3.5 shrink-0 text-[var(--color-accent)]" strokeWidth={2} />
-          </span>
-        );
-      })}
+      {Array.from({ length: COPIES }, (_, i) => (
+        <span key={i} className="inline-flex shrink-0 items-center gap-5 px-8 whitespace-nowrap">
+          <span>{MESSAGE}</span>
+          <Separator index={i} />
+        </span>
+      ))}
     </span>
   );
 }

@@ -12,7 +12,6 @@ export function captureException(error: unknown, context: ObservabilityContext =
 
   if (process.env.SENTRY_DSN) {
     // Optional integration point for Sentry Node SDK.
-    // eslint-disable-next-line no-console
     console.error("[observability]", err.message, context);
   }
 
