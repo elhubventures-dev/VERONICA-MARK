@@ -53,6 +53,7 @@
     "app/sw.ts",
     "**/*.stories.ts",
     "**/*.stories.tsx",
-    "**/*.mdx"
+    "**/*.mdx",
+    "scripts/_tmp-*.ts"
   ]
 }
