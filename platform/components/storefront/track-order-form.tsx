@@ -4,6 +4,7 @@ import Link from "next/link";
 import * as React from "react";
 
 import { brandFillCtaClass } from "@/lib/motion";
+import { storefrontContact } from "@/lib/storefront/contact";
 
 export function TrackOrderForm() {
   const [message, setMessage] = React.useState("");
@@ -15,7 +16,7 @@ export function TrackOrderForm() {
     const email = String(data.get("email") ?? "").trim();
     setMessage(
       order && email
-        ? "We couldn’t find a matching dispatch yet. Check your details or contact client services."
+        ? `We couldn’t find a matching dispatch yet. Check your details or contact client services on ${storefrontContact.phone}.`
         : "Enter both your order reference and email address.",
     );
   }

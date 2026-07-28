@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { PwaShell } from "@/components/pwa/pwa-shell";
 import { FlashSalePopup } from "@/components/storefront/flash-sale-popup";
+import { FloatingContactActions } from "@/components/storefront/floating-contact-actions";
 import { MobileBottomNav } from "@/components/storefront/mobile-bottom-nav";
 import { StorefrontChrome } from "@/components/storefront/storefront-chrome";
 import { StorefrontFooter } from "@/components/storefront/storefront-footer";
@@ -25,6 +26,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
         </main>
         <StorefrontFooter />
         <MobileBottomNav />
+        <FloatingContactActions />
         <FlashSalePopup />
       </div>
     </PwaShell>

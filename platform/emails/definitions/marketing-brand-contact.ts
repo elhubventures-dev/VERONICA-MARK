@@ -6,6 +6,7 @@ import type {
   EmailContent,
   MarketingEmailVars,
 } from "@/emails/types";
+import { storefrontContact } from "@/lib/storefront/contact";
 
 export function buildNewsletterWelcome(vars: MarketingEmailVars): EmailContent {
   const appUrl = resolveAppUrl(vars.appUrl);
@@ -195,12 +196,16 @@ export function buildContactAutoReply(
     paragraphs: [
       greet(vars.senderName || vars.recipientName),
       "Thank you for contacting VERONICA MARK. Your message has been received by client services.",
-      "We aim to respond within one business day. For order questions, please include your order reference.",
+      `${storefrontContact.responseNote} For order questions, please include your order reference.`,
+      `You can also reach us by phone or WhatsApp on ${storefrontContact.phone}, or visit us at ${storefrontContact.addressLine}.`,
     ],
     details: [
       { label: "Subject", value: vars.subject },
       ...(vars.topic ? [{ label: "Topic", value: vars.topic }] : []),
       ...(vars.orderNumber ? [{ label: "Order", value: vars.orderNumber }] : []),
+      { label: "Phone / WhatsApp", value: storefrontContact.phone },
+      { label: "Email", value: storefrontContact.email },
+      { label: "Address", value: storefrontContact.addressLine },
     ],
     cta: {
       label: vars.ctaLabel || "Visit VERONICA MARK",
@@ -226,6 +231,8 @@ export function buildContactInternalNotify(vars: ContactEmailVars): EmailContent
       { label: "Subject", value: vars.subject },
       ...(vars.topic ? [{ label: "Topic", value: vars.topic }] : []),
       ...(vars.orderNumber ? [{ label: "Order", value: vars.orderNumber }] : []),
+      { label: "House phone", value: storefrontContact.phone },
+      { label: "House address", value: storefrontContact.addressLine },
     ],
   };
 }

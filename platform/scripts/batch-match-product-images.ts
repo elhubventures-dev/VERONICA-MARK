@@ -19,7 +19,7 @@ const LIMIT = (() => {
 })();
 
 type Candidate = {
-  source: "dscentsation" | "labelstore";
+  source: "dscentsation" | "labelstore" | "muna" | "fragrancesng" | "mkhasa";
   title: string;
   handleOrUrl: string;
   imageUrl: string;
@@ -32,41 +32,47 @@ const QUERY_OVERRIDES: Record<string, string[]> = {
   "asad-bourbon-perfume-100ml": ["lattafa asad bourbon"],
   "asad-elixir-perfume-100ml": ["lattafa asad elixir"],
   "yara-perfume-100ml": ["lattafa yara edp", "yara lattafa"],
-  "ajwad-lattafa-perfume-100ml": ["ajwad", "lattafa ajwad"],
+  "ajwad-lattafa-perfume-100ml": ["lattafa ajwad", "ajwad edp"],
   "avanti-100ml-perfume": ["avanti perfume", "armaf avanti"],
   "nebras-lattafa-100ml": ["lattafa nebras"],
   "fakhar-lattafa-perfume-100ml": ["lattafa fakhar"],
   "angham-perfume-100ml": ["lattafa angham"],
   "khamrah-dukhan-100ml": ["lattafa khamrah dukhan"],
-  "tamima-lattafa-100ml": ["lattafa tamima"],
-  "petra-lattafa-perfume-100ml": ["lattafa petra"],
-  "sehr-lattafa-perfume": ["lattafa sehr"],
-  "qaed-al-fursan-perfume-90ml-white": ["qaed al fursan white", "qaed al fursan"],
-  "qaed-al-fursan-perfume-black-90ml": ["qaed al fursan black", "qaaed al fursan"],
+  "tamima-lattafa-100ml": ["lattafa tamima", "tamima"],
+  "petra-lattafa-perfume-100ml": ["lattafa petra", "petra"],
+  "sehr-lattafa-perfume": ["lattafa sehr", "sehr"],
+  "qaed-al-fursan-perfume-90ml-white": ["qaed al fursan unlimited", "qaed al fursan white"],
+  "qaed-al-fursan-perfume-black-90ml": ["qaed al fursan edp 90", "lattafa qaed al fursan"],
   "hayaati-black-perfume-lattafa": ["lattafa hayaati", "hayaati black"],
-  "hayaati-blue-pink-perfume-100ml": ["hayaati"],
   "9pm-elixir-perfume-100ml": ["afnan 9pm elixir"],
   "9pm-rebel-perfume-100ml": ["afnan 9pm rebel", "9pm rebel"],
-  "9am-pink-100ml": ["afnan 9am dive", "9am pink", "afnan 9 am"],
+  "9am-pink-100ml": ["afnan 9am dive", "9am dive"],
+  "9pm-deodorant": ["afnan 9pm deodorant", "9pm deodorant"],
   "club-de-nuit-intense-man-105ml": ["club de nuit intense for men", "club de nuit intense man"],
   "club-de-nuit-iconic-105ml": ["club de nuit iconic"],
-  "club-de-nuit-sillage-untold-mix": ["club de nuit sillage", "club de nuit untold"],
-  "ameer-al-oud-intense-oud-100ml": ["ameer al oud", "intense oud lattafa"],
+  "ameer-al-oud-intense-oud-100ml": ["ameer al oudh intense", "ameer al oud intense oud"],
   "oud-for-glory-100ml-mix": ["oud for glory", "badee al oud"],
   "barakkat-perfume-mix-100ml": ["barakkat satin oud", "barakkat"],
   "eclaire-perfume-100ml-mix": ["lattafa eclaire"],
-  "qissa-perfume-mix-100ml": ["lattafa qissa"],
-  "vintage-radio-perfume-100ml": ["lattafa vintage radio"],
-  "supremacy-collectors-edition-100ml": ["supremacy collectors", "afnan supremacy collector"],
-  "supremacy-in-oud-perfume-100ml": ["supremacy in oud", "afnan supremacy oud"],
-  "supremacy-perfume-not-only-intense-100ml": ["supremacy not only intense", "afnan supremacy"],
-  "musaman-black-100ml": ["musamam", "musaman"],
+  "musaman-black-100ml": ["lattafa musamam", "musamam"],
+  "vintage-radio-perfume-100ml": ["lattafa vintage radio", "vintage radio"],
   "rayhaan-tiger-100ml": ["rayhaan tiger"],
   "rayhaan-obsidian-perfume": ["rayhaan obsidian"],
   "rayhaan-nocturno-perfume-100ml": ["rayhaan nocturno"],
   "rayhaan-corium-100ml": ["rayhaan corium"],
   "floriana-rayhaan-100ml": ["rayhaan floriana", "floriana rayhaan"],
   "armaf-odyssey-body-spray-200ml": ["armaf odyssey"],
+  "liquid-burn-perfume-100ml": ["liquid brun", "french avenue liquid brun"],
+  "marshmallow-perfume-blush-paris-corner": ["paris corner marshmallow blush"],
+  "riggs-perfume-100ml": ["riggs of london", "riggs perfume"],
+  "saheb-70ml": ["lattafa saheb", "saheb"],
+  "24-carrat-perfume-mix-100ml": ["lattafa 24 carat pure gold", "24 carat pure gold"],
+  "vanilla-voyage-perfume": ["maison asrar vanilla voyage", "vanilla voyage"],
+  "memories-man-perfume": ["fragrance world memories for men", "memories edp men"],
+  "hayaati-blue-pink-perfume-100ml": ["lattafa hayaati florence", "hayaati florence"],
+  "viking-perfume-115ml": ["abraaj viking", "fa paris viking"],
+  "club-de-nuit-sillage-untold-mix": ["armaf club de nuit sillage"],
+  "armaf-odyssey-body-spray-200ml": ["armaf odyssey body spray"],
 };
 
 function normalize(s: string): string {
@@ -122,18 +128,60 @@ function scoreMatch(ourName: string, theirTitle: string): number {
     penalty += 0.35;
   }
 
+  // Reject designer/luxury titles when our SKU is a generic/mix name
+  const foreignLuxury =
+    /(jo malone|guerlain|kurkdjian|maison francis|vertus|chanel|dior|ysl|yves saint|tom ford|creed|initio|parfums de marly|victoria'?s secret|la petite robe|burberry|jimmy choo|valentino|montale|dolce|gabbana|carolina herrera|bvlgari|bulgari|giorgio armani|michael kors|kenzo|byredo|louis vuitton|mugler)/i;
+  if (foreignLuxury.test(theirTitle) && !foreignLuxury.test(ourName)) {
+    penalty += 0.8;
+  }
+  // Generic weekend/man/my way names must not steal designer packshots
+  if (/berries weekend/i.test(ourName) && /burberry/i.test(theirTitle)) penalty += 0.8;
+  if (/breed my man/i.test(ourName) && /jimmy choo/i.test(theirTitle)) penalty += 0.8;
+  if (/oud noir/i.test(ourName) && /valentino/i.test(theirTitle)) penalty += 0.8;
+  if (/royal taboo/i.test(ourName) && /montale|royal aoud/i.test(theirTitle)) penalty += 0.8;
+  if (/velvet oud/i.test(ourName) && /dolce|gabbana|desert oud/i.test(theirTitle)) penalty += 0.8;
+  if (/my way perfume/i.test(ourName) && /giorgio armani/i.test(theirTitle)) penalty += 0.8;
+  if (/viking/i.test(ourName) && /creed viking/i.test(theirTitle)) penalty += 0.8;
+  // "Giorgio" alone must not match Giorgio Armani designer SKUs for a mix line
+  if (/giorgio perfume mix/i.test(ourName) && /giorgio armani/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  if (/salt perfume/i.test(ourName) && /sea salt|jo malone/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  if (/silk mood/i.test(ourName) && /kurkdjian|oud silk mood/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  if (/velvet oud/i.test(ourName) && /maison oud/i.test(theirTitle)) {
+    penalty += 0.5;
+  }
+  if (/intense noir/i.test(ourName) && /petite robe|guerlain/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  if (/victoria world/i.test(ourName) && /victoria'?s secret/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  // Afnan 9AM Dive is sold as "9AM Pink" in our catalog
+  if (/9am pink/i.test(ourName) && /9am dive/i.test(theirTitle)) {
+    penalty -= 0.35;
+  }
+
   // Variant tokens must agree — don't assign Bourbon image to Black, etc.
   for (const v of VARIANT_TOKENS) {
     const weHave = ours.includes(v) || normalize(ourName).includes(v);
     const theyHave = theirSet.has(v) || normalize(theirTitle).includes(v);
     if (weHave !== theyHave) {
-      // "black" on our Asad Black is soft (classic Asad is black bottle and often untitled)
+      if (v === "pink" && weHave && theirSet.has("dive") && /9am/i.test(ourName)) continue;
+      if (v === "dive" && theyHave && ours.includes("pink") && /9am/i.test(ourName)) continue;
+      // Classic Asad is the black bottle and often untitled as "black"
       if (v === "black" && weHave && !theyHave && !/(bourbon|elixir)/.test(normalize(theirTitle))) {
         continue;
       }
-      // "intense" appears in many Club de Nuit titles — only enforce when distinctive
+      // Qaed Al Fursan Unlimited is the white variant
+      if (v === "white" && weHave && (theirSet.has("unlimited") || normalize(theirTitle).includes("unlimited"))) {
+        continue;
+      }
       if (v === "intense" && !weHave) {
-        // allow CDN Intense match only when our name includes intense
         penalty += 0.25;
         continue;
       }
@@ -204,18 +252,132 @@ async function searchLabelStore(query: string): Promise<Candidate[]> {
     }));
 }
 
+async function fetchHtml(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; VERONICA-MARK/1.0)",
+        Accept: "text/html",
+      },
+      redirect: "follow",
+    });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch {
+    return null;
+  }
+}
+
+function isFragranceTitle(title: string): boolean {
+  return /(edp|edt|perfume|parfum|mist|spray|deodorant|cologne|fragrance|oud|eau de)/i.test(title);
+}
+
+async function searchMuna(query: string): Promise<Candidate[]> {
+  const url = `https://munacosmetics.com/index.php?route=product/search&search=${encodeURIComponent(query)}`;
+  const html = await fetchHtml(url);
+  if (!html) return [];
+  const links = [...html.matchAll(/class="name"\s*>\s*<a href="([^"]+)"[^>]*>([^<]+)<\/a>/gi)];
+  const out: Candidate[] = [];
+  for (const match of links.slice(0, 6)) {
+    const href = match[1]!;
+    const title = match[2]!.replace(/&amp;/g, "&").trim();
+    if (!isFragranceTitle(title)) continue;
+    const page = await fetchHtml(href.split("?")[0]!);
+    if (!page) continue;
+    const large =
+      page.match(/data-largeimg="([^"]+)"/i)?.[1] ??
+      [...page.matchAll(/https:\/\/munacosmetics\.com\/image\/cache\/catalog\/[^"'\s]+-1[056]00x1[056]00\.(?:jpe?g|png|webp)/gi)].map(
+        (m) => m[0],
+      )[0] ??
+      page.match(/property="og:image"\s+content="([^"]+)"/i)?.[1];
+    if (!large) continue;
+    out.push({
+      source: "muna",
+      title,
+      handleOrUrl: href,
+      imageUrl: large.replace(/&amp;/g, "&"),
+      score: 0,
+    });
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  return out;
+}
+
+async function searchFragrancesNg(query: string): Promise<Candidate[]> {
+  const url = `https://fragrances.com.ng/catalogsearch/result/?q=${encodeURIComponent(query)}`;
+  const html = await fetchHtml(url);
+  if (!html) return [];
+  const items = [...html.matchAll(/<a class="product-item-link"[^>]*href="([^"]+)"[^>]*>\s*([^<]+?)\s*<\/a>/gi)];
+  const out: Candidate[] = [];
+  for (const match of items.slice(0, 6)) {
+    const href = match[1]!;
+    const title = match[2]!.replace(/&amp;/g, "&").trim();
+    if (!isFragranceTitle(title)) continue;
+    // Prefer non gift-set pages when our product isn't a set
+    if (/gift set/i.test(title) && !/gift|set|mix/i.test(query)) continue;
+    const page = await fetchHtml(href);
+    if (!page) continue;
+    const og = page.match(/property="og:image"\s+content="([^"]+)"/i)?.[1];
+    if (!og) continue;
+    out.push({
+      source: "fragrancesng",
+      title,
+      handleOrUrl: href,
+      imageUrl: og,
+      score: 0,
+    });
+    await new Promise((r) => setTimeout(r, 150));
+  }
+  return out;
+}
+
+/** Mkhasa product pages are SSR with GCS images — try known/guessed slugs. */
+const MKHASA_DIRECT: Record<string, { slug: string; title: string }> = {
+  "9am-pink-100ml": {
+    slug: "afnan-9am-dive-eau-de-parfum-100ml",
+    title: "Afnan 9am Dive Eau de Parfum 100ml",
+  },
+  "qissa-perfume-mix-100ml": {
+    slug: "paris-corner-qissa-pink-eau-de-parfum-100ml",
+    title: "Paris Corner Qissa Pink Eau de Parfum 100ml",
+  },
+};
+
+async function searchMkhasa(ourSlug: string): Promise<Candidate[]> {
+  const direct = MKHASA_DIRECT[ourSlug];
+  if (!direct) return [];
+  const html = await fetchHtml(`https://www.mkhasa.com/products/${direct.slug}`);
+  if (!html) return [];
+  const gcs = [...html.matchAll(/https:\/\/storage\.googleapis\.com\/mkhasa[^"'\\\s>]+/g)].map((m) =>
+    m[0].replace(/&amp;/g, "&"),
+  );
+  const imageUrl = gcs.find((u) => /1\.(jpe?g|png|webp)/i.test(u)) ?? gcs[0];
+  if (!imageUrl) return [];
+  return [
+    {
+      source: "mkhasa",
+      title: direct.title,
+      handleOrUrl: `https://www.mkhasa.com/products/${direct.slug}`,
+      imageUrl,
+      score: 0,
+    },
+  ];
+}
+
 async function downloadImage(url: string, dest: string): Promise<boolean> {
   mkdirSync(join(dest, ".."), { recursive: true });
   try {
-    const res = await fetch(url, {
-      headers: { "User-Agent": "VERONICA-MARK-catalog-image-matcher/1.0" },
+    // Encode spaces in path while keeping query string intact
+    const safeUrl = url.includes("%") ? url : encodeURI(url);
+    const res = await fetch(safeUrl, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; VERONICA-MARK/1.0)" },
       redirect: "follow",
     });
     if (!res.ok || !res.body) return false;
     const type = res.headers.get("content-type") ?? "";
     if (!type.includes("image") && !/\.(jpe?g|png|webp)(\?|$)/i.test(url)) return false;
     await pipeline(Readable.fromWeb(res.body as never), createWriteStream(dest));
-    return existsSync(dest) && readFileSync(dest).byteLength > 8_000;
+    return existsSync(dest) && readFileSync(dest).byteLength > 5_000;
   } catch {
     return false;
   }
@@ -253,28 +415,52 @@ async function bestCandidate(slug: string, name: string): Promise<Candidate | nu
   const queries = buildQueries(slug, name);
   const all: Candidate[] = [];
 
-  for (const q of queries) {
+  for (const q of queries.slice(0, 2)) {
     const ds = await searchDscentsation(q);
     for (const c of ds) {
-      c.score = scoreMatch(name, c.title);
-      // Prefer dscentsation slightly
-      c.score += 0.05;
+      c.score = scoreMatch(name, c.title) + 0.05;
       all.push(c);
     }
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 150));
   }
 
-  // Only hit Label Store if D'Scentsation is weak
-  const topDs = all.filter((c) => c.source === "dscentsation").sort((a, b) => b.score - a.score)[0];
-  if (!topDs || topDs.score < 0.62) {
+  const top = () => all.slice().sort((a, b) => b.score - a.score)[0];
+  if (!top() || top()!.score < 0.62) {
     for (const q of queries.slice(0, 2)) {
       const ls = await searchLabelStore(q);
       for (const c of ls) {
         c.score = scoreMatch(name, c.title);
         all.push(c);
       }
-      await new Promise((r) => setTimeout(r, 200));
+      await new Promise((r) => setTimeout(r, 150));
     }
+  }
+
+  if (!top() || top()!.score < 0.62) {
+    for (const q of queries.slice(0, 2)) {
+      const muna = await searchMuna(q);
+      for (const c of muna) {
+        c.score = scoreMatch(name, c.title) + 0.03;
+        all.push(c);
+      }
+    }
+  }
+
+  if (!top() || top()!.score < 0.62) {
+    for (const q of queries.slice(0, 2)) {
+      const fg = await searchFragrancesNg(q);
+      for (const c of fg) {
+        c.score = scoreMatch(name, c.title) + 0.02;
+        all.push(c);
+      }
+    }
+  }
+
+  // Mkhasa curated / direct
+  const mk = await searchMkhasa(slug);
+  for (const c of mk) {
+    c.score = scoreMatch(name, c.title) + 0.04;
+    all.push(c);
   }
 
   all.sort((a, b) => b.score - a.score);

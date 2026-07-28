@@ -6,7 +6,9 @@ import { notifyAdminEvent } from "@/lib/email/admin";
 import { sendTemplateEmail } from "@/lib/email/send";
 import { logger } from "@/lib/logger";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { storefrontContact } from "@/lib/storefront/contact";
+import {
+  storefrontContact,
+} from "@/lib/storefront/contact";
 
 export type ContactActionResult =
   | { ok: true; message: string }
@@ -75,7 +77,7 @@ export async function submitContactEnquiryAction(input: {
     logger.warn({ err: error }, "contact.enquiry_failed");
     return {
       ok: false,
-      message: "We could not send your message. Please email sales@veronicamark.com directly.",
+      message: `We could not send your message. Please email ${storefrontContact.email} or call ${storefrontContact.phone}.`,
     };
   }
 }
@@ -119,7 +121,7 @@ export async function submitContactOrderSupportAction(input: {
     logger.warn({ err: error }, "contact.order_support_failed");
     return {
       ok: false,
-      message: "We could not send your request. Please email sales@veronicamark.com with your order reference.",
+      message: `We could not send your request. Please email ${storefrontContact.email} or WhatsApp ${storefrontContact.phone} with your order reference.`,
     };
   }
 }

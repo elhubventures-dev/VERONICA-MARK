@@ -124,17 +124,15 @@ export function LegalDocumentPage({
                   className="font-medium text-[var(--color-foreground)] underline-offset-2 hover:underline"
                 >
                   {storefrontContact.email}
-                </a>{" "}
-                or visit{" "}
+                </a>
+                , call{" "}
                 <a
-                  href={storefrontContact.websiteUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={storefrontContact.telUrl}
                   className="font-medium text-[var(--color-foreground)] underline-offset-2 hover:underline"
                 >
-                  {storefrontContact.websiteLabel}
+                  {storefrontContact.phone}
                 </a>
-                .
+                , or visit us at {storefrontContact.addressLine}.
               </p>
               <Link href="/contact" className={`mt-6 ${brandFillCtaClass}`}>
                 Contact us

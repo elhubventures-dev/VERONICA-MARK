@@ -2,6 +2,16 @@
 
 Templates live in `emails/`. Sends go through Resend via `lib/email/send.ts`.
 
+## House contact (footer on every template)
+
+Sourced from `lib/storefront/contact.ts` via `emails/tokens.ts` (`emailDefaults`):
+
+- Phone / WhatsApp: `+234 904 319 7743` (`https://wa.me/2349043197743`)
+- Email: `sales@veronicamark.com`
+- Address: `115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria`
+
+Contact form auto-replies (`contact.auto_reply`) also include these details in the body.
+
 ## Paired client + admin copies
 
 Every customer-facing notification sends **two individually addressed emails**:

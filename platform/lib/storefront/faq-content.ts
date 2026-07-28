@@ -100,7 +100,7 @@ export const faqCategories: FaqCategory[] = [
         id: "hub",
         question: "Where do you ship from?",
         answer:
-          "Orders are fulfilled from our hub in Port Harcourt, Rivers State, Nigeria.",
+          "Orders are fulfilled from our hub at 115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria.",
       },
       {
         id: "nigeria-rates",
@@ -124,7 +124,7 @@ export const faqCategories: FaqCategory[] = [
         id: "track",
         question: "How do I track my order?",
         answer:
-          "Use Track order on the site with your order reference and email, or open the tracking link from your dispatch email. For further help, contact sales@veronicamark.com.",
+          `Use Track order on the site with your order reference and email, or open the tracking link from your dispatch email. For further help, call or WhatsApp ${storefrontContact.phone} or email ${storefrontContact.email}.`,
       },
     ],
   },
@@ -198,7 +198,7 @@ export const faqCategories: FaqCategory[] = [
       {
         id: "contact",
         question: "How do I contact VERONICA MARK?",
-        answer: `Email ${storefrontContact.email} or use the forms on our Contact page. ${storefrontContact.responseNote} Visit ${storefrontContact.websiteLabel} for the full storefront.`,
+        answer: `Call or WhatsApp ${storefrontContact.phone}, email ${storefrontContact.email}, or visit us at ${storefrontContact.addressLine}. You can also use the forms on our Contact page. ${storefrontContact.responseNote} Visit ${storefrontContact.websiteLabel} for the full storefront.`,
       },
       {
         id: "hours",

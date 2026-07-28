@@ -161,11 +161,14 @@ export function renderEmailShell(content: EmailContent): string {
           <tr>
             <td style="padding:24px 32px 32px;border-top:1px solid ${emailTokens.border};background-color:${emailTokens.cream};">
               <p style="margin:0;font-family:${emailTokens.fontSans};font-size:13px;line-height:1.6;color:${emailTokens.muted};">
-                Client services · <a href="mailto:${escapeHtml(emailDefaults.supportEmail)}" style="color:${emailTokens.primary};text-decoration:none;">${escapeHtml(emailDefaults.supportEmail)}</a><br />
+                Client services<br />
+                Phone / WhatsApp · <a href="${escapeHtml(emailDefaults.telUrl)}" style="color:${emailTokens.primary};text-decoration:none;">${escapeHtml(emailDefaults.supportPhone)}</a>
+                · <a href="${escapeHtml(emailDefaults.whatsappUrl)}" style="color:${emailTokens.primary};text-decoration:none;">WhatsApp</a><br />
+                Email · <a href="mailto:${escapeHtml(emailDefaults.supportEmail)}" style="color:${emailTokens.primary};text-decoration:none;">${escapeHtml(emailDefaults.supportEmail)}</a><br />
                 <a href="${escapeHtml(emailDefaults.websiteUrl)}" style="color:${emailTokens.primary};text-decoration:none;">${escapeHtml(emailDefaults.websiteLabel)}</a>
               </p>
               <p style="margin:14px 0 0;font-family:${emailTokens.fontSans};font-size:12px;line-height:1.5;color:${emailTokens.muted};">
-                ${escapeHtml(emailDefaults.brandName)} · Port Harcourt, Rivers State, Nigeria
+                ${escapeHtml(emailDefaults.brandName)} · ${escapeHtml(emailDefaults.addressLine)}
               </p>
               ${unsubscribe}
             </td>
@@ -213,8 +216,12 @@ export function renderPlainText(content: EmailContent): string {
 
   lines.push(
     "",
-    `Client services: ${emailDefaults.supportEmail}`,
+    "Client services",
+    `Phone / WhatsApp: ${emailDefaults.supportPhone}`,
+    `WhatsApp: ${emailDefaults.whatsappUrl}`,
+    `Email: ${emailDefaults.supportEmail}`,
     emailDefaults.websiteLabel,
+    emailDefaults.addressLine,
   );
 
   if (content.unsubscribeUrl) {

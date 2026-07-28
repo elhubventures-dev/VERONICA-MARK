@@ -2,6 +2,8 @@
  * Email-safe brand tokens — aligned with docs/brand/COLORS.md.
  * Prefer inline hex in HTML (email clients ignore CSS variables).
  */
+import { storefrontContact } from "@/lib/storefront/contact";
+
 export const emailTokens = {
   primary: "#4B246A",
   primaryForeground: "#FFFFFF",
@@ -24,8 +26,12 @@ export const emailTokens = {
 export const emailDefaults = {
   brandName: "VERONICA MARK",
   tagline: "Curated for the Exceptional.",
-  supportEmail: "sales@veronicamark.com",
-  websiteUrl: "https://www.veronicamark.com",
-  websiteLabel: "www.veronicamark.com",
+  supportEmail: storefrontContact.email,
+  supportPhone: storefrontContact.phone,
+  whatsappUrl: storefrontContact.whatsappUrl,
+  telUrl: storefrontContact.telUrl,
+  addressLine: storefrontContact.addressLine,
+  websiteUrl: storefrontContact.websiteUrl,
+  websiteLabel: storefrontContact.websiteLabel,
   appUrl: process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://www.veronicamark.com",
 } as const;

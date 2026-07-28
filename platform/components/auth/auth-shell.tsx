@@ -207,6 +207,13 @@ export function AuthShell({ children, title, description, className }: AuthShell
           </nav>
           <p className="mt-3 text-xs text-[var(--color-muted-foreground)] max-lg:text-white/60">
             <a
+              href={storefrontContact.telUrl}
+              className="underline-offset-2 hover:underline"
+            >
+              {storefrontContact.phone}
+            </a>
+            {" · "}
+            <a
               href={`mailto:${storefrontContact.email}`}
               className="underline-offset-2 hover:underline"
             >
@@ -221,6 +228,9 @@ export function AuthShell({ children, title, description, className }: AuthShell
             >
               {storefrontContact.websiteLabel}
             </a>
+          </p>
+          <p className="mt-2 text-xs text-[var(--color-muted-foreground)] max-lg:text-white/55">
+            {storefrontContact.addressLine}
           </p>
         </footer>
       </div>

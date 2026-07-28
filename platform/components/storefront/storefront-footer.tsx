@@ -5,6 +5,7 @@ import { BrandMark } from "@/components/layout/brand-mark";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { Reveal } from "@/components/storefront/reveal";
 import { siteMedia } from "@/lib/storefront/site-media";
+import { storefrontContact } from "@/lib/storefront/contact";
 
 const groups: { title: string; links: [string, string][] }[] = [
   {
@@ -52,6 +53,24 @@ export function StorefrontFooter() {
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/60">
               Curated for the Exceptional. A considered destination for perfume with presence, provenance and point of view.
             </p>
+            <a
+              href={storefrontContact.telUrl}
+              className="mt-4 inline-flex min-h-11 items-center text-sm text-white/80 transition-colors duration-300 hover:text-white"
+            >
+              {storefrontContact.phone}
+            </a>
+            <a
+              href={storefrontContact.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 block max-w-sm text-sm leading-6 text-white/60 transition-colors duration-300 hover:text-white/90"
+            >
+              {storefrontContact.address.line1}
+              <br />
+              {storefrontContact.address.line2}
+              <br />
+              {storefrontContact.address.line3}
+            </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             {groups.map((group) => (

@@ -173,9 +173,9 @@ export function PwaInstallPrompt({ enabled }: PwaInstallPromptProps) {
     <div
       role="region"
       aria-label="Install VERONICA MARK"
-      className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 px-4 md:bottom-6 md:px-6"
+      className="fixed inset-x-0 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 px-4 pointer-events-none md:bottom-6 md:px-6"
     >
-      <div className="mx-auto flex max-w-3xl flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-subtle)] sm:flex-row sm:items-center sm:justify-between">
+      <div className="pointer-events-auto mx-auto flex max-w-3xl flex-col gap-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-subtle)] sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1 text-left">
           <p className="font-display text-lg text-[var(--color-foreground)]">Install VERONICA MARK</p>
           <p className="text-sm leading-6 text-[var(--color-muted-foreground)]">{supportingCopy}</p>

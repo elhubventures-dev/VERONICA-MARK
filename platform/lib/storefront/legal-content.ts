@@ -14,7 +14,7 @@ export const termsSections: LegalSection[] = [
     title: "Agreement to these terms",
     paragraphs: [
       "These Terms of Use (“Terms”) govern your access to and use of the VERONICA MARK website, storefront and related services (the “Services”), operated from Nigeria and serving clients worldwide.",
-      `By browsing, creating an account or placing an order, you agree to these Terms. If you do not agree, please do not use the Services. For questions, contact ${storefrontContact.email}.`,
+      `By browsing, creating an account or placing an order, you agree to these Terms. If you do not agree, please do not use the Services. For questions, contact ${storefrontContact.email} or ${storefrontContact.phone}.`,
     ],
   },
   {
@@ -46,7 +46,7 @@ export const termsSections: LegalSection[] = [
     id: "shipping",
     title: "Shipping & delivery",
     paragraphs: [
-      "Orders are fulfilled from our hub in Port Harcourt, Rivers State, Nigeria. Available shipping methods and fees are shown at checkout and depend on destination.",
+      `Orders are fulfilled from our hub at ${storefrontContact.addressLine}. Available shipping methods and fees are shown at checkout and depend on destination.`,
       "Within Nigeria: intra-city drop in Rivers (Port Harcourt), interstate shipping to other states, and express courier options apply as listed at checkout. Outside Nigeria, international shipping is offered at the rate shown at checkout.",
       "Delivery estimates are indicative and start after dispatch. Delays may occur due to carriers, customs, weather or events beyond our reasonable control. Risk of loss typically passes on delivery according to the carrier’s practices and applicable law.",
     ],
@@ -111,7 +111,7 @@ export const termsSections: LegalSection[] = [
     id: "contact-terms",
     title: "Contact",
     paragraphs: [
-      `For questions about these Terms or an order, email ${storefrontContact.email} or use the Contact page on ${storefrontContact.websiteLabel}. ${storefrontContact.responseNote}`,
+      `For questions about these Terms or an order, email ${storefrontContact.email} or write to us at ${storefrontContact.addressLine}. You may also use the Contact page on ${storefrontContact.websiteLabel}. ${storefrontContact.responseNote}`,
     ],
   },
 ];
@@ -122,7 +122,7 @@ export const privacySections: LegalSection[] = [
     title: "Our commitment",
     paragraphs: [
       "VERONICA MARK (“we”, “us”) respects your privacy. This Privacy Policy explains what personal information we collect, how we use it, and the choices available to you when you use our storefront and related services.",
-      `For privacy requests, contact ${storefrontContact.email}.`,
+      `For privacy requests, contact ${storefrontContact.email} or ${storefrontContact.phone}. Our address is ${storefrontContact.addressLine}.`,
     ],
   },
   {
@@ -192,7 +192,7 @@ export const privacySections: LegalSection[] = [
     title: "Your choices & rights",
     paragraphs: [
       "Depending on applicable law, you may have rights to access, correct, update, delete or restrict certain personal information, or to object to certain processing and to withdraw consent where processing is consent-based.",
-      `To exercise these rights, email ${storefrontContact.email} with sufficient detail for us to verify and respond. You may also unsubscribe from marketing emails using the link in those messages.`,
+      `To exercise these rights, email ${storefrontContact.email}, call or WhatsApp ${storefrontContact.phone}, or write to ${storefrontContact.addressLine} with sufficient detail for us to verify and respond. You may also unsubscribe from marketing emails using the link in those messages.`,
       "You can update some account details by signing in to your account settings.",
     ],
   },
@@ -214,7 +214,7 @@ export const privacySections: LegalSection[] = [
     id: "contact-privacy",
     title: "Contact",
     paragraphs: [
-      `Privacy enquiries: ${storefrontContact.email}. Website: ${storefrontContact.websiteLabel}. ${storefrontContact.responseNote}`,
+      `Privacy enquiries: ${storefrontContact.email}. Phone / WhatsApp: ${storefrontContact.phone}. Address: ${storefrontContact.addressLine}. Website: ${storefrontContact.websiteLabel}. ${storefrontContact.responseNote}`,
     ],
   },
 ];

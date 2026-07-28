@@ -80,4 +80,23 @@ describe("email templates catalog", () => {
     expect(rendered.html).toContain("12 Ada George Rd");
     expect(rendered.html).toContain("Noir Éclat");
   });
+
+  it("includes house phone, WhatsApp and address in email footers and contact auto-reply", () => {
+    const rendered = renderEmail("contact.auto_reply", {
+      senderName: "Ada",
+      senderEmail: "ada@example.com",
+      recipientName: "Ada",
+      subject: "Enquiry · General enquiry",
+      message: "Hello from the storefront.",
+      topic: "General enquiry",
+    });
+
+    expect(rendered.html).toContain("+234 904 319 7743");
+    expect(rendered.html).toContain("115 Woji Road, GRA Phase 3");
+    expect(rendered.html).toContain("https://wa.me/2349043197743");
+    expect(rendered.text).toContain("+234 904 319 7743");
+    expect(rendered.text).toContain(
+      "115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
+    );
+  });
 });
