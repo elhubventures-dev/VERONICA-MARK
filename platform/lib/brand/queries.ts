@@ -244,7 +244,7 @@ export async function getBrandDashboard() {
         workspace: await getBrandWorkspace(),
         analytics: {
           ...brandAnalytics,
-          orders30d: mappedOrders.length,
+          orders30d: mappedOrders.length || brandAnalytics.orders30d,
           inventoryAlerts: lowStock.length,
           pendingShipments: pending.length,
         },

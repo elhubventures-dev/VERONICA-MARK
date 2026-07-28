@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { catalogCacheKey, CACHE_TAGS, CACHE_TTL } from "@/lib/performance/cache";
 import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 import { organizationJsonLd, productJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
+import { demoProducts } from "@/lib/storefront/demo-catalog";
+
 describe("production readiness helpers", () => {
   it("computes cart totals with tax and coupon discount", () => {
     const totals = computeStorefrontTotals({
@@ -33,20 +35,11 @@ describe("production readiness helpers", () => {
     expect(site.potentialAction?.["@type"]).toBe("SearchAction");
   });
 
-  it("emits product JSON-LD for a catalog item", () => {
-    const product = {
-      id: "sample",
-      slug: "sample-edp",
-      name: "Sample Eau de Parfum",
-      brand: "VMA SCENTS",
-      brandSlug: "vma-scents",
-      category: "Women",
-      categorySlug: "women",
-      price: 85000,
-      image: "https://example.com/sample.jpg",
-    };
-    const json = productJsonLd(product);
+  it("emits product JSON-LD for demo catalog item", () => {
+    const product = demoProducts[0];
+    expect(product).toBeTruthy();
+    const json = productJsonLd(product!);
     expect(json["@type"]).toBe("Product");
-    expect(json.offers.price).toBe(product.price);
+    expect(json.offers.price).toBe(product!.price);
   });
 });

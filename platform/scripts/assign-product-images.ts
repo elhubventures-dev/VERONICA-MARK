@@ -8,6 +8,10 @@
  *
  * Usage: pnpm db:assign-product-images
  */
+import { config as loadEnv } from "dotenv";
+loadEnv({ path: ".env.local" });
+loadEnv();
+
 import { createWriteStream, existsSync, mkdirSync, copyFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { pipeline } from "node:stream/promises";

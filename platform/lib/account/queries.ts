@@ -109,13 +109,13 @@ export async function getAccountOverview() {
 
       return {
         recentOrders: mapped.slice(0, 3),
-        rewardsBalance: profile.rewardAccount?.balance ?? 0,
+        rewardsBalance: profile.rewardAccount?.balance ?? accountRewards.points,
         rewardsTier: accountRewards.tier,
-        wishlistCount,
-        availableCoupons: coupons.filter((c) => c.status === "ACTIVE").length,
-        unreadNotifications: unread,
-        walletBalance: wallet ? Number(wallet.balance) : 0,
-        walletCurrency: wallet?.currency ?? "NGN",
+        wishlistCount: wishlistCount || accountWishlistSlugs.length,
+        availableCoupons: coupons.filter((c) => c.status === "ACTIVE").length || accountCoupons.filter((c) => c.status === "available").length,
+        unreadNotifications: unread || accountNotifications.filter((n) => !n.read).length,
+        walletBalance: wallet ? Number(wallet.balance) : accountWallet.balance,
+        walletCurrency: wallet?.currency ?? accountWallet.currency,
         recommended: demoProducts.slice(0, 4),
       };
     }

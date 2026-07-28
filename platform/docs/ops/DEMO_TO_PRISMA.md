@@ -1,24 +1,30 @@
-# Demo → Prisma
+# Demo → Prisma (P0 #2)
 
-Account, brand, admin, marketing, and storefront query layers prefer Prisma repositories.
+Account, brand, admin, marketing, and storefront query layers now prefer Prisma repositories, with demo-data fallbacks when the DB is empty or unreachable.
 
-Demo façades in `lib/*/demo-data.ts` and `lib/storefront/demo-catalog.ts` are **empty** by default so dashboards and the shop show empty states when the database has no rows (no fake seed UI).
+## What reads from Prisma
 
-## Bootstrap seed
+| Area | Wired |
+|------|--------|
+| Storefront catalog | Products, brands, categories, facets, coupons, flash sale, invoices |
+| Checkout (Paystack) | Real `OrderItem` rows when variant IDs exist in DB |
+| Account | Orders, profile, addresses, wallet, wishlist, coupons, notifications, rewards, analytics |
+| Brand portal | Products, inventory, orders, coupons/flash sales, workspace/profile |
+| Admin | Brands, customers, orders, payments, feature flags, settings, users, dashboard |
+| Marketing | Promotions, coupons, flash sales, dashboard counts |
 
-`pnpm db:seed` (and `pnpm db:wipe`) create only:
+Still demo-only (by design for this pass): returns, referral UI, CMS, fraud, email/push campaigns, abandoned-cart workers, brand customers/media/reports.
 
-- RBAC roles / permissions
-- Login accounts: `admin@veronicamark.com`, `brand.manager@veronicamark.com`, `customer@example.com`
-- House brand shell `vma-scents` (no products)
-- Perfume categories
-- Nigeria VAT + shipping rules
-- Feature flags / default currency
+## Seed expectations
 
-No sample products, orders, wallets, coupons, or promotions.
+`pnpm db:seed` now includes:
 
-## Reset
+- Active promo window through end of 2026
+- Coupons `VM5AUG-20` (primary, 20% off), `AUGUST20`, and `GRANDOPEN`
+- Customer address, wishlist, wallet credit, rewards, welcome notification
+- Sample paid order `VM-SEED-0001` with line item + Paystack payment
+- Unsplash primary images for seeded SKUs
 
-```bash
-pnpm db:wipe   # truncate all tables, then bootstrap seed
-```
+## Fallback behaviour
+
+If Prisma throws or returns empty where a list is required for UX, the previous demo façades are returned so local UI remains browsable without a database.

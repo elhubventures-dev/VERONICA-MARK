@@ -1,4 +1,5 @@
 import type { OrderStatus } from "@/components/commerce/order-status-badge";
+import { demoProducts } from "@/lib/storefront/demo-catalog";
 
 export type AccountOrderLine = {
   title: string;
@@ -118,78 +119,453 @@ export type AccountAnalytics = {
   categoryMix: Array<{ label: string; value: number }>;
 };
 
-/** Empty façades — dashboards render real Prisma data or empty states. */
-export const accountOrders: AccountOrder[] = [];
-export const accountAddresses: AccountAddress[] = [];
-export const accountNotifications: AccountNotification[] = [];
-export const accountCoupons: AccountCoupon[] = [];
-export const accountReturns: AccountReturn[] = [];
-export const accountWishlistSlugs: string[] = [];
+const perfumeImg = (slug: string) =>
+  demoProducts.find((p) => p.slug === slug)?.image ??
+  "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=85";
+
+export const accountOrders: AccountOrder[] = [
+  {
+    orderNumber: "VM-2026-0004",
+    placedAt: "2026-07-22T09:14:00+01:00",
+    status: "shipped",
+    email: "customer@example.com",
+    shippingAddress: {
+      name: "Camille Dubois",
+      line1: "18 Avenue Montaigne",
+      city: "Paris",
+      postalCode: "75008",
+      country: "France",
+    },
+    items: [
+      {
+        title: "Ambre Soie",
+        brand: "Maison Violette",
+        variant: "100 ml",
+        quantity: 1,
+        unitPrice: 262500,
+        image: perfumeImg("ambre-soie"),
+        productSlug: "ambre-soie",
+      },
+    ],
+    subtotal: 262500,
+    tax: 52500,
+    shipping: 0,
+    discount: 0,
+    total: 315000,
+    currency: "NGN",
+    trackingNumber: "VMTRK884201",
+    timeline: [
+      { label: "Order placed", at: "22 Jul · 09:14", done: true },
+      { label: "Payment confirmed", at: "22 Jul · 09:15", done: true },
+      { label: "Packed", at: "22 Jul · 16:40", done: true },
+      { label: "Shipped", at: "23 Jul · 11:02", done: true },
+      { label: "Out for delivery", at: "—", done: false },
+      { label: "Delivered", at: "—", done: false },
+    ],
+  },
+  {
+    orderNumber: "VM-2026-0001",
+    placedAt: "2026-07-20T14:32:00+01:00",
+    status: "confirmed",
+    email: "customer@example.com",
+    shippingAddress: {
+      name: "Camille Dubois",
+      line1: "18 Avenue Montaigne",
+      city: "Paris",
+      postalCode: "75008",
+      country: "France",
+    },
+    items: [
+      {
+        title: "Velvet Iris",
+        brand: "Maison Violette",
+        variant: "100 ml",
+        quantity: 1,
+        unitPrice: 247500,
+        image: perfumeImg("velvet-iris"),
+        productSlug: "velvet-iris",
+      },
+      {
+        title: "Nocturne Oud",
+        brand: "Atelier Noir",
+        variant: "50 ml",
+        quantity: 1,
+        unitPrice: 226500,
+        image: perfumeImg("nocturne-oud"),
+        productSlug: "nocturne-oud",
+      },
+    ],
+    subtotal: 474000,
+    tax: 94800,
+    shipping: 18000,
+    discount: 47400,
+    total: 539400,
+    currency: "NGN",
+    timeline: [
+      { label: "Order placed", at: "20 Jul · 14:32", done: true },
+      { label: "Payment confirmed", at: "20 Jul · 14:33", done: true },
+      { label: "Processing", at: "20 Jul · 18:00", done: true },
+      { label: "Shipped", at: "—", done: false },
+      { label: "Delivered", at: "—", done: false },
+    ],
+  },
+  {
+    orderNumber: "VM-2026-0002",
+    placedAt: "2026-06-12T11:05:00+01:00",
+    status: "delivered",
+    email: "customer@example.com",
+    shippingAddress: {
+      name: "Camille Dubois",
+      line1: "18 Avenue Montaigne",
+      city: "Paris",
+      postalCode: "75008",
+      country: "France",
+    },
+    items: [
+      {
+        title: "Soleil Néroli",
+        brand: "Or Jardin",
+        variant: "100 ml",
+        quantity: 1,
+        unitPrice: 222000,
+        image: perfumeImg("soleil-neroli"),
+        productSlug: "soleil-neroli",
+      },
+    ],
+    subtotal: 222000,
+    tax: 44400,
+    shipping: 18000,
+    discount: 0,
+    total: 284400,
+    currency: "NGN",
+    trackingNumber: "VMTRK771902",
+    timeline: [
+      { label: "Order placed", at: "12 Jun · 11:05", done: true },
+      { label: "Shipped", at: "13 Jun · 09:20", done: true },
+      { label: "Delivered", at: "15 Jun · 14:10", done: true },
+    ],
+  },
+  {
+    orderNumber: "VM-2026-0003",
+    placedAt: "2026-05-03T16:48:00+01:00",
+    status: "completed",
+    email: "customer@example.com",
+    shippingAddress: {
+      name: "Camille Dubois",
+      line1: "42 Rue du Bac",
+      city: "Paris",
+      postalCode: "75007",
+      country: "France",
+    },
+    items: [
+      {
+        title: "Purple Reign",
+        brand: "Maison Violette",
+        variant: "100 ml",
+        quantity: 1,
+        unitPrice: 292500,
+        image: perfumeImg("purple-reign"),
+        productSlug: "purple-reign",
+      },
+    ],
+    subtotal: 292500,
+    tax: 58500,
+    shipping: 0,
+    discount: 29250,
+    total: 321750,
+    currency: "NGN",
+    timeline: [
+      { label: "Order placed", at: "3 May · 16:48", done: true },
+      { label: "Delivered", at: "6 May · 10:22", done: true },
+      { label: "Completed", at: "20 May · 00:00", done: true },
+    ],
+  },
+];
+
+export const accountAddresses: AccountAddress[] = [
+  {
+    id: "addr-ship-1",
+    label: "Home",
+    type: "SHIPPING",
+    name: "Camille Dubois",
+    line1: "18 Avenue Montaigne",
+    city: "Paris",
+    postalCode: "75008",
+    country: "France",
+    phone: "+33 6 12 34 56 78",
+    isDefault: true,
+  },
+  {
+    id: "addr-bill-1",
+    label: "Billing",
+    type: "BILLING",
+    name: "Camille Dubois",
+    line1: "18 Avenue Montaigne",
+    city: "Paris",
+    postalCode: "75008",
+    country: "France",
+    isDefault: true,
+  },
+  {
+    id: "addr-ship-2",
+    label: "Office",
+    type: "SHIPPING",
+    name: "Camille Dubois",
+    line1: "42 Rue du Bac",
+    line2: "Floor 3",
+    city: "Paris",
+    postalCode: "75007",
+    country: "France",
+    phone: "+33 6 12 34 56 78",
+    isDefault: false,
+  },
+];
+
+export const accountNotifications: AccountNotification[] = [
+  {
+    id: "n1",
+    title: "Your order has shipped",
+    body: "VM-2026-0004 is on its way. Tracking: VMTRK884201.",
+    createdAt: "2026-07-23T11:05:00+01:00",
+    read: false,
+    href: "/account/orders/VM-2026-0004",
+    category: "order",
+  },
+  {
+    id: "n2",
+    title: "Flash sale ends soon",
+    body: "August Grand Opening pricing closes 7 August.",
+    createdAt: "2026-07-22T08:00:00+01:00",
+    read: false,
+    href: "/flash-sale",
+    category: "promo",
+  },
+  {
+    id: "n3",
+    title: "You earned 210 points",
+    body: "Reward points credited for order VM-2026-0004.",
+    createdAt: "2026-07-22T09:20:00+01:00",
+    read: true,
+    href: "/account/rewards",
+    category: "rewards",
+  },
+  {
+    id: "n4",
+    title: "Return approved",
+    body: "Return RT-2026-0012 has been approved. Pack your item when ready.",
+    createdAt: "2026-06-18T15:30:00+01:00",
+    read: true,
+    href: "/account/returns/RT-2026-0012",
+    category: "order",
+  },
+];
 
 export const accountWallet = {
-  balance: 0,
+  balance: 63750,
   currency: "NGN",
-  transactions: [] as AccountWalletTx[],
+  transactions: [
+    {
+      id: "w1",
+      type: "credit" as const,
+      amount: 37500,
+      currency: "NGN",
+      description: "Referral reward — Amélie joined",
+      createdAt: "2026-07-10T12:00:00+01:00",
+    },
+    {
+      id: "w2",
+      type: "credit" as const,
+      amount: 45000,
+      currency: "NGN",
+      description: "Store credit from return RT-2026-0012",
+      createdAt: "2026-06-25T10:15:00+01:00",
+    },
+    {
+      id: "w3",
+      type: "debit" as const,
+      amount: 18750,
+      currency: "NGN",
+      description: "Applied to order VM-2026-0002",
+      createdAt: "2026-06-12T11:05:00+01:00",
+    },
+  ] satisfies AccountWalletTx[],
 };
 
 export const accountRewards = {
-  points: 0,
-  tier: "Member",
-  nextTier: "Silver",
-  pointsToNextTier: 500,
-  transactions: [] as AccountRewardTx[],
+  points: 1840,
+  tier: "Gold",
+  nextTier: "Platinum",
+  pointsToNextTier: 160,
+  transactions: [
+    {
+      id: "r1",
+      points: 210,
+      description: "Order VM-2026-0004",
+      createdAt: "2026-07-22T09:20:00+01:00",
+    },
+    {
+      id: "r2",
+      points: 360,
+      description: "Order VM-2026-0001",
+      createdAt: "2026-07-20T14:40:00+01:00",
+    },
+    {
+      id: "r3",
+      points: -500,
+      description: "Redeemed for ₦37,500 wallet credit",
+      createdAt: "2026-07-01T09:00:00+01:00",
+    },
+    {
+      id: "r4",
+      points: 215,
+      description: "Order VM-2026-0003",
+      createdAt: "2026-05-03T17:00:00+01:00",
+    },
+  ] satisfies AccountRewardTx[],
 };
 
+export const accountCoupons: AccountCoupon[] = [
+  {
+    id: "c1",
+    code: "VM5AUG-20",
+    title: "August Grand Opening",
+    description: "20% off signature compositions (1–7 August)",
+    type: "PERCENTAGE",
+    value: 20,
+    expiresAt: "2026-08-07T23:59:59+01:00",
+    status: "available",
+  },
+  {
+    id: "c1b",
+    code: "GRANDOPEN",
+    title: "Grand Opening",
+    description: "20% off your next fragrance order",
+    type: "PERCENTAGE",
+    value: 20,
+    expiresAt: "2026-08-31T23:59:59+01:00",
+    status: "available",
+  },
+  {
+    id: "c2",
+    code: "WELCOME15",
+    title: "Welcome gift",
+    description: "15% off your first order",
+    type: "PERCENTAGE",
+    value: 15,
+    expiresAt: "2026-09-30T23:59:59+01:00",
+    status: "available",
+  },
+  {
+    id: "c3",
+    code: "FREESHIP",
+    title: "Complimentary delivery",
+    description: "Free standard shipping on your next order",
+    type: "FREE_SHIPPING",
+    value: 0,
+    expiresAt: "2026-08-15T23:59:59+01:00",
+    status: "available",
+  },
+  {
+    id: "c4",
+    code: "SPRING10",
+    title: "Spring edit",
+    description: "Used on order VM-2026-0003",
+    type: "PERCENTAGE",
+    value: 10,
+    expiresAt: "2026-05-31T23:59:59+01:00",
+    status: "used",
+  },
+];
+
+export const accountReturns: AccountReturn[] = [
+  {
+    id: "RT-2026-0012",
+    orderNumber: "VM-2026-0002",
+    status: "refunded",
+    reason: "Changed mind — unused, sealed",
+    requestedAt: "2026-06-16T09:00:00+01:00",
+    items: [{ title: "Soleil Néroli · 100 ml", quantity: 1 }],
+    refundAmount: 45000,
+    currency: "NGN",
+  },
+];
+
 export const accountProfile: AccountProfile = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  dateOfBirth: "",
-  gender: "",
+  firstName: "Camille",
+  lastName: "Dubois",
+  email: "customer@example.com",
+  phone: "+33 6 12 34 56 78",
+  dateOfBirth: "1992-04-18",
+  gender: "Prefer not to say",
   language: "English",
   currency: "NGN",
-  timezone: "Africa/Lagos",
+  timezone: "Europe/Paris",
 };
 
 export const accountReferral = {
-  code: "",
-  shareUrl: "",
-  invited: 0,
-  converted: 0,
-  earned: 0,
+  code: "CAMILLE-VM",
+  shareUrl: "https://veronicamark.com/r/CAMILLE-VM",
+  invited: 3,
+  converted: 1,
+  earned: 37500,
   currency: "NGN",
-  invitations: [] as Array<{ email: string; status: "joined" | "pending"; sentAt: string }>,
+  invitations: [
+    { email: "amelie@example.com", status: "joined" as const, sentAt: "2026-07-01" },
+    { email: "louis@example.com", status: "pending" as const, sentAt: "2026-07-15" },
+    { email: "nora@example.com", status: "pending" as const, sentAt: "2026-07-18" },
+  ],
 };
 
 export const accountSecurity = {
-  lastPasswordChange: "",
+  lastPasswordChange: "2026-04-02T10:00:00+01:00",
   twoFactorEnabled: false,
-  sessions: [] as Array<{
-    id: string;
-    device: string;
-    location: string;
-    lastActive: string;
-    current: boolean;
-  }>,
+  sessions: [
+    {
+      id: "s1",
+      device: "Chrome on Windows",
+      location: "Paris, FR",
+      lastActive: "Just now",
+      current: true,
+    },
+    {
+      id: "s2",
+      device: "Safari on iPhone",
+      location: "Paris, FR",
+      lastActive: "2 days ago",
+      current: false,
+    },
+  ],
 };
 
 export const accountSettings = {
   emailOrderUpdates: true,
-  emailPromotions: false,
-  emailRewards: false,
+  emailPromotions: true,
+  emailRewards: true,
   pushEnabled: false,
   smsEnabled: false,
-  marketingConsent: false,
+  marketingConsent: true,
   theme: "system" as "light" | "dark" | "system",
 };
 
 export const accountAnalytics: AccountAnalytics = {
-  ordersPlaced: 0,
-  spendYtd: 0,
-  avgOrderValue: 0,
-  pointsEarned: 0,
-  returnsRate: 0,
-  monthlySpend: [],
-  categoryMix: [],
+  ordersPlaced: 4,
+  spendYtd: 1460550,
+  avgOrderValue: 365145,
+  pointsEarned: 1840,
+  returnsRate: 25,
+  monthlySpend: [
+    { month: "Feb", amount: 0 },
+    { month: "Mar", amount: 0 },
+    { month: "Apr", amount: 0 },
+    { month: "May", amount: 321750 },
+    { month: "Jun", amount: 284400 },
+    { month: "Jul", amount: 854400 },
+  ],
+  categoryMix: [
+    { label: "Women", value: 52 },
+    { label: "Men", value: 28 },
+    { label: "Perfumes", value: 20 },
+  ],
 };
+
+export const accountWishlistSlugs = ["velvet-iris", "santal-minuit", "figue-dor"];

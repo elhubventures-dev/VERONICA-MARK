@@ -42,7 +42,7 @@ export async function getMarketingDashboard() {
     const promotions = await getMarketingPromotions();
     return {
       ...marketingDashboard,
-      activePromotions: promotions.filter((p) => p.status === "active").length,
+      activePromotions: promotions.filter((p) => p.status === "active").length || marketingDashboard.activePromotions,
       analytics: marketingAnalytics,
       upcoming: marketingSchedule.filter((s) => s.status === "scheduled").slice(0, 4),
       openCarts: marketingAbandonedCarts.filter((c) => c.status === "open").slice(0, 4),
