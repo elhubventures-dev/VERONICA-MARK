@@ -61,7 +61,7 @@ const QUERY_OVERRIDES: Record<string, string[]> = {
   "rayhaan-nocturno-perfume-100ml": ["rayhaan nocturno"],
   "rayhaan-corium-100ml": ["rayhaan corium"],
   "floriana-rayhaan-100ml": ["rayhaan floriana", "floriana rayhaan"],
-  "armaf-odyssey-body-spray-200ml": ["armaf odyssey"],
+  "armaf-odyssey-body-spray-200ml": ["armaf odyssey body spray", "armaf odyssey"],
   "liquid-burn-perfume-100ml": ["liquid brun", "french avenue liquid brun"],
   "marshmallow-perfume-blush-paris-corner": ["paris corner marshmallow blush"],
   "riggs-perfume-100ml": ["riggs of london", "riggs perfume"],
@@ -72,7 +72,6 @@ const QUERY_OVERRIDES: Record<string, string[]> = {
   "hayaati-blue-pink-perfume-100ml": ["lattafa hayaati florence", "hayaati florence"],
   "viking-perfume-115ml": ["abraaj viking", "fa paris viking"],
   "club-de-nuit-sillage-untold-mix": ["armaf club de nuit sillage"],
-  "armaf-odyssey-body-spray-200ml": ["armaf odyssey body spray"],
 };
 
 function normalize(s: string): string {
