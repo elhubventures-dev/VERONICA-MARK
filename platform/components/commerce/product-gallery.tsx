@@ -66,7 +66,7 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
                     : "border-transparent hover:border-[var(--color-border)]",
                 )}
               >
-                <Image src={image.src} alt="" fill sizes="88px" className="object-contain" />
+                <Image src={image.src} alt="" fill sizes="88px" className="object-cover object-center" />
               </button>
             </li>
           ))}
@@ -88,7 +88,7 @@ export function ProductGallery({ images, className }: ProductGalleryProps) {
             fetchPriority="high"
             quality={75}
             sizes="(max-width:768px) 100vw, 50vw"
-            className="object-contain"
+            className="object-cover object-center"
           />
           <button
             type="button"

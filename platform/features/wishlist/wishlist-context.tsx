@@ -7,6 +7,8 @@ import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 const WISHLIST_STORAGE_KEY = "vm-wishlist";
 
 type WishlistContextValue = {
+  /** False until localStorage has been read on the client. */
+  ready: boolean;
   slugs: string[];
   isWishlisted: (slug: string) => boolean;
   toggle: (product: Pick<StorefrontProduct, "slug" | "name" | "brand" | "price" | "image">) => void;
@@ -57,8 +59,8 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const clear = React.useCallback(() => setSlugs([]), []);
 
   const value = React.useMemo(
-    () => ({ slugs, isWishlisted, toggle, remove, clear }),
-    [slugs, isWishlisted, toggle, remove, clear],
+    () => ({ ready: hydrated, slugs, isWishlisted, toggle, remove, clear }),
+    [hydrated, slugs, isWishlisted, toggle, remove, clear],
   );
 
   return <WishlistContext.Provider value={value}>{children}</WishlistContext.Provider>;

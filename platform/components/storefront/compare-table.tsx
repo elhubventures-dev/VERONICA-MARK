@@ -16,17 +16,63 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { resolveCompareProducts } from "@/features/compare/actions";
 import { useCompare } from "@/features/compare/compare-context";
-import { demoProductDetails } from "@/lib/storefront/demo-catalog";
+import type { StorefrontProductDetail } from "@/lib/storefront/demo-catalog";
 import { GitCompare } from "lucide-react";
 
 export function CompareTable() {
   const router = useRouter();
-  const { slugs, remove, clear } = useCompare();
+  const { ready, slugs, remove, clear } = useCompare();
+  const [products, setProducts] = React.useState<StorefrontProductDetail[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const slugsKey = slugs.join("|");
 
-  const products = slugs
-    .map((slug) => demoProductDetails.find((p) => p.slug === slug))
-    .filter((p): p is (typeof demoProductDetails)[number] => Boolean(p));
+  React.useEffect(() => {
+    if (!ready) return;
+
+    let cancelled = false;
+
+    if (slugs.length === 0) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    void resolveCompareProducts(slugs).then((resolved) => {
+      if (cancelled) return;
+      setProducts(resolved);
+      setLoading(false);
+
+      // Drop slugs that no longer resolve (stale localStorage / unpublished).
+      const resolvedSet = new Set(resolved.map((p) => p.slug));
+      for (const slug of slugs) {
+        if (!resolvedSet.has(slug)) remove(slug);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // slugsKey tracks list identity; remove is stable from context.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: avoid re-fetch loops on remove
+  }, [ready, slugsKey]);
+
+  if (!ready || loading) {
+    return (
+      <div className="mx-auto max-w-lg px-5 py-16 sm:px-8">
+        <div
+          className="flex flex-col items-center rounded-xl border border-dashed border-[var(--color-border)] px-6 py-12 text-center"
+          aria-busy="true"
+          aria-live="polite"
+        >
+          <GitCompare className="size-10 animate-pulse text-[var(--color-muted-foreground)]" aria-hidden />
+          <p className="mt-4 text-sm text-[var(--color-muted-foreground)]">Loading comparison…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (products.length === 0) {
     return (
@@ -135,7 +181,8 @@ export function CompareTable() {
 
       {products.length < 4 ? (
         <p className="mt-4 text-sm text-[var(--color-muted-foreground)]">
-          You can add {4 - products.length} more fragrance{4 - products.length === 1 ? "" : "s"} to compare.
+          You can add {4 - products.length} more fragrance{4 - products.length === 1 ? "" : "s"} to
+          compare.
         </p>
       ) : null}
     </div>

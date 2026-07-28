@@ -8,17 +8,61 @@ import { CatalogProductCard } from "@/components/storefront/catalog-product-card
 import { Reveal } from "@/components/storefront/reveal";
 import { EmptyState } from "@/components/data/empty-state";
 import { Button } from "@/components/ui/button";
+import { resolveWishlistProducts } from "@/features/wishlist/actions";
 import { useWishlist } from "@/features/wishlist/wishlist-context";
-import { demoProducts } from "@/lib/storefront/demo-catalog";
+import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 import { Heart } from "lucide-react";
 
 export function WishlistContent() {
   const router = useRouter();
-  const { slugs, remove } = useWishlist();
+  const { ready, slugs, remove } = useWishlist();
+  const [products, setProducts] = React.useState<StorefrontProduct[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const slugsKey = slugs.join("|");
 
-  const products = slugs
-    .map((slug) => demoProducts.find((p) => p.slug === slug))
-    .filter((p): p is (typeof demoProducts)[number] => Boolean(p));
+  React.useEffect(() => {
+    if (!ready) return;
+
+    let cancelled = false;
+
+    if (slugs.length === 0) {
+      setProducts([]);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    void resolveWishlistProducts(slugs).then((resolved) => {
+      if (cancelled) return;
+      setProducts(resolved);
+      setLoading(false);
+
+      const resolvedSet = new Set(resolved.map((p) => p.slug));
+      for (const slug of slugs) {
+        if (!resolvedSet.has(slug)) remove(slug);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: avoid re-fetch loops on remove
+  }, [ready, slugsKey]);
+
+  if (!ready || loading) {
+    return (
+      <div className="mx-auto max-w-lg px-5 py-16 sm:px-8">
+        <div
+          className="flex flex-col items-center rounded-xl border border-dashed border-[var(--color-border)] px-6 py-12 text-center"
+          aria-busy="true"
+          aria-live="polite"
+        >
+          <Heart className="size-10 animate-pulse text-[var(--color-muted-foreground)]" aria-hidden />
+          <p className="mt-4 text-sm text-[var(--color-muted-foreground)]">Loading wishlist…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (products.length === 0) {
     return (

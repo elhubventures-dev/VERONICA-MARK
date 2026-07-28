@@ -6,6 +6,8 @@ const COMPARE_STORAGE_KEY = "vm-compare";
 const MAX_COMPARE = 4;
 
 type CompareContextValue = {
+  /** False until localStorage has been read on the client. */
+  ready: boolean;
   slugs: string[];
   isCompared: (slug: string) => boolean;
   toggle: (slug: string) => boolean;
@@ -67,6 +69,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
 
   const value = React.useMemo(
     () => ({
+      ready: hydrated,
       slugs,
       isCompared,
       toggle,
@@ -74,7 +77,7 @@ export function CompareProvider({ children }: { children: React.ReactNode }) {
       clear,
       isFull: slugs.length >= MAX_COMPARE,
     }),
-    [slugs, isCompared, toggle, remove, clear],
+    [hydrated, slugs, isCompared, toggle, remove, clear],
   );
 
   return <CompareContext.Provider value={value}>{children}</CompareContext.Provider>;
