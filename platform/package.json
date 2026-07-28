@@ -29,6 +29,7 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:wipe": "tsx scripts/wipe-all-data.ts && tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:validate": "prisma validate && prisma format",
     "db:import-invoice": "tsx scripts/import-invoice-catalog.ts",

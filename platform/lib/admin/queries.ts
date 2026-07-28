@@ -121,8 +121,8 @@ export async function getAdminDashboard() {
       platform: adminPlatform,
       analytics: {
         ...adminAnalytics,
-        orders30d: orders.length || adminAnalytics.orders30d,
-        totalRevenue30d: orders.reduce((sum, o) => sum + o.total, 0) || adminAnalytics.totalRevenue30d,
+        orders30d: orders.length,
+        totalRevenue30d: orders.reduce((sum, o) => sum + o.total, 0),
       },
       pendingBrands: brands.filter((b) => b.status === "pending"),
       openFraud: adminFraudCases.filter((c) => c.status === "open" || c.status === "reviewing"),
