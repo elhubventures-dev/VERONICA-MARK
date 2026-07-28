@@ -22,6 +22,7 @@ Environment mapping:
 - Service worker (Serwist + Turbopack): `app/sw.ts`, served at `/serwist/sw.js`
 - Offline fallback page: `/~offline`
 - Install prompt: bottom bar on **mobile and tablet** storefront routes only (not desktop; suppressed on checkout/cart/account/auth)
+- Splash / flash screen: `public/media/site/mobile-app-splash-screen.webp` on installed PWA launches (mobile/tablet); iOS also uses sized PNGs under `public/brand/pwa/splash/`
 - PWA icons: `public/brand/pwa/icon-192.png`, `icon-512.png`, `maskable-512.png`
 
 ### Install prompt timing (localStorage: `vm-pwa-install-state`)
