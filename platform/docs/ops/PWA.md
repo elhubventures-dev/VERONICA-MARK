@@ -21,8 +21,17 @@ Environment mapping:
 - Web app manifest: `app/manifest.ts`
 - Service worker (Serwist + Turbopack): `app/sw.ts`, served at `/serwist/sw.js`
 - Offline fallback page: `/~offline`
-- Install prompt: bottom bar on storefront routes (suppressed on checkout/cart/account/auth)
+- Install prompt: bottom bar on **mobile and tablet** storefront routes only (not desktop; suppressed on checkout/cart/account/auth)
 - PWA icons: `public/brand/pwa/icon-192.png`, `icon-512.png`, `maskable-512.png`
+
+### Install prompt timing (localStorage: `vm-pwa-install-state`)
+
+| Event | Behavior |
+|---|---|
+| Eligible visit | Show again after **6 hours** since last dismiss |
+| Install accepted (`Install` or `appinstalled`) | Never show again on that browser |
+| Dismiss (“Not now”) × **4** | Hide for **30 days**, then resume the 6-hour cycle |
+| Browser reset / clear site data | Clears state — timer and dismiss count start fresh |
 
 When the flag is **off**, the storefront unregisters any existing service workers and hides the install prompt.
 
