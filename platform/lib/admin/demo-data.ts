@@ -457,7 +457,7 @@ export const adminEmailTemplates: AdminEmailTemplate[] = [];
 export const adminAuditLogs: AdminAuditLog[] = [
   {
     id: "al-1",
-    actor: "admin@veronicamark.com",
+    actor: "sales@veronicamark.com",
     action: "BRAND.SUSPEND",
     resource: "Brand",
     recordId: "b5",
@@ -467,7 +467,7 @@ export const adminAuditLogs: AdminAuditLog[] = [
   },
   {
     id: "al-2",
-    actor: "admin@veronicamark.com",
+    actor: "sales@veronicamark.com",
     action: "FEATURE_FLAG.UPDATE",
     resource: "FeatureFlag",
     recordId: "ff-2",
@@ -487,7 +487,7 @@ export const adminAuditLogs: AdminAuditLog[] = [
   },
   {
     id: "al-4",
-    actor: "admin@veronicamark.com",
+    actor: "sales@veronicamark.com",
     action: "USER.DISABLE",
     resource: "User",
     recordId: "c4",
@@ -501,7 +501,7 @@ export const adminUsers: AdminUser[] = [
   {
     id: "u1",
     name: "Platform Admin",
-    email: "admin@veronicamark.com",
+    email: "sales@veronicamark.com",
     role: "SUPER_ADMIN",
     status: "active",
     lastActiveAt: "2026-07-24T09:50:00+01:00",
@@ -509,7 +509,7 @@ export const adminUsers: AdminUser[] = [
   {
     id: "u2",
     name: "Amara Okafor",
-    email: "brand.manager@veronicamark.com",
+    email: "veronicamark10@proton.me",
     role: "BRAND_MANAGER",
     status: "active",
     lastActiveAt: "2026-07-23T16:10:00+01:00",

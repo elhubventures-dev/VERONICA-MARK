@@ -11,8 +11,8 @@ This is a **manual/authorized** test plan. Do not run intrusive tests against pr
 | --- | --- |
 | Guest | none |
 | Customer | `customer@example.com` |
-| Brand Manager | `brand.manager@veronicamark.com` |
-| Super Admin | `admin@veronicamark.com` |
+| Brand Manager | `veronicamark10@proton.me` |
+| Super Admin | `sales@veronicamark.com` |
 
 ## Test cases
 

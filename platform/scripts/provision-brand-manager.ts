@@ -4,6 +4,10 @@
  *
  * Defaults brand-slug to vma-scents (house brand).
  */
+import { config as loadEnv } from "dotenv";
+loadEnv({ path: ".env.local" });
+loadEnv();
+
 import { randomBytes } from "node:crypto";
 
 import { hash } from "bcryptjs";

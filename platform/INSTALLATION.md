@@ -59,7 +59,7 @@ pnpm db:seed
 
 Seed creates:
 
-- Super Admin `admin@veronicamark.com` — password from `SEED_DEFAULT_PASSWORD` (local demo fallback only). **Change immediately on any shared environment; production seed is blocked.**
+- Super Admin `sales@veronicamark.com` — password from `SEED_DEFAULT_PASSWORD` (local demo fallback only). **Change immediately on any shared environment; production seed is blocked.**
 - House brand `vma-scents`
 - Category `perfumes`
 - Default currency + guest checkout feature flag

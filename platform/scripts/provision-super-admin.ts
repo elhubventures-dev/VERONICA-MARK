@@ -2,6 +2,10 @@
  * Provision or upgrade a Super Admin account.
  * Usage: pnpm tsx scripts/provision-super-admin.ts <email> [password]
  */
+import { config as loadEnv } from "dotenv";
+loadEnv({ path: ".env.local" });
+loadEnv();
+
 import { randomBytes } from "node:crypto";
 
 import { hash } from "bcryptjs";

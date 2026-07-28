@@ -167,7 +167,7 @@ export const brandWorkspace = {
   brandName: "VMA SCENTS",
   brandSlug: "vma-scents",
   managerName: "Amara Okafor",
-  managerEmail: "brand.manager@veronicamark.com",
+  managerEmail: "veronicamark10@proton.me",
   currency: "NGN",
   timezone: "Europe/Paris",
 };
@@ -662,7 +662,7 @@ export const brandSettings = {
 
 export const brandProfile = {
   name: "Amara Okafor",
-  email: "brand.manager@veronicamark.com",
+  email: "veronicamark10@proton.me",
   title: "Brand Manager",
   phone: "+33 1 42 00 00 00",
   brandName: brandWorkspace.brandName,

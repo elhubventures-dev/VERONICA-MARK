@@ -102,7 +102,7 @@ pnpm db:seed
 pnpm exec prisma validate
 ```
 
-Seed credentials (change immediately): `admin@veronicamark.com` / `ChangeMeNow!1`
+Seed credentials (change immediately): `sales@veronicamark.com` / `ChangeMeNow!1`
 
 ---
 

@@ -129,7 +129,7 @@ async function main() {
   const roles = await seedRolesAndPermissions();
 
   const superAdmin = await prisma.user.upsert({
-    where: { email: "admin@veronicamark.com" },
+    where: { email: "sales@veronicamark.com" },
     update: {
       role: UserRole.SUPER_ADMIN,
       passwordHash,
@@ -138,7 +138,7 @@ async function main() {
       preferredCurrency: Currency.NGN,
     },
     create: {
-      email: "admin@veronicamark.com",
+      email: "sales@veronicamark.com",
       firstName: "Veronica",
       lastName: "Mark",
       role: UserRole.SUPER_ADMIN,
@@ -157,7 +157,7 @@ async function main() {
   await assignRole(superAdmin.id, roles.SUPER_ADMIN!);
 
   const brandManager = await prisma.user.upsert({
-    where: { email: "brand.manager@veronicamark.com" },
+    where: { email: "veronicamark10@proton.me" },
     update: {
       role: UserRole.BRAND_MANAGER,
       passwordHash,
@@ -166,7 +166,7 @@ async function main() {
       preferredCurrency: Currency.NGN,
     },
     create: {
-      email: "brand.manager@veronicamark.com",
+      email: "veronicamark10@proton.me",
       firstName: "Amara",
       lastName: "Okafor",
       role: UserRole.BRAND_MANAGER,
