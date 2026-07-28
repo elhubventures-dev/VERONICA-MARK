@@ -13,6 +13,14 @@ export function ContactHero() {
 
   return (
     <section className="relative isolate flex min-h-[52svh] items-center justify-center overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[58svh]">
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute top-16 left-[-4rem] -z-10 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute right-[-3rem] bottom-10 -z-10 h-48 w-48 rounded-full bg-[color-mix(in_srgb,white_10%,transparent)] blur-3xl"
+      />
       <motion.div
         aria-hidden
         className="absolute inset-0 -z-20"
@@ -26,7 +34,7 @@ export function ContactHero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className={reduceMotion ? "object-cover" : "object-cover vm-ambient-drift"}
         />
       </motion.div>
       <MediaScrim variant="center" />

@@ -27,11 +27,20 @@ export function SearchBar({
   placeholder = "Search fragrances, brands…",
   className,
 }: SearchBarProps) {
-  const [internal, setInternal] = React.useState("");
-  const value = valueProp ?? internal;
+  const [internal, setInternal] = React.useState(valueProp ?? "");
+  const isControlled = valueProp !== undefined && onChange !== undefined;
+  const value = isControlled ? valueProp : internal;
+
+  React.useEffect(() => {
+    if (!isControlled) {
+      setInternal(valueProp ?? "");
+    }
+  }, [isControlled, valueProp]);
 
   const setValue = (next: string) => {
-    setInternal(next);
+    if (!isControlled) {
+      setInternal(next);
+    }
     onChange?.(next);
   };
 

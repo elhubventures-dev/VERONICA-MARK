@@ -78,6 +78,15 @@ function mapDbProduct(product: NonNullable<Awaited<ReturnType<typeof productRepo
   const firstMedia = product.media[0];
   const stock = product.variants.reduce((sum, v) => sum + (v.inventory?.available ?? 0), 0);
   const inStock = stock > 0;
+  const badge = product.featured
+    ? "exclusive"
+    : product.bestSeller
+      ? "bestseller"
+      : product.newArrival
+        ? "new"
+        : firstVariant?.salePrice
+          ? "limited"
+          : undefined;
   return {
     id: product.id,
     slug: product.slug,
@@ -89,7 +98,7 @@ function mapDbProduct(product: NonNullable<Awaited<ReturnType<typeof productRepo
     price: Number(firstVariant?.salePrice ?? firstVariant?.price ?? 0),
     compareAt: firstVariant?.salePrice ? Number(firstVariant.price) : undefined,
     image: firstMedia?.url ?? FALLBACK_IMAGE,
-    badge: product.featured ? "exclusive" : "new",
+    badge,
     inStock,
     stock,
     defaultVariantId: firstVariant?.id,
@@ -405,15 +414,66 @@ export async function getFlashSaleCatalog(): Promise<StorefrontProduct[]> {
   try {
     const promos = await promotionRepository.findActivePromotions();
     if (promos.length) {
-      const result = await productRepository.listPublished({ page: 1, pageSize: 24 }, { featured: true });
-      if (result.items.length) {
-        return result.items.map((p) => mapDbProduct(p));
+      const featuredResult = await productRepository.listPublished(
+        { page: 1, pageSize: 50 },
+        { featured: true },
+      );
+      if (featuredResult.items.length >= 24) {
+        return featuredResult.items.map((p) => mapDbProduct(p));
+      }
+    }
+
+    const result = await productRepository.listPublished({ page: 1, pageSize: 50 });
+    if (result.items.length) {
+      const saleFirst = result.items
+        .map((p) => mapDbProduct(p))
+        .sort((a, b) => {
+          const aPriority = Number(Boolean(a.compareAt || a.badge === "exclusive" || a.badge === "limited"));
+          const bPriority = Number(Boolean(b.compareAt || b.badge === "exclusive" || b.badge === "limited"));
+          return bPriority - aPriority;
+        });
+      if (saleFirst.length) {
+        return saleFirst;
+      }
+    }
+
+    if (promos.length) {
+      const featuredResult = await productRepository.listPublished(
+        { page: 1, pageSize: 24 },
+        { featured: true },
+      );
+      if (featuredResult.items.length) {
+        return featuredResult.items.map((p) => mapDbProduct(p));
       }
     }
   } catch {
     // demo fallback
   }
-  return getFlashSaleProducts();
+
+  try {
+    const result = await queryCatalog({ page: 1, pageSize: 50, sort: "featured" });
+    if (result.items.length) {
+      return result.items.map((product, index) => ({
+        ...product,
+        flashSale: index < 12 || product.flashSale,
+      }));
+    }
+  } catch {
+    // demo fallback
+  }
+
+  const demoSale = getFlashSaleProducts();
+  if (demoSale.length >= 4) {
+    return demoSale;
+  }
+
+  if (demoProducts.length) {
+    return demoProducts.slice(0, Math.min(50, demoProducts.length)).map((product, index) => ({
+      ...product,
+      flashSale: index < 4 || product.flashSale,
+    }));
+  }
+  return [];
 }
 
 export async function validateCouponCode(code: string) {

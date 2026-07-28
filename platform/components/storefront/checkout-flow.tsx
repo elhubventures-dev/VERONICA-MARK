@@ -27,7 +27,7 @@ import {
   shippingFeeNgn,
   type ShippingMethodId,
 } from "@/lib/commerce/shipping-rates";
-import { motionTransition } from "@/lib/motion";
+import { luxuryCardClass, motionTransition } from "@/lib/motion";
 import { demoCoupons } from "@/lib/storefront/demo-catalog";
 import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 
@@ -239,7 +239,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
             <motion.section
               key="shipping"
               {...phaseMotion}
-              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+              className={`space-y-4 rounded-xl p-6 ${luxuryCardClass}`}
             >
               <h2 className="font-display text-xl">Contact &amp; shipping</h2>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -377,7 +377,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                 {availableMethods.map((method) => (
                   <label
                     key={method.methodId}
-                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-border)] p-4"
+                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-border)] p-4 transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-accent)_45%,var(--color-border))] hover:shadow-[var(--shadow-subtle)]"
                   >
                     <input
                       type="radio"
@@ -411,7 +411,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
             <motion.section
               key="payment"
               {...phaseMotion}
-              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+              className={`space-y-4 rounded-xl p-6 ${luxuryCardClass}`}
             >
               <h2 className="font-display text-xl">Secure payment</h2>
               <p className="text-sm text-[var(--color-muted-foreground)]">
@@ -443,7 +443,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
             <motion.section
               key="review"
               {...phaseMotion}
-              className="space-y-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6"
+              className={`space-y-4 rounded-xl p-6 ${luxuryCardClass}`}
             >
               <h2 className="font-display text-xl">Review &amp; place order</h2>
               <dl className="space-y-2 text-sm">

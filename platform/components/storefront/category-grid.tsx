@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/storefront/reveal";
+import { luxuryCardClass, luxuryFrameClass, staggerDelay } from "@/lib/motion";
 import { SectionHeading } from "@/components/storefront/section-heading";
-import { staggerDelay } from "@/lib/motion";
 import { demoCategories } from "@/lib/storefront/demo-catalog";
 import { siteMedia } from "@/lib/storefront/site-media";
 
@@ -28,12 +28,12 @@ export function CategoryGrid() {
         </Reveal>
         <div className="grid gap-5 md:grid-cols-3">
           {demoCategories.map((category, index) => (
-            <Reveal key={category.slug} delay={staggerDelay(index)}>
+            <Reveal key={category.slug} delay={staggerDelay(index)} variant="zoom">
               <Link
                 href={`/categories/${category.slug}`}
-                className="group block bg-surface/95 p-3 backdrop-blur-[2px] transition-[transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+                className={`group block bg-surface/95 p-3 backdrop-blur-[2px] ${luxuryCardClass}`}
               >
-                <div className="relative aspect-[4/3] overflow-hidden">
+                <div className={`relative aspect-[4/3] overflow-hidden ${luxuryFrameClass}`}>
                   <Image
                     src={category.image}
                     alt=""

@@ -9,7 +9,7 @@ import { Reveal } from "@/components/storefront/reveal";
 import { SectionHeading } from "@/components/storefront/section-heading";
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { getPublicEnv } from "@/lib/env";
-import { staggerDelay } from "@/lib/motion";
+import { luxuryCardClass, staggerDelay } from "@/lib/motion";
 import { getProductDetail, queryCatalog } from "@/lib/storefront/catalog-queries";
 import { demoProductDetails } from "@/lib/storefront/demo-catalog";
 
@@ -116,8 +116,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </Reveal>
           <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {product.specs.map((spec, index) => (
-              <Reveal key={spec.label} delay={staggerDelay(index)}>
-                <div className="rounded-xl border border-[var(--color-border)] p-4">
+              <Reveal key={spec.label} delay={staggerDelay(index)} variant="zoom">
+                <div className={`rounded-xl p-4 ${luxuryCardClass}`}>
                   <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
                     {spec.label}
                   </dt>
@@ -125,8 +125,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               </Reveal>
             ))}
-            <Reveal delay={staggerDelay(product.specs.length)}>
-              <div className="rounded-xl border border-[var(--color-border)] p-4">
+            <Reveal delay={staggerDelay(product.specs.length)} variant="zoom">
+              <div className={`rounded-xl p-4 ${luxuryCardClass}`}>
                 <dt className="text-xs tracking-wide text-[var(--color-muted-foreground)] uppercase">
                   Delivery
                 </dt>
@@ -146,8 +146,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </Reveal>
           <div className="grid gap-4 md:grid-cols-2">
             {product.reviews.map((review, index) => (
-              <Reveal key={review.id} delay={staggerDelay(index)}>
-                <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+              <Reveal key={review.id} delay={staggerDelay(index)} variant="zoom">
+                <article className={`rounded-xl p-5 ${luxuryCardClass}`}>
                   <div className="flex items-center justify-between gap-2">
                     <div>
                       <p className="font-medium">{review.author}</p>

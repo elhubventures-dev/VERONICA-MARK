@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { PageBanner } from "@/components/storefront/page-banner";
 import { Reveal } from "@/components/storefront/reveal";
-import { staggerDelay } from "@/lib/motion";
+import { luxuryCardClass, luxuryFrameClass, staggerDelay } from "@/lib/motion";
 import { getCategories } from "@/lib/storefront/catalog-queries";
 import { siteMedia } from "@/lib/storefront/site-media";
 
@@ -29,12 +29,12 @@ export default async function CategoriesPage() {
       <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
         <div className="grid gap-6 md:grid-cols-3">
           {categories.map((category, index) => (
-            <Reveal key={category.slug} delay={staggerDelay(index)}>
+            <Reveal key={category.slug} delay={staggerDelay(index)} variant="zoom">
               <Link
                 href={`/categories/${category.slug}`}
-                className="group block overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+                className={`group block overflow-hidden rounded-xl ${luxuryCardClass}`}
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-muted)]">
+                <div className={`relative aspect-[4/3] overflow-hidden bg-[var(--color-muted)] ${luxuryFrameClass}`}>
                   <Image
                     src={category.image}
                     alt=""

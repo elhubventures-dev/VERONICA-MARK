@@ -110,12 +110,22 @@ export function FlashSalePopup() {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md overflow-hidden border-[color-mix(in_srgb,var(--color-accent)_40%,transparent)] bg-[var(--color-brand-deep)] p-0 text-white shadow-[0_24px_80px_rgba(0,0,0,.45)] sm:max-w-lg [&_button.absolute]:text-white [&_button.absolute]:opacity-80 [&_button.absolute]:hover:opacity-100">
         <div className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--color-brand-deep)]">
+          <div
+            aria-hidden
+            className="vm-ambient-orb absolute top-10 left-[-3rem] -z-10 h-32 w-32 rounded-full bg-[color-mix(in_srgb,var(--color-accent)_24%,transparent)] blur-3xl"
+          />
+          <div
+            aria-hidden
+            className="vm-ambient-orb absolute right-[-3rem] bottom-12 -z-10 h-40 w-40 rounded-full bg-[color-mix(in_srgb,white_12%,transparent)] blur-3xl"
+          />
           <Image
             src={siteMedia.seasonalCollection}
             alt=""
             fill
             sizes="(max-width: 640px) 100vw, 32rem"
-            className="-z-20 object-cover object-center brightness-[0.45] saturate-[0.85]"
+            className={reduceMotion
+              ? "-z-20 object-cover object-center brightness-[0.45] saturate-[0.85]"
+              : "-z-20 object-cover object-center brightness-[0.45] saturate-[0.85] vm-ambient-drift"}
             priority={false}
           />
           <div
@@ -147,7 +157,7 @@ export function FlashSalePopup() {
             </motion.div>
 
             {time ? (
-              <motion.div {...stagger(0.24)} className="mt-7">
+              <motion.div {...stagger(0.24)} className="mx-auto mt-7 w-fit">
                 <CountdownBlocks
                   units={flashSaleCountdownUnits(time)}
                   size="sm"
@@ -156,14 +166,17 @@ export function FlashSalePopup() {
               </motion.div>
             ) : null}
 
-            <motion.div {...stagger(0.3)} className="mt-8 flex w-full max-w-xs flex-col items-center">
+            <motion.div
+              {...stagger(0.3)}
+              className="mx-auto mt-8 flex w-[18.875rem] flex-col items-stretch"
+            >
               <Link href="/flash-sale" className={`w-full justify-center ${accentFillCtaClass}`}>
                 View the opening edit
               </Link>
               <button
                 type="button"
                 onClick={() => handleOpenChange(false)}
-                className="mt-4 min-h-10 text-xs tracking-[0.14em] text-white/80 uppercase transition-colors hover:text-white"
+                className="mt-4 min-h-10 text-center text-xs tracking-[0.14em] text-white/80 uppercase transition-colors hover:text-white"
               >
                 Continue browsing
               </button>

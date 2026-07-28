@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/storefront/reveal";
+import { luxuryCardClass, luxuryFrameClass, staggerDelay } from "@/lib/motion";
 import { SectionHeading } from "@/components/storefront/section-heading";
-import { staggerDelay } from "@/lib/motion";
 import type { StorefrontBrand } from "@/lib/storefront/demo-catalog";
 import { siteMedia } from "@/lib/storefront/site-media";
 
@@ -28,10 +28,10 @@ export function BrandShowcase({ brands }: { brands: StorefrontBrand[] }) {
         </Reveal>
         <div className="grid gap-5 md:grid-cols-3">
           {brands.slice(0, 3).map((brand, index) => (
-            <Reveal key={brand.id} delay={staggerDelay(index)}>
+            <Reveal key={brand.id} delay={staggerDelay(index)} variant="zoom">
               <Link
                 href={`/brands/${brand.slug}`}
-                className="group relative block min-h-[420px] overflow-hidden bg-[var(--color-brand-deep)] text-white transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+                className={`group relative block min-h-[420px] overflow-hidden bg-[var(--color-brand-deep)] text-white ${luxuryCardClass} ${luxuryFrameClass}`}
               >
                 <Image
                   src={brand.image}

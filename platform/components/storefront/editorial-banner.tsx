@@ -53,6 +53,13 @@ export function EditorialBanner({
         minHeightClass[minHeight],
       )}
     >
+      <div
+        aria-hidden
+        className={cn(
+          "vm-ambient-orb absolute top-10 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--color-accent)_16%,transparent)] blur-3xl",
+          isRight ? "left-10" : "right-10",
+        )}
+      />
       <Image
         src={src}
         alt=""
@@ -65,7 +72,7 @@ export function EditorialBanner({
           "-z-20 object-cover",
           reduceMotion
             ? undefined
-            : "scale-105 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-100",
+            : "scale-105 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-100 vm-ambient-drift",
         )}
       />
       <MediaScrim variant={isRight ? "right" : "left"} />

@@ -49,7 +49,13 @@ export function ActiveFilters({ filters, onRemove, onClearAll, className }: Acti
         ))}
       </AnimatePresence>
       {onClearAll ? (
-        <Button type="button" variant="ghost" size="sm" onClick={onClearAll}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onClearAll}
+          className="transition-[transform,opacity] duration-300 hover:opacity-80 active:scale-[0.98]"
+        >
           Clear all
         </Button>
       ) : null}

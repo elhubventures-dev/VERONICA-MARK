@@ -19,7 +19,7 @@ const shopColumns = [
     links: [
       { label: "All fragrances", href: "/shop", description: "The full edit" },
       { label: "New arrivals", href: "/shop?sort=newest", description: "Recent to the edit" },
-      { label: "Opening edit", href: "/flash-sale", description: "Private opening collection" },
+      { label: "Flash sales", href: "/flash-sale", description: "Limited-time offers" },
       { label: "Search", href: "/search", description: "Find a fragrance" },
     ],
   },
@@ -48,7 +48,7 @@ const shopColumns = [
 const primaryLinks = [
   { label: "Categories", href: "/categories" },
   { label: "Brands", href: "/brands" },
-  { label: "Opening edit", href: "/flash-sale" },
+  { label: "Flash sales", href: "/flash-sale" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/faq" },
@@ -98,9 +98,15 @@ export function StorefrontHeader() {
   const { itemCount } = useCart();
   const { slugs: wishlistSlugs } = useWishlist();
   const { slugs: compareSlugs } = useCompare();
+  const reduceMotion = useReducedMotion();
 
   return (
-    <header className="border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-background)]/80">
+    <motion.header
+      initial={reduceMotion ? false : { opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={motionTransition(reduceMotion, 0.45)}
+      className="sticky top-0 z-30 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-background)]/80"
+    >
       <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-5 py-4 sm:px-8 lg:gap-6">
         <MobileNav />
 
@@ -130,7 +136,7 @@ export function StorefrontHeader() {
         <div className="ml-auto flex items-center gap-2">
           <Link
             href="/search"
-            className="relative hidden min-h-10 min-w-[11rem] items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-muted-foreground)] transition-[background-color,transform] duration-300 hover:bg-[var(--color-muted)] active:scale-[0.98] md:inline-flex"
+            className="relative hidden min-h-10 min-w-[11rem] items-center gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm text-[var(--color-muted-foreground)] transition-[background-color,transform,box-shadow] duration-300 hover:bg-[var(--color-muted)] hover:shadow-[var(--shadow-subtle)] active:scale-[0.98] md:inline-flex"
             aria-label="Search the collection"
           >
             <Search className="size-4 shrink-0" aria-hidden />
@@ -153,6 +159,6 @@ export function StorefrontHeader() {
           </IconLink>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

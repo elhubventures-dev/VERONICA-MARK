@@ -1,12 +1,13 @@
 "use client";
 
-import { Heart, Home, LayoutGrid, ShoppingBag, User } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Home, LayoutGrid, ShoppingBag, User, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { useCart } from "@/features/cart/cart-context";
-import { useWishlist } from "@/features/wishlist/wishlist-context";
+import { motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const DEFAULT_HEIGHT = 64;
@@ -17,6 +18,7 @@ type NavItem = {
   icon: typeof Home;
   match: (pathname: string) => boolean;
   count?: number;
+  featured?: boolean;
 };
 
 function isActivePath(pathname: string, href: string) {
@@ -27,7 +29,7 @@ function isActivePath(pathname: string, href: string) {
 export function MobileBottomNav() {
   const pathname = usePathname();
   const { itemCount } = useCart();
-  const { slugs: wishlistSlugs } = useWishlist();
+  const reduceMotion = useReducedMotion();
   const navRef = useRef<HTMLElement>(null);
   const [height, setHeight] = useState(DEFAULT_HEIGHT);
 
@@ -69,15 +71,14 @@ export function MobileBottomNav() {
         path.startsWith("/shop/") ||
         path.startsWith("/categories") ||
         path.startsWith("/brands") ||
-        path.startsWith("/products") ||
-        path.startsWith("/flash-sale"),
+        path.startsWith("/products"),
     },
     {
-      href: "/wishlist",
-      label: "Wishlist",
-      icon: Heart,
-      match: (path) => isActivePath(path, "/wishlist"),
-      count: wishlistSlugs.length,
+      href: "/flash-sale",
+      label: "Flash",
+      icon: Zap,
+      match: (path) => isActivePath(path, "/flash-sale"),
+      featured: true,
     },
     {
       href: "/account",
@@ -106,6 +107,57 @@ export function MobileBottomNav() {
           {items.map((item) => {
             const Icon = item.icon;
             const active = item.match(pathname);
+
+            if (item.featured) {
+              return (
+                <li key={item.href} className="relative flex flex-1 items-end justify-center pb-1.5">
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    aria-label="Flash sales"
+                    className="group relative -mt-5 flex flex-col items-center gap-1 active:scale-[0.94]"
+                  >
+                    <span className="relative inline-flex">
+                      {!reduceMotion ? (
+                        <motion.span
+                          aria-hidden
+                          className="absolute inset-0 rounded-full bg-[var(--color-accent)]/35"
+                          animate={{ scale: [1, 1.28, 1], opacity: [0.45, 0, 0.45] }}
+                          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                      ) : null}
+                      <motion.span
+                        initial={reduceMotion ? false : { y: 6, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={motionTransition(reduceMotion, 0.4)}
+                        className={cn(
+                          "relative inline-flex size-12 items-center justify-center rounded-full border-2 shadow-[0_10px_28px_color-mix(in_srgb,var(--color-brand-deep)_28%,transparent)] transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]",
+                          active
+                            ? "border-[var(--color-accent-bright)] bg-[var(--color-brand-deep)] text-[var(--color-accent-bright)]"
+                            : "border-[var(--color-accent)] bg-[linear-gradient(160deg,var(--color-brand-field),var(--color-brand-deep))] text-[var(--color-accent)]",
+                        )}
+                      >
+                        <Icon className="size-5 fill-current" strokeWidth={2.25} aria-hidden />
+                        <span className="absolute -top-1 -right-1 rounded-full bg-[var(--color-accent)] px-1.5 py-0.5 text-[8px] font-bold tracking-[0.12em] text-[var(--color-accent-foreground)] uppercase shadow-sm">
+                          Sale
+                        </span>
+                      </motion.span>
+                    </span>
+                    <span
+                      className={cn(
+                        "text-[10px] font-semibold tracking-[0.12em] uppercase",
+                        active
+                          ? "text-[var(--color-primary)]"
+                          : "text-[var(--color-accent)]",
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                  </Link>
+                </li>
+              );
+            }
+
             return (
               <li key={item.href} className="flex-1">
                 <Link

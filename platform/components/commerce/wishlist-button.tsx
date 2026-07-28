@@ -37,8 +37,9 @@ export function WishlistButton({
       aria-label={active ? "Remove from wishlist" : "Add to wishlist"}
       onClick={onToggle}
       whileTap={reduceMotion || disabled ? undefined : { scale: 0.9 }}
+      whileHover={reduceMotion || disabled ? undefined : { y: -1 }}
       className={cn(
-        "inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-[background-color,border-color,color] duration-300 hover:bg-[var(--color-muted)] disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex items-center justify-center rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-[background-color,border-color,color,box-shadow] duration-300 hover:bg-[var(--color-muted)] hover:shadow-[var(--shadow-subtle)] disabled:pointer-events-none disabled:opacity-50",
         focusRingClass,
         active && "border-[var(--color-accent)] text-[var(--color-accent)]",
         size === "sm" ? "size-9" : "size-11",

@@ -46,6 +46,14 @@ export function PageBanner({
         className,
       )}
     >
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute top-16 left-[-5rem] -z-10 h-44 w-44 rounded-full bg-[color-mix(in_srgb,var(--color-accent)_18%,transparent)] blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute right-[-4rem] bottom-10 -z-10 h-52 w-52 rounded-full bg-[color-mix(in_srgb,white_10%,transparent)] blur-3xl"
+      />
       <motion.div
         aria-hidden
         className="absolute inset-0 -z-20"
@@ -59,7 +67,7 @@ export function PageBanner({
           fill
           priority={priority}
           sizes="100vw"
-          className="object-cover"
+          className={reduceMotion ? "object-cover" : "object-cover vm-ambient-drift"}
         />
       </motion.div>
       <MediaScrim variant={centered ? "center" : "left"} />

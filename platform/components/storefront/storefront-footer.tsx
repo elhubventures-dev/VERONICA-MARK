@@ -4,6 +4,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/layout/brand-mark";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { Reveal } from "@/components/storefront/reveal";
+import { staggerDelay } from "@/lib/motion";
 import { siteMedia } from "@/lib/storefront/site-media";
 import { storefrontContact } from "@/lib/storefront/contact";
 
@@ -43,7 +44,7 @@ export function StorefrontFooter() {
         alt=""
         fill
         sizes="100vw"
-        className="-z-20 object-cover"
+        className="-z-20 object-cover vm-ambient-drift"
       />
       <MediaScrim variant="center" />
       <Reveal className="relative mx-auto max-w-[1440px]">
@@ -73,22 +74,22 @@ export function StorefrontFooter() {
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-            {groups.map((group) => (
-              <div key={group.title}>
+            {groups.map((group, index) => (
+              <Reveal key={group.title} delay={staggerDelay(index, 0.05)} variant="up">
                 <h2 className="text-xs tracking-[0.18em] text-[var(--color-accent)] uppercase">{group.title}</h2>
                 <ul className="mt-4 space-y-1">
                   {group.links.map(([label, href]) => (
                     <li key={href}>
                       <Link
                         href={href}
-                        className="inline-flex min-h-11 items-center text-sm text-white/70 transition-colors duration-300 hover:text-white"
+                        className="inline-flex min-h-11 items-center text-sm text-white/70 transition-[color,transform] duration-300 hover:translate-x-1 hover:text-white"
                       >
                         {label}
                       </Link>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>

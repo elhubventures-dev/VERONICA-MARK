@@ -9,7 +9,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import * as React from "react";
 
-import { focusRingClass, motionTransition } from "@/lib/motion";
+import { focusRingClass, luxuryCardClass, luxuryFrameClass, motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export interface MegaMenuColumn {
@@ -82,16 +82,24 @@ export function MegaMenu({ label, columns, featured, className }: MegaMenuProps)
             id={panelId}
             role="region"
             aria-label={`${label} menu`}
-            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduceMotion ? undefined : { opacity: 0, y: 8 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 8, scale: 0.985 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: 8, scale: 0.99 }}
             transition={motionTransition(reduceMotion, 0.2)}
-            className="absolute top-full left-0 z-50 mt-3 w-[min(100vw-2rem,720px)] rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-subtle)]"
+            className={`absolute top-full left-0 z-50 mt-3 w-[min(100vw-2rem,720px)] rounded-xl p-6 ${luxuryCardClass}`}
           >
             <div className={cn("grid gap-6", featured ? "md:grid-cols-[1fr_220px]" : "md:grid-cols-3")}>
               <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-                {columns.map((column) => (
-                  <div key={column.title}>
+                {columns.map((column, columnIndex) => (
+                  <motion.div
+                    key={column.title}
+                    initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      ...motionTransition(reduceMotion, 0.2),
+                      delay: reduceMotion ? 0 : columnIndex * 0.04,
+                    }}
+                  >
                     <p className="mb-3 text-xs font-medium tracking-[0.12em] text-[var(--color-accent)] uppercase">
                       {column.title}
                     </p>
@@ -115,15 +123,23 @@ export function MegaMenu({ label, columns, featured, className }: MegaMenuProps)
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
               {featured ? (
-                <Link
+                <motion.div
+                  initial={reduceMotion ? false : { opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{
+                    ...motionTransition(reduceMotion, 0.22),
+                    delay: reduceMotion ? 0 : 0.12,
+                  }}
+                >
+                  <Link
                   href={featured.href}
                   className={cn(
-                    "flex flex-col justify-end rounded-xl bg-[var(--color-muted)] p-4 transition-colors hover:bg-[color-mix(in_srgb,var(--color-muted)_80%,var(--color-accent))]",
+                    `flex flex-col justify-end rounded-xl bg-[var(--color-muted)] p-4 transition-colors hover:bg-[color-mix(in_srgb,var(--color-muted)_80%,var(--color-accent))] ${luxuryFrameClass}`,
                     focusRingClass,
                   )}
                 >
@@ -134,7 +150,8 @@ export function MegaMenu({ label, columns, featured, className }: MegaMenuProps)
                   <p className="mt-1 text-xs text-[var(--color-muted-foreground)]">
                     {featured.description}
                   </p>
-                </Link>
+                  </Link>
+                </motion.div>
               ) : null}
             </div>
           </motion.div>

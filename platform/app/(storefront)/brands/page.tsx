@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { PageBanner } from "@/components/storefront/page-banner";
 import { Reveal } from "@/components/storefront/reveal";
-import { staggerDelay } from "@/lib/motion";
+import { luxuryCardClass, luxuryFrameClass, staggerDelay } from "@/lib/motion";
 import { getBrands } from "@/lib/storefront/catalog-queries";
 import { siteMedia } from "@/lib/storefront/site-media";
 
@@ -29,10 +29,10 @@ export default async function BrandsPage() {
       <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:py-16">
         <div className="grid gap-6 md:grid-cols-3">
           {brands.map((brand, index) => (
-            <Reveal key={brand.id} delay={staggerDelay(index)}>
+            <Reveal key={brand.id} delay={staggerDelay(index)} variant="zoom">
               <Link
                 href={`/brands/${brand.slug}`}
-                className="group relative block min-h-[420px] overflow-hidden rounded-xl bg-[var(--color-brand-deep)] transition-[transform] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5"
+                className={`group relative block min-h-[420px] overflow-hidden rounded-xl bg-[var(--color-brand-deep)] ${luxuryCardClass} ${luxuryFrameClass}`}
               >
                 <Image
                   src={brand.image}

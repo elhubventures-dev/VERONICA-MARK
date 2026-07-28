@@ -17,6 +17,15 @@ const LIMIT = (() => {
   const idx = process.argv.indexOf("--limit");
   return idx >= 0 ? Number(process.argv[idx + 1]) : Infinity;
 })();
+const INCLUDE = (() => {
+  const idx = process.argv.indexOf("--include");
+  return idx >= 0 ? new RegExp(process.argv[idx + 1]!, "i") : null;
+})();
+const EXCLUDE = (() => {
+  const idx = process.argv.indexOf("--exclude");
+  return idx >= 0 ? new RegExp(process.argv[idx + 1]!, "i") : null;
+})();
+const FETCH_TIMEOUT_MS = 12000;
 
 type Candidate = {
   source: "dscentsation" | "labelstore" | "muna" | "fragrancesng" | "mkhasa";
@@ -160,6 +169,12 @@ function scoreMatch(ourName: string, theirTitle: string): number {
   if (/victoria world/i.test(ourName) && /victoria'?s secret/i.test(theirTitle)) {
     penalty += 0.8;
   }
+  if (/just jack 1691/i.test(ourName) && /italian leather/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
+  if (/lattafa body spray/i.test(ourName) && /khamrah|al nuaim/i.test(theirTitle)) {
+    penalty += 0.8;
+  }
   // Afnan 9AM Dive is sold as "9AM Pink" in our catalog
   if (/9am pink/i.test(ourName) && /9am dive/i.test(theirTitle)) {
     penalty -= 0.35;
@@ -194,6 +209,7 @@ function scoreMatch(ourName: string, theirTitle: string): number {
 async function fetchJson(url: string): Promise<unknown | null> {
   try {
     const res = await fetch(url, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       headers: {
         "User-Agent": "VERONICA-MARK-catalog-image-matcher/1.0",
         Accept: "application/json",
@@ -254,6 +270,7 @@ async function searchLabelStore(query: string): Promise<Candidate[]> {
 async function fetchHtml(url: string): Promise<string | null> {
   try {
     const res = await fetch(url, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; VERONICA-MARK/1.0)",
         Accept: "text/html",
@@ -369,6 +386,7 @@ async function downloadImage(url: string, dest: string): Promise<boolean> {
     // Encode spaces in path while keeping query string intact
     const safeUrl = url.includes("%") ? url : encodeURI(url);
     const res = await fetch(safeUrl, {
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       headers: { "User-Agent": "Mozilla/5.0 (compatible; VERONICA-MARK/1.0)" },
       redirect: "follow",
     });
@@ -520,11 +538,23 @@ async function applyImage(slug: string, name: string, imageUrl: string, sourceTi
 async function main() {
   const products = await prisma.product.findMany({
     where: { deletedAt: null },
-    include: { media: { where: { deletedAt: null }, orderBy: { sortOrder: "asc" }, take: 1 } },
+    include: {
+      media: {
+        where: { deletedAt: null },
+        orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
+      },
+    },
     orderBy: { name: "asc" },
   });
 
-  const need = products.filter((p) => !p.media[0]?.url?.includes("supabase.co"));
+  const need = products.filter((product) => {
+    const primary = product.media.find((media) => media.isPrimary) ?? product.media[0];
+    if (primary?.url?.includes("supabase.co")) return false;
+    const haystack = `${product.slug} ${product.name}`;
+    if (INCLUDE && !INCLUDE.test(haystack)) return false;
+    if (EXCLUDE && EXCLUDE.test(haystack)) return false;
+    return true;
+  });
   console.log(`Need images: ${need.length} / ${products.length}`);
 
   let updated = 0;

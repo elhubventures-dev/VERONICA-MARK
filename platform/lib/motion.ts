@@ -9,6 +9,26 @@ export const fadeUpVariants: Variants = {
   visible: { opacity: 1, y: 0 },
 };
 
+/** Shared reveal presets so pages can feel related without repeating curves. */
+export const revealVariants = {
+  up: (distance = 16): Variants => ({
+    hidden: { opacity: 0, y: distance, scale: 0.985 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+  }),
+  left: (distance = 20): Variants => ({
+    hidden: { opacity: 0, x: -distance, scale: 0.985 },
+    visible: { opacity: 1, x: 0, scale: 1 },
+  }),
+  right: (distance = 20): Variants => ({
+    hidden: { opacity: 0, x: distance, scale: 0.985 },
+    visible: { opacity: 1, x: 0, scale: 1 },
+  }),
+  zoom: (distance = 10): Variants => ({
+    hidden: { opacity: 0, y: distance, scale: 0.94 },
+    visible: { opacity: 1, y: 0, scale: 1 },
+  }),
+} as const;
+
 /** Stagger delay (seconds) for sequential card/grid reveals. */
 export const staggerDelay = (index: number, step = 0.06): number => index * step;
 
@@ -19,8 +39,8 @@ export const focusRingClass =
 const ctaTransition =
   "transition-[background-color,color,border-color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.98]";
 
-/** Ghost/outline CTA used on dark editorial media (uppercase tracking). */
-export const editorialCtaClass = `inline-flex min-h-11 items-center border border-[var(--color-accent)] bg-transparent px-7 text-[0.7rem] font-semibold tracking-[0.18em] text-[var(--color-accent)] uppercase ${ctaTransition} hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)] ${focusRingClass}`;
+/** Editorial CTA with primary background and accent hover treatment. */
+export const editorialCtaClass = `inline-flex min-h-11 items-center border border-[var(--color-accent)] bg-[var(--color-primary)] px-7 text-[0.7rem] font-semibold tracking-[0.18em] text-[var(--color-accent)] uppercase ${ctaTransition} hover:bg-[var(--color-accent)] hover:text-[var(--color-accent-foreground)] ${focusRingClass}`;
 
 /** Filled gold CTA — heroes and dark bands. */
 export const accentFillCtaClass = `inline-flex min-h-11 items-center justify-center bg-[var(--color-accent)] px-7 text-sm font-semibold text-[var(--color-accent-foreground)] ${ctaTransition} hover:bg-[color-mix(in_srgb,var(--color-accent)_88%,white)] ${focusRingClass}`;
@@ -33,6 +53,13 @@ export const brandFillCtaClass = `inline-flex min-h-11 items-center justify-cent
 
 /** Neutral outline CTA on light surfaces. */
 export const outlineCtaClass = `inline-flex min-h-11 items-center justify-center border border-[var(--color-border)] px-7 text-sm font-semibold ${ctaTransition} hover:bg-[var(--color-muted)] ${focusRingClass}`;
+
+/** Shared hover elevation for luxe cards and content panels. */
+export const luxuryCardClass =
+  "vm-luxury-card border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-subtle)]";
+
+/** Hover sheen for image-led surfaces. */
+export const luxuryFrameClass = "vm-luxury-frame";
 
 /** Standard transition when motion is allowed. */
 export const motionTransition = (reduceMotion: boolean | null, duration = 0.35): Transition =>

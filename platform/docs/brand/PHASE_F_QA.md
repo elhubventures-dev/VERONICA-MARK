@@ -33,7 +33,7 @@
 
 - [x] Homepage hero: **Curated for the Exceptional.** + priority LCP image  
 - [x] About: founder story, mission/vision, pillars, manifesto  
-- [x] Nav: search, wishlist, account, bag; Opening edit label  
+- [x] Nav: search, wishlist, account, bag; Flash sales label  
 - [x] Brand assets: favicon/OG paths resolve  
 - [x] PDP trust signals + zoom control present (route 200)  
 - [x] Marketing brand standards hub loads  

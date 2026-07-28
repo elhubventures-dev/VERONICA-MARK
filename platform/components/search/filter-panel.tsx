@@ -17,7 +17,13 @@ export interface FilterPanelProps {
 
 export function FilterPanel({ title = "Filters", children, footer, className }: FilterPanelProps) {
   return (
-    <aside className={cn("rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4", className)} aria-label={title}>
+    <aside
+      className={cn(
+        "rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-subtle)]",
+        className,
+      )}
+      aria-label={title}
+    >
       <h2 className="font-display text-sm font-semibold tracking-wide uppercase">{title}</h2>
       <div className="mt-4 space-y-6">{children}</div>
       {footer ? <div className="mt-6 border-t border-[var(--color-border)] pt-4">{footer}</div> : null}

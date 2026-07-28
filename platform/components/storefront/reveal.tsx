@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
-import { motionTransition } from "@/lib/motion";
+import { motionTransition, revealVariants } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type RevealProps = {
@@ -15,6 +15,8 @@ type RevealProps = {
   y?: number;
   /** Fraction of element that must be visible to trigger. */
   amount?: number | "some" | "all";
+  /** Direction/preset for the reveal. */
+  variant?: keyof typeof revealVariants;
 };
 
 /**
@@ -27,15 +29,18 @@ export function Reveal({
   delay = 0,
   y = 16,
   amount = 0.35,
+  variant = "up",
 }: RevealProps) {
   const reduceMotion = useReducedMotion();
+  const variants = revealVariants[variant](y);
 
   return (
     <motion.div
       className={cn(className)}
-      initial={reduceMotion ? false : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : "hidden"}
+      whileInView="visible"
       viewport={{ once: true, amount }}
+      variants={variants}
       transition={{
         ...motionTransition(reduceMotion, 0.5),
         delay: reduceMotion ? 0 : delay,

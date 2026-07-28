@@ -105,7 +105,7 @@ export function AnnouncementBar() {
     <Link
       ref={rootRef}
       href="/flash-sale"
-      className="relative block h-10 overflow-hidden bg-[var(--color-brand-deep)] text-xs font-semibold tracking-[0.16em] text-white uppercase focus-visible:outline-offset-[-2px]"
+      className="vm-luxury-frame relative block h-10 overflow-hidden bg-[var(--color-brand-deep)] text-xs font-semibold tracking-[0.16em] text-white uppercase focus-visible:outline-offset-[-2px]"
       aria-label={MESSAGE}
     >
       {reduceMotion ? (

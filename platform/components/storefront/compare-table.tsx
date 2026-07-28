@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import { resolveCompareProducts } from "@/features/compare/actions";
 import { useCompare } from "@/features/compare/compare-context";
+import { luxuryCardClass } from "@/lib/motion";
 import type { StorefrontProductDetail } from "@/lib/storefront/demo-catalog";
 import { GitCompare } from "lucide-react";
 
@@ -104,7 +105,7 @@ export function CompareTable() {
         </Button>
       </Reveal>
 
-      <div className="mt-10 overflow-x-auto rounded-xl border border-[var(--color-border)]">
+      <div className={`mt-10 overflow-x-auto rounded-xl ${luxuryCardClass}`}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -120,7 +121,7 @@ export function CompareTable() {
                   <button
                     type="button"
                     onClick={() => remove(product.slug)}
-                    className="ml-2 text-xs text-[var(--color-muted-foreground)] underline"
+                    className="ml-2 text-xs text-[var(--color-muted-foreground)] underline transition-colors hover:text-[var(--color-error)]"
                   >
                     Remove
                   </button>

@@ -10,6 +10,7 @@ import { EmptyState } from "@/components/data/empty-state";
 import { Button } from "@/components/ui/button";
 import { resolveWishlistProducts } from "@/features/wishlist/actions";
 import { useWishlist } from "@/features/wishlist/wishlist-context";
+import { luxuryCardClass, staggerDelay } from "@/lib/motion";
 import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 import { Heart } from "lucide-react";
 
@@ -92,17 +93,17 @@ export function WishlistContent() {
         </p>
       </Reveal>
       <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-        {products.map((product) => (
-          <div key={product.id} className="relative">
+        {products.map((product, index) => (
+          <Reveal key={product.id} delay={staggerDelay(index)} variant="zoom" className="relative">
             <CatalogProductCard product={product} />
             <button
               type="button"
               onClick={() => remove(product.slug)}
-              className="absolute bottom-24 right-4 text-xs text-[var(--color-muted-foreground)] underline underline-offset-4 transition-colors hover:text-[var(--color-error)]"
+              className={`absolute right-4 bottom-24 rounded-full px-2 py-1 text-xs underline underline-offset-4 transition-[color,transform] hover:-translate-y-0.5 hover:text-[var(--color-error)] ${luxuryCardClass}`}
             >
               Remove
             </button>
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>

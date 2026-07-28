@@ -52,9 +52,9 @@ export function FlashSaleCountdown() {
           </p>
         </div>
         {time ? (
-          <div className="flex flex-col items-start gap-4 lg:items-end">
+          <div className="flex w-[20.25rem] flex-col items-stretch gap-4 lg:ml-auto">
             <CountdownBlocks units={flashSaleCountdownUnits(time)} size="md" />
-            <Link href="/flash-sale" className={editorialCtaClass}>
+            <Link href="/flash-sale" className={`w-full justify-center ${editorialCtaClass}`}>
               View the opening edit
             </Link>
           </div>

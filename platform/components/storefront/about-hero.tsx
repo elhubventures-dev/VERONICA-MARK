@@ -13,6 +13,14 @@ export function AboutHero() {
 
   return (
     <section className="relative isolate flex min-h-[78svh] items-center justify-center overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[85svh]">
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute top-24 left-[-6rem] -z-10 h-52 w-52 rounded-full bg-[color-mix(in_srgb,var(--color-accent)_20%,transparent)] blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="vm-ambient-orb absolute right-[-4rem] bottom-16 -z-10 h-64 w-64 rounded-full bg-[color-mix(in_srgb,white_10%,transparent)] blur-3xl"
+      />
       <motion.div
         aria-hidden
         className="absolute inset-0 -z-20"
@@ -26,7 +34,7 @@ export function AboutHero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className={reduceMotion ? "object-cover" : "object-cover vm-ambient-drift"}
         />
       </motion.div>
       <MediaScrim variant="center" />

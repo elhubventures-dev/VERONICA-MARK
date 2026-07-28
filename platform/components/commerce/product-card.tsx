@@ -14,7 +14,7 @@ import { AddToCartButton } from "@/components/commerce/add-to-cart-button";
 import { ProductBadge, type ProductBadgeVariant } from "@/components/commerce/product-badge";
 import { Price } from "@/components/commerce/price";
 import { WishlistButton } from "@/components/commerce/wishlist-button";
-import { motionTransition } from "@/lib/motion";
+import { luxuryCardClass, luxuryFrameClass, motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export interface ProductCardProps {
@@ -73,13 +73,13 @@ export function ProductCard({
       viewport={{ once: true }}
       transition={motionTransition(reduceMotion)}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-[transform,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-[0_16px_40px_color-mix(in_srgb,var(--color-brand-deep)_14%,transparent)]",
+        `group relative flex flex-col overflow-hidden rounded-xl ${luxuryCardClass}`,
         !inStock && "opacity-90",
         className,
       )}
     >
       <div
-        className="relative w-full shrink-0 overflow-hidden bg-[var(--color-muted)]"
+        className={cn("relative w-full shrink-0 overflow-hidden bg-[var(--color-muted)]", luxuryFrameClass)}
         style={{ aspectRatio: "1 / 1" }}
       >
         <Link href={href} className="absolute inset-0 block">

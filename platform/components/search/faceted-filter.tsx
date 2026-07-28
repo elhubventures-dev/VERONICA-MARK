@@ -36,9 +36,15 @@ export function FacetedFilter({ title, options, selected, onChange, className }:
         {options.map((opt) => {
           const id = `${title}-${opt.value}`;
           return (
-            <li key={opt.value} className="flex items-center gap-2">
+            <li
+              key={opt.value}
+              className="group flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors duration-300 hover:bg-[var(--color-muted)]"
+            >
               <Checkbox id={id} checked={selected.includes(opt.value)} onCheckedChange={() => toggle(opt.value)} />
-              <Label htmlFor={id} className="flex flex-1 cursor-pointer justify-between font-normal">
+              <Label
+                htmlFor={id}
+                className="flex flex-1 cursor-pointer justify-between font-normal transition-colors group-hover:text-[var(--color-primary)]"
+              >
                 <span>{opt.label}</span>
                 {opt.count !== undefined ? (
                   <span className="text-[var(--color-muted-foreground)]">{opt.count}</span>

@@ -14,6 +14,7 @@ import { PaginationNav } from "@/components/navigation/pagination-nav";
 import { PriceRangeFilter } from "@/components/search/price-range-filter";
 import { SortSelect } from "@/components/search/sort-select";
 import { Button } from "@/components/ui/button";
+import { luxuryCardClass } from "@/lib/motion";
 import { SORT_OPTIONS, type SortValue, type StorefrontProduct } from "@/lib/storefront/demo-catalog";
 
 type Facets = {
@@ -130,38 +131,40 @@ export function ShopCatalog({
       </Reveal>
 
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
-        <FilterPanel
-          className="lg:sticky lg:top-24 lg:self-start"
-          footer={
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => router.push(basePath)}
-            >
-              Reset filters
-            </Button>
-          }
-        >
-          <FacetedFilter
-            title="Brand"
-            options={facets.brands}
-            selected={selectedBrands}
-            onChange={(selected) => updateParams({ brand: selected.join(",") || null })}
-          />
-          <FacetedFilter
-            title="Category"
-            options={facets.categories}
-            selected={selectedCategories}
-            onChange={(selected) => updateParams({ category: selected.join(",") || null })}
-          />
-          <PriceRangeFilter
-            min={facets.priceRange.min}
-            max={facets.priceRange.max}
-            value={[priceMin, priceMax]}
-            onChange={setPriceRange}
-          />
-        </FilterPanel>
+        <Reveal variant="left" className="lg:sticky lg:top-24 lg:self-start">
+          <FilterPanel
+            className={luxuryCardClass}
+            footer={
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push(basePath)}
+              >
+                Reset filters
+              </Button>
+            }
+          >
+            <FacetedFilter
+              title="Brand"
+              options={facets.brands}
+              selected={selectedBrands}
+              onChange={(selected) => updateParams({ brand: selected.join(",") || null })}
+            />
+            <FacetedFilter
+              title="Category"
+              options={facets.categories}
+              selected={selectedCategories}
+              onChange={(selected) => updateParams({ category: selected.join(",") || null })}
+            />
+            <PriceRangeFilter
+              min={facets.priceRange.min}
+              max={facets.priceRange.max}
+              value={[priceMin, priceMax]}
+              onChange={setPriceRange}
+            />
+          </FilterPanel>
+        </Reveal>
 
         <div className="space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4">

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -15,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { productToSnapshot, useCart } from "@/features/cart/cart-context";
 import { useCompare } from "@/features/compare/compare-context";
 import { useWishlist } from "@/features/wishlist/wishlist-context";
+import { luxuryCardClass, motionTransition } from "@/lib/motion";
 import type { StorefrontProductDetail } from "@/lib/storefront/demo-catalog";
 
 type PdpPurchasePanelProps = {
@@ -32,6 +34,7 @@ export function PdpPurchasePanel({ product }: PdpPurchasePanelProps) {
   const { addItem, getLineQuantity } = useCart();
   const { isWishlisted, toggle } = useWishlist();
   const { isCompared, toggle: toggleCompare, isFull } = useCompare();
+  const reduceMotion = useReducedMotion();
 
   const defaultVariant = product.variants.find((v) => v.available) ?? product.variants[0];
   const [variantId, setVariantId] = React.useState(defaultVariant?.id ?? "");
@@ -100,7 +103,12 @@ export function PdpPurchasePanel({ product }: PdpPurchasePanelProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={motionTransition(reduceMotion, 0.5)}
+      className={`space-y-6 rounded-2xl p-6 sm:p-8 ${luxuryCardClass}`}
+    >
       <div>
         <p className="text-xs tracking-[0.12em] text-[var(--color-muted-foreground)] uppercase">
           {product.brand}
@@ -183,6 +191,6 @@ export function PdpPurchasePanel({ product }: PdpPurchasePanelProps) {
           Speak with client services
         </Link>
       </p>
-    </div>
+    </motion.div>
   );
 }

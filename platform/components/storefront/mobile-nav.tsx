@@ -17,7 +17,7 @@ const links = [
   { label: "Women", href: "/categories/women" },
   { label: "Men", href: "/categories/men" },
   { label: "Brands", href: "/brands" },
-  { label: "Opening edit", href: "/flash-sale" },
+  { label: "Flash sales", href: "/flash-sale" },
   { label: "Search", href: "/search" },
   { label: "Wishlist", href: "/wishlist" },
   { label: "Compare", href: "/compare" },
@@ -64,46 +64,62 @@ export function MobileNav() {
     ? createPortal(
         <AnimatePresence>
           {open ? (
-            <motion.div
-              key="mobile-nav"
-              id={panelId}
-              className="fixed inset-x-0 z-40 overflow-y-auto bg-[var(--color-background)] px-5 py-8 shadow-lg lg:hidden"
-              style={{
-                top: "var(--storefront-chrome-height, 112px)",
-                bottom: "var(--storefront-bottom-nav-height, 64px)",
-              }}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Mobile navigation"
-              initial={reduceMotion ? false : { opacity: 0, y: -12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
-              transition={motionTransition(reduceMotion, 0.28)}
-            >
-              <nav>
-                <ul className="divide-y divide-[var(--color-border)]">
-                  {links.map((link, index) => (
-                    <motion.li
-                      key={link.href}
-                      initial={reduceMotion ? false : { opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        ...motionTransition(reduceMotion, 0.28),
-                        delay: reduceMotion ? 0 : staggerDelay(index, 0.025),
-                      }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        className="flex min-h-14 items-center font-display text-2xl transition-opacity hover:opacity-70 active:scale-[0.99]"
+            <>
+              <motion.button
+                type="button"
+                aria-label="Close mobile navigation overlay"
+                className="fixed inset-0 z-30 bg-[color-mix(in_srgb,var(--color-brand-deep)_38%,black)] lg:hidden"
+                style={{
+                  top: "var(--storefront-chrome-height, 112px)",
+                  bottom: "var(--storefront-bottom-nav-height, 64px)",
+                }}
+                onClick={() => setOpen(false)}
+                initial={reduceMotion ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0 }}
+                transition={motionTransition(reduceMotion, 0.2)}
+              />
+              <motion.div
+                key="mobile-nav"
+                id={panelId}
+                className="fixed inset-x-0 z-40 overflow-y-auto bg-[var(--color-background)] px-5 py-8 shadow-lg lg:hidden"
+                style={{
+                  top: "var(--storefront-chrome-height, 112px)",
+                  bottom: "var(--storefront-bottom-nav-height, 64px)",
+                }}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Mobile navigation"
+                initial={reduceMotion ? false : { opacity: 0, y: -12, scale: 0.985 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={reduceMotion ? undefined : { opacity: 0, y: -8, scale: 0.99 }}
+                transition={motionTransition(reduceMotion, 0.28)}
+              >
+                <nav>
+                  <ul className="divide-y divide-[var(--color-border)]">
+                    {links.map((link, index) => (
+                      <motion.li
+                        key={link.href}
+                        initial={reduceMotion ? false : { opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          ...motionTransition(reduceMotion, 0.28),
+                          delay: reduceMotion ? 0 : staggerDelay(index, 0.025),
+                        }}
                       >
-                        {link.label}
-                      </Link>
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
-            </motion.div>
+                        <Link
+                          href={link.href}
+                          onClick={() => setOpen(false)}
+                          className="flex min-h-14 items-center font-display text-2xl transition-[opacity,transform,color] hover:text-[var(--color-primary)] hover:opacity-80 active:scale-[0.99]"
+                        >
+                          {link.label}
+                        </Link>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </nav>
+              </motion.div>
+            </>
           ) : null}
         </AnimatePresence>,
         document.body,

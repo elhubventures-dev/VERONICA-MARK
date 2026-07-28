@@ -47,7 +47,7 @@ export function AddToCartButton({
     <Button
       size={size}
       className={cn(
-        "w-full transition-[transform,background-color] duration-300 active:scale-[0.98] sm:w-auto",
+        "w-full transition-[transform,background-color,box-shadow] duration-300 hover:shadow-[var(--shadow-subtle)] active:scale-[0.98] sm:w-auto",
         showSuccess &&
           "bg-[color-mix(in_srgb,var(--color-success)_92%,black)] hover:bg-[color-mix(in_srgb,var(--color-success)_88%,black)]",
         className,

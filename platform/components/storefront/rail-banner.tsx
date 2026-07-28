@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
-import { editorialCtaClass, motionTransition } from "@/lib/motion";
+import { editorialCtaClass, luxuryFrameClass, motionTransition } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type RailBannerProps = {
@@ -30,7 +30,12 @@ export function RailBanner({
   const reduceMotion = useReducedMotion();
 
   return (
-    <div className="group relative mb-10 isolate min-h-[220px] overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[280px] lg:min-h-[320px]">
+    <div
+      className={cn(
+        "group relative mb-10 isolate min-h-[220px] overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[280px] lg:min-h-[320px]",
+        luxuryFrameClass,
+      )}
+    >
       <Image
         src={src}
         alt=""
@@ -41,7 +46,7 @@ export function RailBanner({
         className={
           reduceMotion
             ? "-z-20 object-cover object-[78%_center]"
-            : "-z-20 scale-110 object-cover object-[78%_center] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-100"
+            : "-z-20 scale-110 object-cover object-[78%_center] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform group-hover:scale-100 vm-ambient-drift"
         }
       />
       <MediaScrim variant="left" />
