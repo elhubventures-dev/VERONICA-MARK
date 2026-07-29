@@ -46,9 +46,10 @@ export type CheckoutLinePayload = {
 export type CheckoutShippingPayload = {
   email: string;
   name: string;
-  line1: string;
+  phone: string;
+  line1?: string;
   line2?: string;
-  city: string;
+  city?: string;
   state?: string;
   postalCode?: string;
   country: string;
@@ -77,8 +78,9 @@ function buildOrderNumber(): string {
   return `VM-${stamp}-${rand}`;
 }
 
-async function ensureGuestCustomer(email: string, fullName: string) {
+async function ensureGuestCustomer(email: string, fullName: string, phone: string) {
   const normalized = email.trim().toLowerCase();
+  const normalizedPhone = phone.trim();
   const { firstName, lastName } = splitName(fullName);
 
   const existing = await prisma.user.findFirst({
@@ -87,10 +89,22 @@ async function ensureGuestCustomer(email: string, fullName: string) {
   });
 
   if (existing?.customerProfile) {
+    if (normalizedPhone && existing.phone !== normalizedPhone) {
+      await prisma.user.update({
+        where: { id: existing.id },
+        data: { phone: normalizedPhone },
+      });
+    }
     return existing.customerProfile;
   }
 
   if (existing && !existing.customerProfile) {
+    if (normalizedPhone && existing.phone !== normalizedPhone) {
+      await prisma.user.update({
+        where: { id: existing.id },
+        data: { phone: normalizedPhone },
+      });
+    }
     return prisma.customerProfile.create({
       data: { userId: existing.id },
     });
@@ -101,6 +115,7 @@ async function ensureGuestCustomer(email: string, fullName: string) {
       email: normalized,
       firstName,
       lastName,
+      phone: normalizedPhone || undefined,
       role: UserRole.CUSTOMER,
       preferredCurrency: Currency.NGN,
       customerProfile: { create: {} },
@@ -187,14 +202,16 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw new ValidationError("A valid email is required");
   }
-  if (!input.shipping.name.trim() || !input.shipping.line1.trim() || !input.shipping.city.trim()) {
-    throw new ValidationError("Complete shipping details are required");
+  if (!input.shipping.name.trim()) {
+    throw new ValidationError("Full name is required");
+  }
+  const phone = input.shipping.phone.trim();
+  const phoneDigits = phone.replace(/\D/g, "");
+  if (!phone || phoneDigits.length < 7 || phoneDigits.length > 15) {
+    throw new ValidationError("A valid phone number is required");
   }
   if (isNigeriaCountry(input.shipping.country) && !input.shipping.state?.trim()) {
     throw new ValidationError("State is required for Nigerian deliveries");
-  }
-  if (!isNigeriaCountry(input.shipping.country) && !input.shipping.postalCode?.trim()) {
-    throw new ValidationError("Postal code is required for international deliveries");
   }
 
   const totals = computeCheckoutTotals(input);
@@ -203,19 +220,19 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
     throw new ValidationError("Order total must be greater than zero");
   }
 
-  const customer = await ensureGuestCustomer(email, input.shipping.name);
+  const customer = await ensureGuestCustomer(email, input.shipping.name, phone);
   const orderNumber = buildOrderNumber();
   const reference = createPaystackReference(orderNumber);
 
+  const regionLabel = input.shipping.state?.trim() || input.shipping.country;
   const address = {
     name: input.shipping.name,
-    line1: input.shipping.line1,
+    phone,
+    line1: input.shipping.line1?.trim() || regionLabel,
     line2: input.shipping.line2 || undefined,
-    city: input.shipping.city,
+    city: input.shipping.city?.trim() || regionLabel,
     state: input.shipping.state || undefined,
-    postalCode: isNigeriaCountry(input.shipping.country)
-      ? undefined
-      : input.shipping.postalCode?.trim() || undefined,
+    postalCode: undefined,
     country: input.shipping.country,
     email,
   };

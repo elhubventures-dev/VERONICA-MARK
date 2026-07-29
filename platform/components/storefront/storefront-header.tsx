@@ -112,7 +112,14 @@ export function StorefrontHeader() {
 
         <BrandMark variant="icon" size={36} priority />
 
-        <nav aria-label="Primary" className="hidden flex-1 items-center gap-5 xl:gap-6 lg:flex">
+        <Link
+          href="/"
+          className="relative hidden shrink-0 text-sm font-medium whitespace-nowrap text-[var(--color-foreground)] transition-colors after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[var(--color-accent)] after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 sm:inline-flex"
+        >
+          Home
+        </Link>
+
+        <nav aria-label="Primary" className="hidden min-w-0 flex-1 items-center gap-5 overflow-x-auto xl:gap-6 lg:flex">
           <MegaMenu
             label="Shop"
             columns={shopColumns}
@@ -126,7 +133,7 @@ export function StorefrontHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="relative text-sm font-medium whitespace-nowrap text-[var(--color-muted-foreground)] transition-colors after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[var(--color-accent)] after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[var(--color-foreground)] hover:after:scale-x-100"
+              className="relative shrink-0 text-sm font-medium whitespace-nowrap text-[var(--color-muted-foreground)] transition-colors after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-[var(--color-accent)] after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-[var(--color-foreground)] hover:after:scale-x-100"
             >
               {link.label}
             </Link>

@@ -41,6 +41,7 @@ function mapShippingAddress(raw: unknown): AccountOrder["shippingAddress"] {
   const addr = (raw ?? {}) as Record<string, string | undefined>;
   return {
     name: addr.name ?? addr.fullName ?? "",
+    phone: addr.phone,
     line1: addr.line1 ?? addr.address1 ?? "",
     line2: addr.line2 ?? addr.address2,
     city: addr.city ?? "",

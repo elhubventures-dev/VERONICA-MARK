@@ -61,6 +61,12 @@ export default async function InvoicePage({ params }: InvoicePageProps) {
           <address className="mt-2 text-sm not-italic">
             {order.shippingAddress.name}
             <br />
+            {order.shippingAddress.phone ? (
+              <>
+                {order.shippingAddress.phone}
+                <br />
+              </>
+            ) : null}
             {order.shippingAddress.line1}
             {order.shippingAddress.line2 ? (
               <>

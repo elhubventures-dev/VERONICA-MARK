@@ -10,6 +10,7 @@ import { createPortal } from "react-dom";
 import { motionTransition, staggerDelay } from "@/lib/motion";
 
 const links = [
+  { label: "Home", href: "/" },
   { label: "Shop all", href: "/shop" },
   { label: "New arrivals", href: "/shop?sort=newest" },
   { label: "Categories", href: "/categories" },

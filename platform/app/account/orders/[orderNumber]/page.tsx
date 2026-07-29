@@ -171,6 +171,7 @@ export default async function AccountOrderDetailPage({
             <h2 className="font-display text-xl">Shipping address</h2>
             <address className="mt-4 space-y-1 text-sm not-italic text-[var(--color-muted-foreground)]">
               <p className="font-medium text-[var(--color-foreground)]">{order.shippingAddress.name}</p>
+              {order.shippingAddress.phone ? <p>{order.shippingAddress.phone}</p> : null}
               <p>{order.shippingAddress.line1}</p>
               {order.shippingAddress.line2 ? <p>{order.shippingAddress.line2}</p> : null}
               <p>

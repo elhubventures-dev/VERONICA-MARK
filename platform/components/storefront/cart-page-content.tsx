@@ -7,33 +7,20 @@ import { CartItem } from "@/components/commerce/cart-item";
 import { CartSummary } from "@/components/commerce/cart-summary";
 import { CouponInput } from "@/components/commerce/coupon-input";
 import { EmptyCart } from "@/components/commerce/empty-cart";
-import { ShippingEstimator } from "@/components/commerce/shipping-estimator";
 import { Reveal } from "@/components/storefront/reveal";
 import { TrustSignals } from "@/components/storefront/trust-signals";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/features/cart/cart-context";
 import { useProceedToCheckout } from "@/hooks/use-proceed-to-checkout";
-import { shippingFeeNgn, type ShippingMethodId } from "@/lib/commerce/shipping-rates";
 import { demoCoupons } from "@/lib/storefront/demo-catalog";
 import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 import { toast } from "sonner";
-
-type BagShippingQuote = {
-  cost: number;
-  currency?: string;
-  estimatedDelivery: string;
-  method: string;
-  methodId?: ShippingMethodId;
-  country?: string;
-  state?: string;
-};
 
 export function CartPageContent() {
   const { proceedToCheckout, isReady } = useProceedToCheckout();
   const { lines, subtotal, updateQuantity, removeItem, couponCode, setCouponCode } = useCart();
   const [couponError, setCouponError] = React.useState<string>();
   const [couponLoading, setCouponLoading] = React.useState(false);
-  const [shippingQuote, setShippingQuote] = React.useState<BagShippingQuote | null>(null);
 
   const couponDiscount = React.useMemo(() => {
     if (!couponCode) return 0;
@@ -43,17 +30,6 @@ export function CartPageContent() {
     return Math.min(subtotal, promo.value);
   }, [couponCode, subtotal]);
 
-  const shippingFeeForTotal = React.useMemo(() => {
-    if (!shippingQuote?.methodId || !shippingQuote.country) {
-      return 0;
-    }
-    return shippingFeeNgn({
-      country: shippingQuote.country,
-      state: shippingQuote.state,
-      methodId: shippingQuote.methodId,
-    });
-  }, [shippingQuote]);
-
   const totals = React.useMemo(() => {
     return computeStorefrontTotals({
       items: lines.map((line) => ({
@@ -61,10 +37,10 @@ export function CartPageContent() {
         unitPrice: line.product.price,
       })),
       taxRatePercent: 0,
-      shippingFee: shippingFeeForTotal,
+      shippingFee: 0,
       couponDiscount,
     });
-  }, [lines, shippingFeeForTotal, couponDiscount]);
+  }, [lines, couponDiscount]);
 
   const handleApplyCoupon = async (code: string) => {
     setCouponLoading(true);
@@ -121,16 +97,6 @@ export function CartPageContent() {
               onRemove={() => removeItem(line.variantId)}
             />
           ))}
-
-          <ShippingEstimator
-            onEstimate={async ({ country, state, methodId, quote }) => {
-              await new Promise((r) => setTimeout(r, 250));
-              const next = { ...quote, country, state, methodId };
-              setShippingQuote(next);
-              return next;
-            }}
-            quote={shippingQuote}
-          />
         </div>
 
         <Reveal className="space-y-4 lg:sticky lg:top-24 lg:self-start" delay={0.06}>
@@ -147,21 +113,6 @@ export function CartPageContent() {
           <CartSummary
             subtotal={totals.subtotal}
             discount={totals.discount}
-            shipping={
-              shippingQuote
-                ? shippingQuote.currency === "USD"
-                  ? shippingQuote.cost
-                  : totals.shipping
-                : undefined
-            }
-            shippingLabel={
-              shippingQuote
-                ? shippingQuote.currency === "USD"
-                  ? `${shippingQuote.method} (charged in NGN at checkout)`
-                  : shippingQuote.method
-                : "Shipping"
-            }
-            shippingCurrency={shippingQuote?.currency === "USD" ? "USD" : undefined}
             total={totals.total}
           />
           <Button className="w-full" size="lg" disabled={!isReady} onClick={proceedToCheckout}>

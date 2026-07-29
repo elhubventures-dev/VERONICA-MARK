@@ -7,6 +7,7 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 type ShippingAddressJson = {
   name?: string;
   email?: string;
+  phone?: string;
   line1?: string;
   line2?: string;
   city?: string;
@@ -134,6 +135,7 @@ export function buildOrderAdminDetails(
   if (method) rows.push({ label: "Shipping method", value: method });
   if (shipping.name) rows.push({ label: "Ship to name", value: shipping.name });
   if (shipping.email) rows.push({ label: "Ship to email", value: shipping.email });
+  if (shipping.phone) rows.push({ label: "Phone", value: shipping.phone });
   if (shipping.line1) rows.push({ label: "Address line 1", value: shipping.line1 });
   if (shipping.line2) rows.push({ label: "Address line 2", value: shipping.line2 });
   if (shipping.city) rows.push({ label: "City", value: shipping.city });

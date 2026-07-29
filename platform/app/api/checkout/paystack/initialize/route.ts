@@ -9,9 +9,16 @@ const bodySchema = z.object({
   shipping: z.object({
     email: z.string().email(),
     name: z.string().min(1),
-    line1: z.string().min(1),
+    phone: z
+      .string()
+      .min(1)
+      .refine((value) => {
+        const digits = value.replace(/\D/g, "");
+        return digits.length >= 7 && digits.length <= 15;
+      }, "Invalid phone number"),
+    line1: z.string().optional().default(""),
     line2: z.string().optional(),
-    city: z.string().min(1),
+    city: z.string().optional().default(""),
     state: z.string().optional(),
     postalCode: z.string().optional().default(""),
     country: z.string().min(2),

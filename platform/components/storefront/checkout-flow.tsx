@@ -34,6 +34,7 @@ import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 type ShippingForm = {
   email: string;
   name: string;
+  phone: string;
   line1: string;
   line2: string;
   city: string;
@@ -47,6 +48,7 @@ function buildInitialShipping(checkoutCountry: string): ShippingForm {
   return {
     email: "",
     name: "",
+    phone: "",
     line1: "",
     line2: "",
     city: "",
@@ -162,10 +164,11 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
       next.email = "Enter a valid email address";
     }
     if (!shipping.name.trim()) next.name = "Full name is required";
-    if (!shipping.line1.trim()) next.line1 = "Address is required";
-    if (!shipping.city.trim()) next.city = "City is required";
+    const phoneDigits = shipping.phone.replace(/\D/g, "");
+    if (!shipping.phone.trim() || phoneDigits.length < 7 || phoneDigits.length > 15) {
+      next.phone = "Enter a valid phone number";
+    }
     if (nigeria && !shipping.state.trim()) next.state = "State is required";
-    if (!nigeria && !shipping.postalCode.trim()) next.postalCode = "Postal code is required";
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -271,26 +274,20 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                   ) : null}
                 </div>
                 <div className="space-y-1 sm:col-span-2">
-                  <Label htmlFor="checkout-line1">Address</Label>
+                  <Label htmlFor="checkout-phone">Phone number</Label>
                   <Input
-                    id="checkout-line1"
-                    autoComplete="address-line1"
-                    value={shipping.line1}
-                    onChange={(e) => setShipping((s) => ({ ...s, line1: e.target.value }))}
-                    aria-invalid={Boolean(errors.line1)}
+                    id="checkout-phone"
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    placeholder="+234 801 234 5678"
+                    value={shipping.phone}
+                    onChange={(e) => setShipping((s) => ({ ...s, phone: e.target.value }))}
+                    aria-invalid={Boolean(errors.phone)}
                   />
-                  {errors.line1 ? (
-                    <p className="text-xs text-[var(--color-error)]">{errors.line1}</p>
+                  {errors.phone ? (
+                    <p className="text-xs text-[var(--color-error)]">{errors.phone}</p>
                   ) : null}
-                </div>
-                <div className="space-y-1 sm:col-span-2">
-                  <Label htmlFor="checkout-line2">Apartment, suite (optional)</Label>
-                  <Input
-                    id="checkout-line2"
-                    autoComplete="address-line2"
-                    value={shipping.line2}
-                    onChange={(e) => setShipping((s) => ({ ...s, line2: e.target.value }))}
-                  />
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <Label htmlFor="checkout-country">Country</Label>
@@ -304,12 +301,14 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                         ...s,
                         country,
                         state: toNigeria ? s.state || "Rivers" : "",
-                        postalCode: toNigeria ? "" : s.postalCode,
+                        line1: "",
+                        line2: "",
+                        city: "",
+                        postalCode: "",
                       }));
                       setErrors((prev) => {
                         const next = { ...prev };
-                        delete next.postalCode;
-                        if (toNigeria) delete next.state;
+                        delete next.state;
                         return next;
                       });
                     }}
@@ -325,7 +324,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                   </select>
                 </div>
                 {nigeria ? (
-                  <div className="space-y-1">
+                  <div className="space-y-1 sm:col-span-2">
                     <Label htmlFor="checkout-state">State</Label>
                     <select
                       id="checkout-state"
@@ -342,34 +341,6 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                     </select>
                     {errors.state ? (
                       <p className="text-xs text-[var(--color-error)]">{errors.state}</p>
-                    ) : null}
-                  </div>
-                ) : null}
-                <div className="space-y-1">
-                  <Label htmlFor="checkout-city">City</Label>
-                  <Input
-                    id="checkout-city"
-                    autoComplete="address-level2"
-                    value={shipping.city}
-                    onChange={(e) => setShipping((s) => ({ ...s, city: e.target.value }))}
-                    aria-invalid={Boolean(errors.city)}
-                  />
-                  {errors.city ? (
-                    <p className="text-xs text-[var(--color-error)]">{errors.city}</p>
-                  ) : null}
-                </div>
-                {!nigeria ? (
-                  <div className="space-y-1">
-                    <Label htmlFor="checkout-postal">Postal code</Label>
-                    <Input
-                      id="checkout-postal"
-                      autoComplete="postal-code"
-                      value={shipping.postalCode}
-                      onChange={(e) => setShipping((s) => ({ ...s, postalCode: e.target.value }))}
-                      aria-invalid={Boolean(errors.postalCode)}
-                    />
-                    {errors.postalCode ? (
-                      <p className="text-xs text-[var(--color-error)]">{errors.postalCode}</p>
                     ) : null}
                   </div>
                 ) : null}
@@ -462,11 +433,14 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                   <dd>{shipping.email}</dd>
                 </div>
                 <div>
+                  <dt className="text-[var(--color-muted-foreground)]">Phone</dt>
+                  <dd>{shipping.phone}</dd>
+                </div>
+                <div>
                   <dt className="text-[var(--color-muted-foreground)]">Ship to</dt>
                   <dd>
-                    {shipping.name}, {shipping.line1}, {shipping.city}
-                    {shipping.state ? `, ${shipping.state}` : ""}
-                    {!nigeria && shipping.postalCode ? ` ${shipping.postalCode}` : ""}
+                    {shipping.name}
+                    {shipping.state ? `, ${shipping.state}` : ""}, {shipping.country}
                   </dd>
                 </div>
                 <div>
@@ -484,7 +458,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
               <Label htmlFor="order-notes">Order notes (optional)</Label>
               <Textarea
                 id="order-notes"
-                placeholder="Gift message or delivery instructions"
+                placeholder="Delivery address, landmark, or gift message"
                 rows={3}
                 value={orderNotes}
                 onChange={(e) => setOrderNotes(e.target.value)}

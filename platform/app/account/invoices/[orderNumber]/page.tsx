@@ -92,6 +92,12 @@ export default async function AccountInvoiceDetailPage({
             <address className="mt-3 text-sm not-italic">
               {order.shippingAddress.name}
               <br />
+              {order.shippingAddress.phone ? (
+                <>
+                  {order.shippingAddress.phone}
+                  <br />
+                </>
+              ) : null}
               {order.shippingAddress.line1}
               {order.shippingAddress.line2 ? (
                 <>

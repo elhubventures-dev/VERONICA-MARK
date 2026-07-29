@@ -18,6 +18,7 @@ export type AccountOrder = {
   email: string;
   shippingAddress: {
     name: string;
+    phone?: string;
     line1: string;
     line2?: string;
     city: string;
