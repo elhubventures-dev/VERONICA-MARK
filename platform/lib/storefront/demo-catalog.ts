@@ -80,6 +80,7 @@ export type DemoOrder = {
   status: "CONFIRMED" | "PROCESSING" | "SHIPPED" | "DELIVERED";
   shippingAddress: {
     name: string;
+    phone?: string;
     line1: string;
     line2?: string;
     city: string;
