@@ -6,6 +6,7 @@ import { FloatingContactActions } from "@/components/storefront/floating-contact
 import { MobileBottomNav } from "@/components/storefront/mobile-bottom-nav";
 import { StorefrontChrome } from "@/components/storefront/storefront-chrome";
 import { StorefrontFooter } from "@/components/storefront/storefront-footer";
+import { WelcomeBackPopup } from "@/components/storefront/welcome-back-popup";
 import { isFeatureEnabled } from "@/lib/feature-flags";
 
 export default async function StorefrontLayout({ children }: { children: React.ReactNode }) {
@@ -28,6 +29,7 @@ export default async function StorefrontLayout({ children }: { children: React.R
         <MobileBottomNav />
         <FloatingContactActions />
         <FlashSalePopup />
+        <WelcomeBackPopup />
       </div>
     </PwaShell>
   );

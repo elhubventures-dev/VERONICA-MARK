@@ -105,9 +105,9 @@ export function StorefrontHeader() {
       initial={reduceMotion ? false : { opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={motionTransition(reduceMotion, 0.45)}
-      className="sticky top-0 z-30 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-background)]/80"
+      className="border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--color-background)]/80"
     >
-      <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-5 py-4 sm:px-8 lg:gap-6">
+      <div className="mx-auto flex max-w-[1440px] items-center gap-4 overflow-visible px-5 py-4 sm:px-8 lg:gap-6">
         <MobileNav />
 
         <BrandMark variant="icon" size={36} priority />
@@ -119,7 +119,8 @@ export function StorefrontHeader() {
           Home
         </Link>
 
-        <nav aria-label="Primary" className="hidden min-w-0 flex-1 items-center gap-5 overflow-x-auto xl:gap-6 lg:flex">
+        {/* overflow-visible: mega-menu must not be clipped by scroll containers */}
+        <nav aria-label="Primary" className="hidden min-w-0 flex-1 items-center gap-5 overflow-visible xl:gap-6 lg:flex">
           <MegaMenu
             label="Shop"
             columns={shopColumns}

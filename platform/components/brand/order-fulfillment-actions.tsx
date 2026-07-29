@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import {
   OrderStatusBadge,
@@ -23,8 +24,13 @@ export function OrderFulfillmentActions({
   orderNumber,
   initialStatus,
 }: OrderFulfillmentActionsProps) {
+  const router = useRouter();
   const [status, setStatus] = React.useState<OrderStatus>(initialStatus);
   const [pendingAction, setPendingAction] = React.useState<FulfillmentAction | null>(null);
+
+  React.useEffect(() => {
+    setStatus(initialStatus);
+  }, [initialStatus]);
 
   const canMarkPacked = packableStatuses.includes(status);
   const canMarkShipped = status === "packed";
@@ -46,6 +52,7 @@ export function OrderFulfillmentActions({
     } else {
       setStatus(nextStatus);
       toast.success(result.message);
+      router.refresh();
     }
     setPendingAction(null);
   }

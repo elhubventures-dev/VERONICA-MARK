@@ -8,12 +8,10 @@ import {
   buildOrderAdminDetails,
   buildOrderEmailVars,
   buildOrderLineItems,
-  formatOrderMoney,
   resolveOrderRecipient,
 } from "@/lib/email/order-email-vars";
 import { sendTemplateEmail } from "@/lib/email/send";
 import { logger } from "@/lib/logger";
-import { prisma } from "@/lib/prisma";
 import type { OrderWithRelations } from "@/lib/repositories/order.repository";
 import { absoluteUrl } from "@/lib/seo/metadata";
 
@@ -133,73 +131,4 @@ export async function notifyCustomerPaymentFailed(
     ctaUrl: absoluteUrl(`/admin/orders/${order.orderNumber}`),
     ctaLabel: "View order in admin",
   });
-}
-
-/**
- * Notify brand managers (and brand contactEmail fallback) about a newly paid order.
- * Admin already receives the full order copy via notifyCustomerOrderStatus(PAID).
- */
-export async function notifyBrandManagersNewOrder(order: OrderWithRelations): Promise<void> {
-  const brandIds = [
-    ...new Set(
-      order.items
-        .map((item) => item.variant?.product?.brandId)
-        .filter((id): id is string => Boolean(id)),
-    ),
-  ];
-  if (!brandIds.length) return;
-
-  try {
-    const managers = await prisma.brandManagerProfile.findMany({
-      where: { brandId: { in: brandIds }, deletedAt: null },
-      include: {
-        user: { select: { email: true, firstName: true, lastName: true } },
-        brand: { select: { id: true, name: true, contactEmail: true } },
-      },
-    });
-
-    const sent = new Set<string>();
-
-    for (const manager of managers) {
-      const to = manager.user.email?.trim().toLowerCase();
-      if (!to || sent.has(to)) continue;
-      sent.add(to);
-
-      await sendTemplateEmail("brand.new_order", to, {
-        recipientName:
-          [manager.user.firstName, manager.user.lastName].filter(Boolean).join(" ") || undefined,
-        brandName: manager.brand.name,
-        orderNumber: order.orderNumber,
-        orderTotalLabel: formatOrderMoney(Number(order.total), order.currency),
-        appUrl: absoluteUrl("/").replace(/\/$/, ""),
-        ctaUrl: absoluteUrl(`/brand/orders/${order.orderNumber}`),
-      });
-    }
-
-    const brands = await prisma.brand.findMany({
-      where: { id: { in: brandIds }, deletedAt: null },
-      select: { id: true, name: true, contactEmail: true },
-    });
-
-    for (const brand of brands) {
-      const to = brand.contactEmail?.trim().toLowerCase();
-      if (!to || sent.has(to)) continue;
-      const hasManager = managers.some((m) => m.brandId === brand.id);
-      if (hasManager) continue;
-      sent.add(to);
-
-      await sendTemplateEmail("brand.new_order", to, {
-        brandName: brand.name,
-        orderNumber: order.orderNumber,
-        orderTotalLabel: formatOrderMoney(Number(order.total), order.currency),
-        appUrl: absoluteUrl("/").replace(/\/$/, ""),
-        ctaUrl: absoluteUrl(`/brand/orders/${order.orderNumber}`),
-      });
-    }
-  } catch (error) {
-    logger.error(
-      { err: error, orderNumber: order.orderNumber },
-      "brand.new_order.send_failed",
-    );
-  }
 }

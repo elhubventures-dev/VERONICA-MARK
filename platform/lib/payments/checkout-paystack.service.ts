@@ -11,7 +11,6 @@ import {
 } from "@/lib/commerce/shipping-rates";
 import { withTransaction } from "@/lib/db/transactions";
 import {
-  notifyBrandManagersNewOrder,
   notifyCustomerOrderStatus,
   notifyCustomerPaymentFailed,
 } from "@/lib/email/order-notifications";
@@ -423,26 +422,64 @@ export async function finalizePaystackPayment(reference: string) {
     });
   }
 
-  if (verified.amountMinor !== expectedMinor) {
+  /**
+   * Bank transfer (and some channels) return `amount` = requested + fees.
+   * Match against `requested_amount` when present; only treat as mismatch if that fails too.
+   */
+  const matchMinor =
+    verified.requestedAmountMinor != null && Number.isFinite(verified.requestedAmountMinor)
+      ? verified.requestedAmountMinor
+      : verified.amountMinor;
+  const amountMismatch = matchMinor !== expectedMinor;
+  if (amountMismatch) {
     logger.error(
-      { reference, expectedMinor, got: verified.amountMinor },
-      "Paystack amount mismatch",
+      {
+        reference,
+        expectedMinor,
+        gotAmount: verified.amountMinor,
+        gotRequested: verified.requestedAmountMinor,
+        fees: verified.feesMinor,
+        channel: verified.channel,
+        orderNumber: payment.order.orderNumber,
+      },
+      "Paystack amount mismatch — proceeding with PAID because charge succeeded",
     );
-    throw new AppError("Payment amount mismatch", {
-      code: "PAYMENT_AMOUNT_MISMATCH",
-      statusCode: 409,
-    });
+  } else if (
+    verified.requestedAmountMinor != null &&
+    verified.amountMinor !== verified.requestedAmountMinor
+  ) {
+    logger.info(
+      {
+        reference,
+        requested: verified.requestedAmountMinor,
+        charged: verified.amountMinor,
+        fees: verified.feesMinor,
+        channel: verified.channel,
+      },
+      "Paystack channel fee included in charged amount (expected for bank_transfer)",
+    );
   }
 
   await paymentRepository.updateStatus(payment.id, PaymentStatus.PAID, {
     provider: PaymentProvider.PAYSTACK,
     providerEventId: `verify_${reference}_${verified.paidAt ?? Date.now()}`,
-    eventType: "transaction.verify.success",
-    payload: verified.raw as Prisma.InputJsonValue,
+    eventType: amountMismatch
+      ? "transaction.verify.success_amount_mismatch"
+      : "transaction.verify.success",
+    payload: {
+      ...(verified.raw as object),
+      vmExpectedMinor: expectedMinor,
+      vmMatchMinor: matchMinor,
+      vmReceivedMinor: verified.amountMinor,
+      vmRequestedMinor: verified.requestedAmountMinor,
+      vmAmountMismatch: amountMismatch,
+    } as Prisma.InputJsonValue,
   });
 
   const paidOrder = await orderRepository.updateStatus(payment.orderId, OrderStatus.PAID, {
-    note: "Payment confirmed via Paystack",
+    note: amountMismatch
+      ? `Payment confirmed via Paystack (amount mismatch: expected ${expectedMinor} kobo, matched against ${matchMinor} kobo, charged ${verified.amountMinor} kobo)`
+      : "Payment confirmed via Paystack",
     fromStatus: payment.order.status,
   });
 
@@ -461,8 +498,8 @@ export async function finalizePaystackPayment(reference: string) {
   });
 
   // First successful finalize only (alreadyPaid short-circuits above) — verify + webhook share this path.
+  // Recipients: client + sales@ only (never brand managers).
   await notifyCustomerOrderStatus(paidOrder, OrderStatus.PAID);
-  await notifyBrandManagersNewOrder(paidOrder);
 
   try {
     const { markCustomerAbandonedCartsRecovered } = await import("@/lib/marketing/abandoned-cart");
@@ -471,12 +508,23 @@ export async function finalizePaystackPayment(reference: string) {
     logger.warn({ err: error, orderId: payment.orderId }, "abandoned_cart.recover_on_paid_failed");
   }
 
-  logger.info({ reference, orderNumber: payment.order.orderNumber }, "Paystack payment finalized");
+  logger.info(
+    {
+      reference,
+      orderNumber: payment.order.orderNumber,
+      amountMismatch,
+      channel: verified.channel,
+      paidMinor: verified.amountMinor,
+      requestedMinor: verified.requestedAmountMinor,
+    },
+    "Paystack payment finalized",
+  );
 
   return {
     alreadyPaid: false as const,
     orderNumber: payment.order.orderNumber,
     reference: payment.reference,
+    amountMismatch,
   };
 }
 

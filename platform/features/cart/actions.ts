@@ -52,7 +52,7 @@ export async function mergeGuestCart(_sessionId: string): Promise<{ ok: boolean 
   return { ok: true };
 }
 
-export async function clearServerCart(_cartId: string): Promise<{ ok: boolean }> {
+export async function clearServerCart(_cartId?: string): Promise<{ ok: boolean }> {
   try {
     const session = await auth();
     const userId = session?.user?.id;
@@ -64,6 +64,7 @@ export async function clearServerCart(_cartId: string): Promise<{ ok: boolean }>
     });
     if (!profile) return { ok: true };
 
+    // Soft-deletes cart lines and marks abandoned-cart rows recovered.
     await markCustomerAbandonedCartsRecovered(profile.id);
     return { ok: true };
   } catch (error) {

@@ -44,6 +44,16 @@ NEXT_PUBLIC_APP_URL=https://your-domain.com
 - Shipping (hub: Port Harcourt, Rivers): Intra-city ₦3,500 (Rivers only) · Interstate ₦8,000 (other NG states) · Express ₦10,000 · International **$50 USD** (outside Nigeria; FX **$1 = ₦1,500**).
 - International browsers see catalog prices in **USD** at the same rate; Paystack still charges NGN.
 - Without `PAYSTACK_SECRET_KEY`, initialize returns **503** (no fake success).
+- **Bank transfer:** Paystack verify may return `amount` = requested + fees. Matching uses `requested_amount` (not raw `amount`). If a charge succeeds but amounts still disagree, we still mark **PAID** and log/alert — never leave a charged customer stuck in PENDING.
+- Confirmation emails (`order.confirmation` + admin copy) fire only after successful finalize to PAID.
+
+## Recover a stuck paid order
+
+If Paystack shows success but the DB is still PENDING (older amount-mismatch bug):
+
+```bash
+pnpm exec tsx --require ./scripts/register-server-only.cjs scripts/recover-paid-order.ts <paystack-reference>
+```
 
 ## Test cards
 

@@ -38,9 +38,17 @@ function CallbackInner() {
         if (cancelled) return;
 
         clearCart();
+        let prior: Record<string, unknown> = {};
+        try {
+          const raw = sessionStorage.getItem("vm-last-order");
+          if (raw) prior = JSON.parse(raw) as Record<string, unknown>;
+        } catch {
+          // keep empty prior
+        }
         sessionStorage.setItem(
           "vm-last-order",
           JSON.stringify({
+            ...prior,
             orderNumber: payload.data.orderNumber,
             reference,
           }),

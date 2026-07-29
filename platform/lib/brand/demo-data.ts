@@ -93,7 +93,25 @@ export type BrandOrder = {
   itemCount: number;
   total: number;
   currency: string;
+  notes: string;
+  shippingAddress: {
+    name: string;
+    phone: string;
+    email: string;
+    line1: string;
+    line2: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+  };
   items: Array<{ title: string; variant: string; quantity: number; unitPrice: number }>;
+  statusHistory: Array<{
+    fromStatus: string | null;
+    toStatus: string;
+    comment: string | null;
+    at: string;
+  }>;
 };
 
 export type BrandCoupon = {
@@ -312,7 +330,20 @@ export const brandOrders: BrandOrder[] = [
     itemCount: 1,
     total: 315000,
     currency: "NGN",
+    notes: "",
+    shippingAddress: {
+      name: "Camille Dubois",
+      phone: "+2348012345678",
+      email: "customer@example.com",
+      line1: "12 Admiralty Way",
+      line2: "",
+      city: "Port Harcourt",
+      state: "Rivers",
+      postalCode: "",
+      country: "NG",
+    },
     items: [{ title: "Ambre Soie", variant: "100 ml", quantity: 1, unitPrice: 262500 }],
+    statusHistory: [],
   },
   {
     orderNumber: "VM-2026-0001",
@@ -323,10 +354,23 @@ export const brandOrders: BrandOrder[] = [
     itemCount: 2,
     total: 539400,
     currency: "NGN",
+    notes: "",
+    shippingAddress: {
+      name: "Camille Dubois",
+      phone: "+2348012345678",
+      email: "customer@example.com",
+      line1: "12 Admiralty Way",
+      line2: "",
+      city: "Port Harcourt",
+      state: "Rivers",
+      postalCode: "",
+      country: "NG",
+    },
     items: [
       { title: "Velvet Iris", variant: "100 ml", quantity: 1, unitPrice: 247500 },
       { title: "Nocturne Oud", variant: "50 ml", quantity: 1, unitPrice: 226500 },
     ],
+    statusHistory: [],
   },
   {
     orderNumber: "VM-2026-0010",
@@ -337,7 +381,20 @@ export const brandOrders: BrandOrder[] = [
     itemCount: 1,
     total: 266400,
     currency: "NGN",
+    notes: "",
+    shippingAddress: {
+      name: "Louis Moreau",
+      phone: "+2348098765432",
+      email: "louis@example.com",
+      line1: "8 Aba Road",
+      line2: "",
+      city: "Port Harcourt",
+      state: "Rivers",
+      postalCode: "",
+      country: "NG",
+    },
     items: [{ title: "Soleil Néroli", variant: "100 ml", quantity: 1, unitPrice: 222000 }],
+    statusHistory: [],
   },
   {
     orderNumber: "VM-2026-0008",
@@ -348,7 +405,20 @@ export const brandOrders: BrandOrder[] = [
     itemCount: 1,
     total: 351000,
     currency: "NGN",
+    notes: "",
+    shippingAddress: {
+      name: "Nora Ellis",
+      phone: "+2348070011223",
+      email: "nora@example.com",
+      line1: "21 Trans Amadi",
+      line2: "",
+      city: "Port Harcourt",
+      state: "Rivers",
+      postalCode: "",
+      country: "NG",
+    },
     items: [{ title: "Purple Reign", variant: "100 ml", quantity: 1, unitPrice: 292500 }],
+    statusHistory: [],
   },
   {
     orderNumber: "VM-2026-0006",
@@ -359,10 +429,23 @@ export const brandOrders: BrandOrder[] = [
     itemCount: 2,
     total: 603000,
     currency: "NGN",
+    notes: "Leave with concierge",
+    shippingAddress: {
+      name: "James Laurent",
+      phone: "+2348055544332",
+      email: "james@example.com",
+      line1: "4 GRA Phase 2",
+      line2: "",
+      city: "Port Harcourt",
+      state: "Rivers",
+      postalCode: "",
+      country: "NG",
+    },
     items: [
       { title: "Nocturne Oud", variant: "100 ml", quantity: 1, unitPrice: 315000 },
       { title: "Figue d'Or", variant: "100 ml", quantity: 1, unitPrice: 232500 },
     ],
+    statusHistory: [],
   },
 ];
 

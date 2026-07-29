@@ -60,6 +60,7 @@ const orderInclude = {
       user: true,
     },
   },
+  coupon: true,
   statusHistory: {
     orderBy: { createdAt: "asc" as const },
   },
@@ -255,6 +256,54 @@ export class OrderRepository extends BaseRepository {
     status: OrderStatus,
     input: { note?: string; changedBy?: string } = {},
   ) {
+    const order = await this.requireOrderForBrand(brandId, orderNumber);
+
+    return this.updateStatus(order.id, status, {
+      note: input.note,
+      changedBy: input.changedBy,
+      fromStatus: order.status,
+    });
+  }
+
+  async updateDetails(
+    orderId: string,
+    input: {
+      notes?: string | null;
+      shippingAddress?: Prisma.InputJsonValue;
+      billingAddress?: Prisma.InputJsonValue;
+    },
+  ) {
+    return handlePrisma(() =>
+      this.db.order.update({
+        where: { id: orderId },
+        data: {
+          ...(input.notes !== undefined ? { notes: input.notes } : {}),
+          ...(input.shippingAddress !== undefined
+            ? { shippingAddress: input.shippingAddress }
+            : {}),
+          ...(input.billingAddress !== undefined
+            ? { billingAddress: input.billingAddress }
+            : {}),
+        },
+        include: orderInclude,
+      }),
+    );
+  }
+
+  async updateDetailsForBrand(
+    brandId: string,
+    orderNumber: string,
+    input: {
+      notes?: string | null;
+      shippingAddress?: Prisma.InputJsonValue;
+      billingAddress?: Prisma.InputJsonValue;
+    },
+  ) {
+    const order = await this.requireOrderForBrand(brandId, orderNumber);
+    return this.updateDetails(order.id, input);
+  }
+
+  private async requireOrderForBrand(brandId: string, orderNumber: string) {
     const order = await this.findByOrderNumber(orderNumber);
     if (!order) {
       throw new NotFoundError("Order not found");
@@ -265,11 +314,7 @@ export class OrderRepository extends BaseRepository {
       throw new NotFoundError("Order not found for this brand");
     }
 
-    return this.updateStatus(order.id, status, {
-      note: input.note,
-      changedBy: input.changedBy,
-      fromStatus: order.status,
-    });
+    return order;
   }
 }
 

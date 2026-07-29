@@ -4,9 +4,9 @@ import { Suspense } from "react";
 import { CheckoutConfirmationContent } from "@/components/storefront/checkout-confirmation-content";
 
 export const metadata: Metadata = {
-  title: "Order Confirmed",
+  title: "Thank You",
   description:
-    "Your VERONICA MARK order is confirmed. View your invoice or track delivery status at any time.",
+    "Thank you for choosing VERONICA MARK. Your order is confirmed — view your invoice or track delivery at any time.",
 };
 
 export default function CheckoutConfirmationPage() {

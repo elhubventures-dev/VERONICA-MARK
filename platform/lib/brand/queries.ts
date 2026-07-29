@@ -23,6 +23,12 @@ import {
   type BrandProductEditor,
   type BrandProductStatus,
 } from "@/lib/brand/demo-data";
+import { mapOrderAddress } from "@/lib/commerce/order-address";
+import {
+  emptyStaffOrderDetail,
+  mapStaffOrderDetail,
+  type StaffOrderDetail,
+} from "@/lib/commerce/staff-order-detail";
 import { getSessionBrandId } from "@/lib/data/session-context";
 import { orderBelongsToBrand } from "@/lib/auth/brand-tenancy-rules";
 import { brandRepository } from "@/lib/repositories/brand.repository";
@@ -177,11 +183,19 @@ function mapBrandOrder(order: OrderWithRelations): BrandOrder {
     itemCount: order.items.reduce((sum, i) => sum + i.quantity, 0),
     total: Number(order.total),
     currency: order.currency,
+    notes: order.notes ?? "",
+    shippingAddress: mapOrderAddress(order.shippingAddress),
     items: order.items.map((item) => ({
       title: item.productName,
       variant: item.variantName ?? "",
       quantity: item.quantity,
       unitPrice: Number(item.unitPrice),
+    })),
+    statusHistory: (order.statusHistory ?? []).map((entry) => ({
+      fromStatus: entry.fromStatus?.toLowerCase() ?? null,
+      toStatus: entry.toStatus.toLowerCase(),
+      comment: entry.comment,
+      at: entry.createdAt.toISOString(),
     })),
   };
 }
@@ -399,26 +413,91 @@ export async function getBrandOrders() {
   return brandOrders;
 }
 
-export async function getBrandOrder(orderNumber: string) {
+export async function getBrandOrder(orderNumber: string): Promise<StaffOrderDetail | null> {
   try {
     const brandId = await getSessionBrandId();
     if (!brandId) {
       // No assigned brand — never leak cross-tenant orders from Prisma
-      return brandOrders.find((o) => o.orderNumber === orderNumber) ?? null;
+      const demo = brandOrders.find((o) => o.orderNumber === orderNumber);
+      return demo
+        ? emptyStaffOrderDetail({
+            orderNumber: demo.orderNumber,
+            placedAt: demo.placedAt,
+            status: demo.status,
+            customerName: demo.customerName,
+            customerEmail: demo.customerEmail,
+            total: demo.total,
+            currency: demo.currency,
+            itemCount: demo.itemCount,
+            notes: demo.notes,
+            customerNotes: demo.notes,
+            shippingAddress: demo.shippingAddress,
+            billingAddress: demo.shippingAddress,
+            items: demo.items.map((item) => ({
+              title: item.title,
+              brand: "",
+              variant: item.variant,
+              sku: "",
+              quantity: item.quantity,
+              unitPrice: item.unitPrice,
+              compareAtPrice: null,
+              taxAmount: 0,
+              discountAmount: 0,
+              lineTotal: item.unitPrice * item.quantity,
+              preorderEstimatedAt: null,
+              productSlug: null,
+              image: null,
+            })),
+            statusHistory: demo.statusHistory,
+          })
+        : null;
     }
 
     const order = await orderRepository.findByOrderNumber(orderNumber);
     if (order) {
       const itemBrandIds = order.items.map((i) => i.variant?.product?.brandId);
       if (orderBelongsToBrand(itemBrandIds, brandId)) {
-        return mapBrandOrder(order);
+        return mapStaffOrderDetail(order);
       }
       return null;
     }
   } catch {
     // demo fallback
   }
-  return brandOrders.find((o) => o.orderNumber === orderNumber) ?? null;
+
+  const demo = brandOrders.find((o) => o.orderNumber === orderNumber);
+  return demo
+    ? emptyStaffOrderDetail({
+        orderNumber: demo.orderNumber,
+        placedAt: demo.placedAt,
+        status: demo.status,
+        customerName: demo.customerName,
+        customerEmail: demo.customerEmail,
+        total: demo.total,
+        currency: demo.currency,
+        itemCount: demo.itemCount,
+        notes: demo.notes,
+        customerNotes: demo.notes,
+        shippingAddress: demo.shippingAddress,
+        billingAddress: demo.shippingAddress,
+        items: demo.items.map((item) => ({
+          title: item.title,
+          brand: "",
+          variant: item.variant,
+          sku: "",
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          compareAtPrice: null,
+          taxAmount: 0,
+          discountAmount: 0,
+          lineTotal: item.unitPrice * item.quantity,
+          preorderEstimatedAt: null,
+          productSlug: null,
+          image: null,
+        })),
+        statusHistory: demo.statusHistory,
+      })
+    : null;
 }
 
 export async function getBrandCoupons() {

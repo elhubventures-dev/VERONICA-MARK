@@ -17,22 +17,23 @@ Contact form auto-replies (`contact.auto_reply`) also include these details in t
 Every customer-facing notification sends **two individually addressed emails**:
 
 1. **Client** — their template, addressed to them  
-2. **Admin** (`sales@veronicamark.com`, or `PLATFORM_ADMIN_EMAIL`) — `admin.event` (or `contact.internal_notify` for forms) with **full submitted details**
+2. **Super Admin only** — `sales@veronicamark.com` (or `PLATFORM_ADMIN_EMAIL`) via `admin.event` / `contact.internal_notify`
+
+**Never** email Brand Managers or brand `contactEmail` for these platform notifications.
 
 Admin auth copies never include verification/reset token links.
 
 ## Live send hooks
 
-| Event | Client template | Admin |
+| Event | Client template | Admin (`sales@`) |
 |---|---|---|
 | Email verification | `auth.email_verification` | `admin.event` (no token) |
 | Password reset | `auth.password_reset` | `admin.event` (no token) |
 | Payment success | `order.confirmation` | `admin.event` (full order + address + lines) |
 | Payment failed | `order.payment_failed` | `admin.event` |
 | Packed → delivered | matching `order.*` | `admin.event` |
-| Brand new order | `brand.new_order` (brand managers) | covered by paid confirmation admin copy |
 | Abandoned cart | `cart.abandoned_1/2` | `admin.event` |
-| Contact enquiry / order support | `contact.auto_reply` | `contact.internal_notify` → sales@ |
+| Contact enquiry / order support | `contact.auto_reply` | `contact.internal_notify` |
 | Newsletter signup | `newsletter.welcome` | `admin.event` |
 
 Idempotency for confirmation: `finalizePaystackPayment` returns early when already PAID.

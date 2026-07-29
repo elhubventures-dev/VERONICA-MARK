@@ -35,7 +35,7 @@ export function StorefrontChrome() {
 
   return (
     <>
-      <div ref={chromeRef} className="fixed top-0 right-0 left-0 z-50">
+      <div ref={chromeRef} className="fixed top-0 right-0 left-0 z-50 overflow-visible">
         <AnnouncementBar />
         <StorefrontHeader />
       </div>

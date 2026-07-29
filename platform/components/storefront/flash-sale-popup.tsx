@@ -21,13 +21,15 @@ import { accentFillCtaClass, motionTransition } from "@/lib/motion";
 import { flashSale } from "@/lib/storefront/demo-catalog";
 import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
-
-const STORAGE_KEY = "vm-flash-sale-popup-seen-at";
-const COOLDOWN_MS = 48 * 60 * 60 * 1000;
-const OPEN_DELAY_MS = 900;
+import {
+  ENGAGEMENT_POPUP_OPEN_DELAY_MS,
+  isFlashSalePopupOnCooldown,
+  markFlashSalePopupSeen,
+  registerStorefrontVisit,
+} from "@/lib/storefront/visitor";
 
 /** Paths where the promo popup would interrupt a focused flow. */
-const SUPPRESSED_PATHS = ["/flash-sale", "/checkout", "/cart", "/account"];
+const SUPPRESSED_PATHS = ["/flash-sale", "/checkout", "/cart", "/account", "/auth"];
 
 function isFlashSaleRelevant(now = Date.now()) {
   return now <= new Date(flashSale.endsAt).getTime();
@@ -35,25 +37,6 @@ function isFlashSaleRelevant(now = Date.now()) {
 
 function shouldSuppressPath(pathname: string) {
   return SUPPRESSED_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
-}
-
-function readLastSeen(): number | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const value = Number(raw);
-    return Number.isFinite(value) ? value : null;
-  } catch {
-    return null;
-  }
-}
-
-function markSeen() {
-  try {
-    localStorage.setItem(STORAGE_KEY, String(Date.now()));
-  } catch {
-    // ignore storage errors (private mode, quota, etc.)
-  }
 }
 
 function remainingToTarget() {
@@ -67,6 +50,8 @@ export function FlashSalePopup() {
   const [time, setTime] = React.useState<ReturnType<typeof remainingToTarget>>(null);
 
   React.useEffect(() => {
+    const visitCount = registerStorefrontVisit();
+
     if (!isFlashSaleRelevant()) {
       setOpen(false);
       return;
@@ -76,13 +61,14 @@ export function FlashSalePopup() {
       return;
     }
 
-    const lastSeen = readLastSeen();
-    if (lastSeen !== null && Date.now() - lastSeen < COOLDOWN_MS) return;
+    // First-time visitors only — returning guests get WelcomeBackPopup.
+    if (visitCount >= 2) return;
+    if (isFlashSalePopupOnCooldown()) return;
 
     const timer = window.setTimeout(() => {
-      markSeen();
+      markFlashSalePopupSeen();
       setOpen(true);
-    }, OPEN_DELAY_MS);
+    }, ENGAGEMENT_POPUP_OPEN_DELAY_MS);
     return () => window.clearTimeout(timer);
   }, [pathname]);
 

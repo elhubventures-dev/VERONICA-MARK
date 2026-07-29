@@ -5,6 +5,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { requireBrandContext } from "@/lib/auth/brand-tenancy";
+import { mapOrderAddress, toAddressJson } from "@/lib/commerce/order-address";
+import { toPrismaOrderStatus } from "@/lib/commerce/order-status";
+import { mergeOrderNotes } from "@/lib/commerce/staff-order-detail";
 import { notifyCustomerOrderStatus } from "@/lib/email/order-notifications";
 import { env } from "@/lib/env";
 import { toErrorResponse } from "@/lib/errors";
@@ -14,6 +17,10 @@ import { orderRepository } from "@/lib/repositories/order.repository";
 import { productRepository } from "@/lib/repositories/product.repository";
 import { createSignedUploadUrl } from "@/lib/storage/supabase";
 import { updateBrandProductSchema } from "@/lib/validations/brand-product";
+import {
+  updateOrderDetailsSchema,
+  updateOrderStatusSchema,
+} from "@/lib/validations/order-edit";
 
 export type BrandActionResult =
   | { ok: true; message: string; data?: Record<string, unknown> }
@@ -258,6 +265,117 @@ export async function updateBrandOrderFulfillmentAction(input: {
     };
   } catch (error) {
     logger.warn({ err: error }, "brand.order.fulfillment_failed");
+    return failure(error);
+  }
+}
+
+/**
+ * Set any order status for a brand-scoped order (staff status control).
+ */
+export async function updateBrandOrderStatusAction(input: {
+  orderNumber: string;
+  status: string;
+  note?: string;
+}): Promise<BrandActionResult> {
+  try {
+    const parsed = updateOrderStatusSchema.parse(input);
+    const ctx = await requireBrandContext();
+    const nextStatus = toPrismaOrderStatus(parsed.status);
+
+    const order = await orderRepository.updateStatusForBrand(
+      ctx.brandId,
+      parsed.orderNumber,
+      nextStatus,
+      {
+        note: parsed.note?.trim() || `Brand Manager set status to ${parsed.status}`,
+        changedBy: ctx.userId,
+      },
+    );
+
+    await notifyCustomerOrderStatus(order, nextStatus);
+
+    revalidatePath("/brand/orders");
+    revalidatePath(`/brand/orders/${parsed.orderNumber}`);
+    revalidatePath("/brand");
+
+    return {
+      ok: true,
+      message: `Order ${order.orderNumber} updated to ${parsed.status.replaceAll("_", " ")}`,
+      data: { orderNumber: order.orderNumber, status: parsed.status },
+    };
+  } catch (error) {
+    logger.warn({ err: error }, "brand.order.status_failed");
+    return failure(error);
+  }
+}
+
+/**
+ * Edit shipping address and notes for a brand-scoped order.
+ */
+export async function updateBrandOrderDetailsAction(input: {
+  orderNumber: string;
+  notes?: string;
+  shippingAddress: {
+    name: string;
+    phone: string;
+    email?: string;
+    line1: string;
+    line2?: string;
+    city: string;
+    state?: string;
+    postalCode?: string;
+    country: string;
+  };
+}): Promise<BrandActionResult> {
+  try {
+    const parsed = updateOrderDetailsSchema.parse(input);
+    const ctx = await requireBrandContext();
+
+    const shippingAddress = toAddressJson({
+      name: parsed.shippingAddress.name,
+      phone: parsed.shippingAddress.phone,
+      email: parsed.shippingAddress.email ?? "",
+      line1: parsed.shippingAddress.line1,
+      line2: parsed.shippingAddress.line2 ?? "",
+      city: parsed.shippingAddress.city,
+      state: parsed.shippingAddress.state ?? "",
+      postalCode: parsed.shippingAddress.postalCode ?? "",
+      country: parsed.shippingAddress.country,
+    });
+
+    const current = await orderRepository.findByOrderNumber(parsed.orderNumber);
+    if (!current) {
+      return { ok: false, message: "Order not found", code: "NOT_FOUND" };
+    }
+
+    const currentShipping = mapOrderAddress(current.shippingAddress);
+    const currentBilling = mapOrderAddress(current.billingAddress);
+    const billingMatchedShipping =
+      currentBilling.line1 === currentShipping.line1 &&
+      currentBilling.city === currentShipping.city &&
+      currentBilling.name === currentShipping.name;
+
+    const order = await orderRepository.updateDetailsForBrand(ctx.brandId, parsed.orderNumber, {
+      notes: mergeOrderNotes(current.notes, parsed.notes ?? ""),
+      shippingAddress,
+      ...(billingMatchedShipping ? { billingAddress: shippingAddress } : {}),
+    });
+
+    revalidatePath("/brand/orders");
+    revalidatePath(`/brand/orders/${parsed.orderNumber}`);
+    revalidatePath("/brand");
+
+    return {
+      ok: true,
+      message: `Order ${order.orderNumber} details saved`,
+      data: {
+        orderNumber: order.orderNumber,
+        notes: order.notes ?? "",
+        shippingAddress: mapOrderAddress(order.shippingAddress),
+      },
+    };
+  } catch (error) {
+    logger.warn({ err: error }, "brand.order.details_failed");
     return failure(error);
   }
 }

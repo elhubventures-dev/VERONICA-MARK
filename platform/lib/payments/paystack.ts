@@ -27,7 +27,11 @@ export type PaystackInitializeResult = {
 export type PaystackVerifyResult = {
   status: string;
   reference: string;
+  /** Settled/charged amount in minor units (may include channel fees for bank_transfer). */
   amountMinor: number;
+  /** Original requested amount in minor units (matches initialize). Prefer this for order matching. */
+  requestedAmountMinor: number | null;
+  feesMinor: number | null;
   currency: string;
   paidAt: string | null;
   channel: string | null;
@@ -122,6 +126,11 @@ export async function verifyPaystackTransaction(reference: string): Promise<Pays
     status: String(data.status ?? ""),
     reference: String(data.reference ?? reference),
     amountMinor: Number(data.amount ?? 0),
+    requestedAmountMinor:
+      data.requested_amount != null && data.requested_amount !== ""
+        ? Number(data.requested_amount)
+        : null,
+    feesMinor: data.fees != null && data.fees !== "" ? Number(data.fees) : null,
     currency: String(data.currency ?? "NGN"),
     paidAt: data.paid_at ? String(data.paid_at) : null,
     channel: data.channel ? String(data.channel) : null,

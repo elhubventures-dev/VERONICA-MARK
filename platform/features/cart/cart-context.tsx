@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import * as React from "react";
 
-import { syncCartLines } from "@/features/cart/actions";
+import { syncCartLines, clearServerCart } from "@/features/cart/actions";
 import type { StorefrontProduct } from "@/lib/storefront/demo-catalog";
 
 const CART_STORAGE_KEY = "vm-guest-cart";
@@ -225,6 +225,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     linesRef.current = [];
     setLines([]);
     setCouponCode(null);
+    // Persist immediately so a post-payment navigation/refresh cannot revive the bag.
+    if (typeof window !== "undefined") {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify([]));
+      localStorage.removeItem(`${CART_STORAGE_KEY}-coupon`);
+    }
+    // Signed-in bags also live in Prisma for abandoned-cart recovery — clear now,
+    // not only via the debounced sync (which can be cancelled on route change).
+    void syncCartLines([]);
+    void clearServerCart();
   }, [setCouponCode]);
 
   const itemCount = lines.reduce((sum, line) => sum + line.quantity, 0);

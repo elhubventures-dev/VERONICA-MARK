@@ -30,6 +30,11 @@ import {
   type AdminOrder,
   type AdminPayment,
 } from "@/lib/admin/demo-data";
+import {
+  emptyStaffOrderDetail,
+  mapStaffOrderDetail,
+  type StaffOrderDetail,
+} from "@/lib/commerce/staff-order-detail";
 import { prisma } from "@/lib/prisma";
 import { brandRepository } from "@/lib/repositories/brand.repository";
 import { orderRepository, type OrderWithRelations } from "@/lib/repositories/order.repository";
@@ -103,6 +108,10 @@ function mapAdminOrder(order: OrderWithRelations): AdminOrder {
     paymentStatus,
     shippingStatus,
   };
+}
+
+function mapAdminOrderDetail(order: OrderWithRelations): StaffOrderDetail {
+  return mapStaffOrderDetail(order);
 }
 
 export async function getAdminPlatform() {
@@ -226,14 +235,26 @@ export async function getAdminOrders(): Promise<AdminOrder[]> {
   return adminOrders;
 }
 
-export async function getAdminOrder(orderNumber: string) {
+export async function getAdminOrder(orderNumber: string): Promise<StaffOrderDetail | null> {
   try {
     const order = await orderRepository.findByOrderNumber(orderNumber);
-    if (order) return mapAdminOrder(order);
+    if (order) return mapAdminOrderDetail(order);
   } catch {
     // demo fallback
   }
-  return adminOrders.find((o) => o.orderNumber === orderNumber) ?? null;
+  const demo = adminOrders.find((o) => o.orderNumber === orderNumber);
+  if (!demo) return null;
+  return emptyStaffOrderDetail({
+    orderNumber: demo.orderNumber,
+    placedAt: demo.placedAt,
+    status: demo.status as StaffOrderDetail["status"],
+    customerName: demo.customerName,
+    total: demo.total,
+    currency: demo.currency,
+    brandNames: [demo.brandName],
+    paymentStatus: demo.paymentStatus,
+    shippingStatus: demo.shippingStatus,
+  });
 }
 
 export async function getAdminPayments(): Promise<AdminPayment[]> {

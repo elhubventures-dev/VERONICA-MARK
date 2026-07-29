@@ -2,13 +2,11 @@
 
 import { z } from "zod";
 
-import { notifyAdminEvent } from "@/lib/email/admin";
+import { getPlatformAdminEmail, notifyAdminEvent } from "@/lib/email/admin";
 import { sendTemplateEmail } from "@/lib/email/send";
 import { logger } from "@/lib/logger";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import {
-  storefrontContact,
-} from "@/lib/storefront/contact";
+import { storefrontContact } from "@/lib/storefront/contact";
 
 export type ContactActionResult =
   | { ok: true; message: string }
@@ -64,7 +62,7 @@ export async function submitContactEnquiryAction(input: {
       appUrl: absoluteUrl("/").replace(/\/$/, ""),
     });
 
-    await sendTemplateEmail("contact.internal_notify", storefrontContact.email, {
+    await sendTemplateEmail("contact.internal_notify", getPlatformAdminEmail(), {
       senderName: parsed.name,
       senderEmail: clientEmail,
       subject,
@@ -107,7 +105,7 @@ export async function submitContactOrderSupportAction(input: {
       appUrl: absoluteUrl("/").replace(/\/$/, ""),
     });
 
-    await sendTemplateEmail("contact.internal_notify", storefrontContact.email, {
+    await sendTemplateEmail("contact.internal_notify", getPlatformAdminEmail(), {
       senderName: parsed.name,
       senderEmail: clientEmail,
       subject,

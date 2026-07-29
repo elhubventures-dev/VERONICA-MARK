@@ -1,0 +1,19 @@
+---
+description: Transactional email recipients — client + sales@ only
+alwaysApply: true
+---
+
+# Email recipients (VERONICA MARK)
+
+Transactional notifications must be sent **only** to:
+
+1. **The client** (customer / form submitter) — their personalized template  
+2. **Super Admin inbox** — `sales@veronicamark.com` (or `PLATFORM_ADMIN_EMAIL` if set)
+
+## Do not
+
+- Send order or form notifications to Brand Manager accounts  
+- Send to brand `contactEmail` fallbacks  
+- BCC or CC extra inboxes  
+
+Admin copies use `notifyAdminEvent` / `contact.internal_notify` via `getPlatformAdminEmail()` in `lib/email/admin.ts`.

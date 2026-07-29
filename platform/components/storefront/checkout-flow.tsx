@@ -204,6 +204,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
           orderNumber: payload.data.orderNumber,
           reference: payload.data.reference,
           email: shipping.email,
+          name: shipping.name.trim(),
           total: totals.total,
         }),
       );

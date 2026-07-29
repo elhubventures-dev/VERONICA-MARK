@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { cookies, headers } from "next/headers";
 import { Inter, Manrope, Playfair_Display } from "next/font/google";
 
+import { PwaSplashBoot } from "@/components/pwa/pwa-splash-boot";
 import { AppProviders } from "@/components/providers/app-providers";
 import { auth } from "@/lib/auth";
 import {
@@ -10,6 +11,7 @@ import {
   resolveCountryFromHeaders,
 } from "@/lib/commerce/geo";
 import { getPublicEnv } from "@/lib/env";
+import { PWA_SPLASH_IMAGE } from "@/lib/pwa/splash-boot";
 
 import "./globals.css";
 
@@ -143,6 +145,8 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} ${manrope.variable} antialiased`}>
+        <link rel="preload" as="image" href={PWA_SPLASH_IMAGE} type="image/webp" />
+        <PwaSplashBoot />
         <AppProviders session={session} geoCountry={geoCountry}>
           {children}
         </AppProviders>
