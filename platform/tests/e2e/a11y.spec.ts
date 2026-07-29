@@ -31,9 +31,9 @@ test.describe("critical flow accessibility", () => {
     await expectNoSeriousViolations(page);
   });
 
-  test("checkout gate (auth) has no serious axe violations", async ({ page }) => {
+  test("checkout has no serious axe violations", async ({ page }) => {
     await page.goto("/checkout");
-    await expect(page).toHaveURL(/\/auth\//);
+    await expect(page).toHaveURL(/\/checkout\/?$/);
     await expect(page.getByRole("heading").first()).toBeVisible();
     await expectNoSeriousViolations(page);
   });

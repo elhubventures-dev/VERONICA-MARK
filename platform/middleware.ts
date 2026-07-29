@@ -68,8 +68,7 @@ export default auth((request) => {
   const session = request.auth;
 
   if (!session?.user) {
-    const authPath = pathname === "/checkout" ? "/auth/sign-up" : "/auth/sign-in";
-    const authUrl = new URL(authPath, request.nextUrl.origin);
+    const authUrl = new URL("/auth/sign-in", request.nextUrl.origin);
     authUrl.searchParams.set("callbackUrl", pathname);
     return finalize(NextResponse.redirect(authUrl));
   }

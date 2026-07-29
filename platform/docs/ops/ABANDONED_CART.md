@@ -23,5 +23,5 @@ curl -H "Authorization: Bearer $CRON_SECRET" https://your-domain/api/cron/abando
 
 ## Notes
 
-- Guests using localStorage-only bags are not emailed until they authenticate (checkout requires auth).
+- Guests using localStorage-only bags are not emailed (no server cart until they authenticate or complete checkout).
 - Push notifications are out of scope for this pass (email only).

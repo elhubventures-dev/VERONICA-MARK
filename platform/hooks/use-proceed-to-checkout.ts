@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { CHECKOUT_PATH, checkoutSignUpUrl } from "@/lib/auth/checkout-gate";
+import { CHECKOUT_PATH } from "@/lib/auth/checkout-gate";
 import { useSession } from "@/lib/auth/client";
 
 export function useProceedToCheckout() {
@@ -10,22 +10,13 @@ export function useProceedToCheckout() {
   const { status } = useSession();
 
   const proceedToCheckout = () => {
-    if (status === "loading") {
-      return;
-    }
-
-    if (status === "authenticated") {
-      router.push(CHECKOUT_PATH);
-      return;
-    }
-
-    router.push(checkoutSignUpUrl());
+    router.push(CHECKOUT_PATH);
   };
 
   return {
     proceedToCheckout,
     isAuthenticated: status === "authenticated",
-    isReady: status !== "loading",
+    isReady: true,
     status,
   };
 }

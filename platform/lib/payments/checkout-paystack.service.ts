@@ -50,7 +50,7 @@ export type CheckoutShippingPayload = {
   line2?: string;
   city: string;
   state?: string;
-  postalCode: string;
+  postalCode?: string;
   country: string;
 };
 
@@ -193,6 +193,9 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
   if (isNigeriaCountry(input.shipping.country) && !input.shipping.state?.trim()) {
     throw new ValidationError("State is required for Nigerian deliveries");
   }
+  if (!isNigeriaCountry(input.shipping.country) && !input.shipping.postalCode?.trim()) {
+    throw new ValidationError("Postal code is required for international deliveries");
+  }
 
   const totals = computeCheckoutTotals(input);
   const amountMajor = Number(totals.total.toFixed(2));
@@ -210,7 +213,9 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
     line2: input.shipping.line2 || undefined,
     city: input.shipping.city,
     state: input.shipping.state || undefined,
-    postalCode: input.shipping.postalCode,
+    postalCode: isNigeriaCountry(input.shipping.country)
+      ? undefined
+      : input.shipping.postalCode?.trim() || undefined,
     country: input.shipping.country,
     email,
   };

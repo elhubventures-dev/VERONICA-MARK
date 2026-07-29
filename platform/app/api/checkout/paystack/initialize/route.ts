@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { requireAuth } from "@/lib/auth/session";
 import { toErrorResponse } from "@/lib/errors";
 import { logger } from "@/lib/logger";
 import { initializePaystackCheckout } from "@/lib/payments/checkout-paystack.service";
@@ -14,7 +13,7 @@ const bodySchema = z.object({
     line2: z.string().optional(),
     city: z.string().min(1),
     state: z.string().optional(),
-    postalCode: z.string().min(1),
+    postalCode: z.string().optional().default(""),
     country: z.string().min(2),
   }),
   shippingMethod: z.enum(["intra_city", "interstate", "express", "international"]),
@@ -41,8 +40,6 @@ const bodySchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    await requireAuth();
-
     const json = await request.json();
     const parsed = bodySchema.safeParse(json);
     if (!parsed.success) {

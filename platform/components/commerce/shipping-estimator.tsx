@@ -132,7 +132,10 @@ export function ShippingEstimator({
               onChange={(e) => {
                 const next = e.target.value;
                 setCountry(next);
-                if (isNigeriaCountry(next) && !state) setState("Rivers");
+                if (isNigeriaCountry(next)) {
+                  if (!state) setState("Rivers");
+                  setPostalCode("");
+                }
               }}
               className="flex h-11 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-3 text-sm focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:outline-none"
             >
@@ -146,7 +149,7 @@ export function ShippingEstimator({
             </select>
           </div>
           {nigeria ? (
-            <div className="space-y-1">
+            <div className="space-y-1 sm:col-span-2">
               <Label htmlFor="state">State</Label>
               <select
                 id="state"
@@ -161,17 +164,18 @@ export function ShippingEstimator({
                 ))}
               </select>
             </div>
-          ) : null}
-          <div className={`space-y-1 ${nigeria ? "" : "sm:col-span-2"}`}>
-            <Label htmlFor="postal-code">Postal code</Label>
-            <Input
-              id="postal-code"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              placeholder={nigeria ? "100001" : "Postal / ZIP"}
-              required
-            />
-          </div>
+          ) : (
+            <div className="space-y-1 sm:col-span-2">
+              <Label htmlFor="postal-code">Postal code</Label>
+              <Input
+                id="postal-code"
+                value={postalCode}
+                onChange={(e) => setPostalCode(e.target.value)}
+                placeholder="Postal / ZIP"
+                required
+              />
+            </div>
+          )}
         </div>
 
         <fieldset className="space-y-2">
@@ -200,7 +204,7 @@ export function ShippingEstimator({
           ))}
         </fieldset>
 
-        <Button type="submit" variant="outline" disabled={loading || !postalCode.trim()}>
+        <Button type="submit" variant="outline" disabled={loading || (!nigeria && !postalCode.trim())}>
           {loading ? (
             <>
               <Loader2 className="size-4 animate-spin" aria-hidden />
