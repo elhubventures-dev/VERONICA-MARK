@@ -41,7 +41,7 @@ export const emailPreviewSamples: { [K in EmailTemplateKey]: EmailVarsMap[K] } =
     recipientName: "Camille",
     orderNumber: "VM-2026-0001",
     orderTotalLabel: "₦93,500",
-    shippingMethod: "Intra-city drop · Rivers",
+    shippingMethod: "Intra-city drop · Rivers / Abuja-FCT",
     shippingAddress: "Port Harcourt, Rivers State",
     items: [{ name: "Noir Éclat Eau de Parfum · 100 ml", quantity: 1, priceLabel: "₦85,000" }],
     currencyNote: "All product prices include tax.",

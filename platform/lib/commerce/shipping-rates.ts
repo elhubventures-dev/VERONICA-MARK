@@ -1,7 +1,7 @@
 /**
  * Client shipping rates (VERONICA MARK, Jul 2026).
  * Domestic fees are NGN. International is USD $50 and only offered outside Nigeria.
- * Fulfillment hub: Port Harcourt, Rivers State.
+ * Fulfillment hubs: Port Harcourt (Rivers) and Abuja-FCT.
  */
 
 export const SHIPPING_METHOD_IDS = [
@@ -23,15 +23,22 @@ export type ShippingQuote = {
   estimatedDelivery: string;
 };
 
-/** Fulfillment hub for intra-city drops (Port Harcourt). */
-export const FULFILLMENT_STATE = "Rivers";
-export const FULFILLMENT_CITY = "Port Harcourt";
+/** Fulfillment hubs eligible for intra-city drop. */
+export const FULFILLMENT_HUBS = [
+  { state: "Rivers", city: "Port Harcourt" },
+  { state: "FCT", city: "Abuja-FCT" },
+] as const;
+
+/** @deprecated Prefer FULFILLMENT_HUBS — primary hub remains Port Harcourt. */
+export const FULFILLMENT_STATE = FULFILLMENT_HUBS[0].state;
+/** @deprecated Prefer FULFILLMENT_HUBS. */
+export const FULFILLMENT_CITY = FULFILLMENT_HUBS[0].city;
 
 export const DOMESTIC_SHIPPING_RATES = {
   intra_city: {
     methodId: "intra_city" as const,
     label: "Intra-city drop",
-    description: `Same-city delivery within ${FULFILLMENT_CITY}, Rivers`,
+    description: "Same-city delivery within Rivers (Port Harcourt) or Abuja-FCT",
     fee: 3_500,
     currency: "NGN" as const,
     estimatedDelivery: "1–2 business days",
@@ -109,18 +116,24 @@ export function isNigeriaCountry(country: string | null | undefined): boolean {
   return normalized === "NG" || normalized === "NGA" || normalized === "NIGERIA";
 }
 
-/** True when destination state is the fulfillment hub (Rivers / Port Harcourt). */
+/** True when destination is a fulfillment hub (Rivers / Port Harcourt or Abuja-FCT). */
 export function isFulfillmentState(state: string | null | undefined): boolean {
   const normalized = (state ?? "").trim().toLowerCase();
   return (
     normalized === "rivers" ||
     normalized === "rv" ||
     normalized === "port harcourt" ||
-    normalized === "portharcourt"
+    normalized === "portharcourt" ||
+    normalized === "fct" ||
+    normalized === "abuja" ||
+    normalized === "abuja-fct" ||
+    normalized === "abuja fct" ||
+    normalized === "federal capital territory" ||
+    normalized === "fct abuja"
   );
 }
 
-/** @deprecated Use isFulfillmentState — hub is Rivers, not Lagos. */
+/** @deprecated Use isFulfillmentState — hubs are Rivers and FCT, not Lagos. */
 export function isLagosState(state: string | null | undefined): boolean {
   return isFulfillmentState(state);
 }
@@ -132,7 +145,7 @@ export function isShippingMethodId(value: string): value is ShippingMethodId {
 /**
  * Methods offered for a destination.
  * Outside Nigeria → international only (USD).
- * Rivers State → intra-city + express (no interstate).
+ * Rivers or FCT → intra-city + express (no interstate).
  * Other Nigerian states → interstate + express (no intra-city).
  */
 export function getAvailableShippingMethods(input: {

@@ -15,7 +15,14 @@ describe("shipping rates", () => {
     expect(methods.every((m) => m.currency === "NGN")).toBe(true);
   });
 
-  it("offers interstate + express outside Rivers (no intra-city)", () => {
+  it("offers intra-city + express in FCT / Abuja (no interstate)", () => {
+    const byFct = getAvailableShippingMethods({ country: "NG", state: "FCT" });
+    const byAbuja = getAvailableShippingMethods({ country: "NG", state: "Abuja" });
+    expect(byFct.map((m) => m.methodId)).toEqual(["intra_city", "express"]);
+    expect(byAbuja.map((m) => m.methodId)).toEqual(["intra_city", "express"]);
+  });
+
+  it("offers interstate + express outside Rivers and FCT (no intra-city)", () => {
     const methods = getAvailableShippingMethods({ country: "NG", state: "Lagos" });
     expect(methods.map((m) => m.methodId)).toEqual(["interstate", "express"]);
   });
@@ -30,8 +37,9 @@ describe("shipping rates", () => {
     });
   });
 
-  it("defaults Rivers to intra-city and other states to interstate", () => {
+  it("defaults Rivers and FCT to intra-city and other states to interstate", () => {
     expect(defaultShippingMethodId({ country: "NG", state: "Rivers" })).toBe("intra_city");
+    expect(defaultShippingMethodId({ country: "NG", state: "FCT" })).toBe("intra_city");
     expect(defaultShippingMethodId({ country: "NG", state: "Kano" })).toBe("interstate");
     expect(defaultShippingMethodId({ country: "GB" })).toBe("international");
   });
@@ -39,6 +47,9 @@ describe("shipping rates", () => {
   it("quotes fixed domestic fees", () => {
     expect(
       quoteShipping({ country: "NG", state: "Rivers", methodId: "intra_city" }).fee,
+    ).toBe(3500);
+    expect(
+      quoteShipping({ country: "NG", state: "FCT", methodId: "intra_city" }).fee,
     ).toBe(3500);
     expect(
       quoteShipping({ country: "NG", state: "Kano", methodId: "interstate" }).fee,
@@ -56,12 +67,19 @@ describe("shipping rates", () => {
     });
     expect(interstateInRivers.methodId).toBe("intra_city");
 
-    const intraOutsideRivers = quoteShipping({
+    const interstateInFct = quoteShipping({
+      country: "NG",
+      state: "FCT",
+      methodId: "interstate",
+    });
+    expect(interstateInFct.methodId).toBe("intra_city");
+
+    const intraOutsideHub = quoteShipping({
       country: "NG",
       state: "Lagos",
       methodId: "intra_city",
     });
-    expect(intraOutsideRivers.methodId).toBe("interstate");
+    expect(intraOutsideHub.methodId).toBe("interstate");
   });
 
   it("rejects domestic method for international destination by falling back", () => {

@@ -17,7 +17,7 @@ type ShippingAddressJson = {
 };
 
 const SHIPPING_METHOD_LABELS: Record<string, string> = {
-  intra_city: "Intra-city drop · Rivers",
+  intra_city: "Intra-city drop · Rivers / Abuja-FCT",
   interstate: "Interstate shipping",
   express: "Express courier",
   international: "International shipping",

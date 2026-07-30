@@ -2,7 +2,7 @@
  * Import Perfume Invoice products into the store database.
  *
  * - costPrice = invoice Rate (NGN)
- * - price (selling) = costPrice × 1.5
+ * - price (selling) = costPrice × 2 (100% markup)
  * - stock = invoice Qty
  * - currency defaults remain NGN
  *
@@ -168,6 +168,7 @@ async function main() {
       },
     });
 
+    // Never overwrite existing product photos — only add a placeholder if none exist.
     const mediaCount = await prisma.productMedia.count({
       where: { productId: product.id, deletedAt: null },
     });
@@ -181,11 +182,6 @@ async function main() {
           sortOrder: 0,
           isPrimary: true,
         },
-      });
-    } else {
-      await prisma.productMedia.updateMany({
-        where: { productId: product.id, deletedAt: null },
-        data: { url: FALLBACK_IMAGE, altText: item.name },
       });
     }
 
@@ -232,7 +228,7 @@ async function main() {
   }
 
   console.log(`Done. Created ${imported}, updated ${updated}.`);
-  console.log("Selling price = cost × 1.5 (NGN). Stock set from invoice Qty.");
+  console.log("Selling price = cost × 2 (NGN, 100% markup). Stock set from invoice Qty.");
 }
 
 main()

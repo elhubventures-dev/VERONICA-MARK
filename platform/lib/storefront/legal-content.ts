@@ -46,8 +46,8 @@ export const termsSections: LegalSection[] = [
     id: "shipping",
     title: "Shipping & delivery",
     paragraphs: [
-      `Orders are fulfilled from our hub at ${storefrontContact.addressLine}. Available shipping methods and fees are shown at checkout and depend on destination.`,
-      "Within Nigeria: intra-city drop in Rivers (Port Harcourt), interstate shipping to other states, and express courier options apply as listed at checkout. Outside Nigeria, international shipping is offered at the rate shown at checkout.",
+      `Orders are fulfilled from our hubs at ${storefrontContact.addressLine} and Abuja-FCT. Available shipping methods and fees are shown at checkout and depend on destination.`,
+      "Within Nigeria: intra-city drop in Rivers (Port Harcourt) or Abuja-FCT, interstate shipping to other states, and express courier options apply as listed at checkout. Outside Nigeria, international shipping is offered at the rate shown at checkout.",
       "Delivery estimates are indicative and start after dispatch. Delays may occur due to carriers, customs, weather or events beyond our reasonable control. Risk of loss typically passes on delivery according to the carrier’s practices and applicable law.",
     ],
   },

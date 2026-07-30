@@ -100,13 +100,13 @@ export const faqCategories: FaqCategory[] = [
         id: "hub",
         question: "Where do you ship from?",
         answer:
-          "Orders are fulfilled from our hub at 115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria.",
+          "Orders are fulfilled from our hubs at 115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria, and Abuja-FCT.",
       },
       {
         id: "nigeria-rates",
         question: "What are your shipping rates in Nigeria?",
         answer:
-          "Intra-city drop within Rivers (Port Harcourt): ₦3,500 (typically 1–2 business days). Interstate to other Nigerian states: ₦8,000 (typically 3–5 business days). Express courier nationwide: ₦10,000 (typically 1–2 business days). Available options are shown at checkout based on your address.",
+          "Intra-city drop within Rivers (Port Harcourt) or Abuja-FCT: ₦3,500 (typically 1–2 business days). Interstate to other Nigerian states: ₦8,000 (typically 3–5 business days). Express courier nationwide: ₦10,000 (typically 1–2 business days). Available options are shown at checkout based on your address.",
       },
       {
         id: "international",

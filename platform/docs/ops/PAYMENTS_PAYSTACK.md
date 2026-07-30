@@ -41,7 +41,7 @@ NEXT_PUBLIC_APP_URL=https://your-domain.com
 
 - Bag line items from the demo catalog are stored as a `CART_SNAPSHOT` on `Order.notes` (Prisma `OrderItem` requires real `ProductVariant` rows — full line sync is P0 #2).
 - Checkout charges **NGN** via Paystack using the bag’s major-unit total (same numeric total as shown, labeled ₦ at pay time).
-- Shipping (hub: Port Harcourt, Rivers): Intra-city ₦3,500 (Rivers only) · Interstate ₦8,000 (other NG states) · Express ₦10,000 · International **$50 USD** (outside Nigeria; FX **$1 = ₦1,500**).
+- Shipping (hubs: Port Harcourt / Rivers and Abuja-FCT): Intra-city ₦3,500 (Rivers or FCT) · Interstate ₦8,000 (other NG states) · Express ₦10,000 · International **$50 USD** (outside Nigeria; FX **$1 = ₦1,500**).
 - International browsers see catalog prices in **USD** at the same rate; Paystack still charges NGN.
 - Without `PAYSTACK_SECRET_KEY`, initialize returns **503** (no fake success).
 - **Bank transfer:** Paystack verify may return `amount` = requested + fees. Matching uses `requested_amount` (not raw `amount`). If a charge succeeds but amounts still disagree, we still mark **PAID** and log/alert — never leave a charged customer stuck in PENDING.

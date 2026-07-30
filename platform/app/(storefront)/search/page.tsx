@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 import { SearchCatalog } from "@/components/storefront/search-catalog";
 import { searchCatalog } from "@/lib/storefront/catalog-queries";
-import type { SortValue } from "@/lib/storefront/demo-catalog";
+import { CATALOG_PAGE_SIZE, type SortValue } from "@/lib/storefront/demo-catalog";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -25,7 +25,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         sort: (params.sort as SortValue) ?? "featured",
         page,
       })
-    : { items: [], total: 0, page: 1, pageSize: 12, totalPages: 1 };
+    : { items: [], total: 0, page: 1, pageSize: CATALOG_PAGE_SIZE, totalPages: 1 };
 
   return (
     <Suspense fallback={<div className="px-5 py-16 text-center">Searching…</div>}>

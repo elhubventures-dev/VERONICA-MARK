@@ -508,6 +508,13 @@ async function main() {
       priority: 10,
     },
     {
+      name: "Intra-city drop (Abuja-FCT)",
+      country: "NG",
+      region: "FCT",
+      fee: new Decimal("3500.00"),
+      priority: 10,
+    },
+    {
       name: "Interstate shipping",
       country: "NG",
       region: "DEFAULT",

@@ -1,6 +1,6 @@
 /**
  * Perfume Invoice (C-GLOBAL / PEE VEE S.O. 846) — purchase catalog.
- * costPrice = invoice Rate (NGN). sellPrice = costPrice * 1.5. stock = Qty.
+ * costPrice = invoice Rate (NGN). sellPrice = costPrice * 2 (100% markup). stock = Qty.
  */
 export type InvoiceProduct = {
   name: string;
@@ -134,7 +134,7 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
   { name: "Betress Mist 100ml", qty: 12, costPrice: 2000, category: "body" },
 ];
 
-export const MARKUP_MULTIPLIER = 1.5;
+export const MARKUP_MULTIPLIER = 2;
 
 export function sellPriceFromCost(costPrice: number): number {
   return Math.round(costPrice * MARKUP_MULTIPLIER * 100) / 100;
