@@ -55,21 +55,21 @@ export function FlashSaleLanding({
   const phase = time?.phase;
   const eyebrow =
     phase === "upcoming"
-      ? "Opens 1 August"
+      ? "Launches 1st August"
       : phase === "live"
         ? "Live now · Limited days"
-        : "Opening event";
+        : "Launch event";
 
   const discountPercent = flashSale.discountPercent ?? 20;
-  const couponCode = flashSale.couponCode ?? "VM5AUG-20";
+  const couponCode = flashSale.couponCode ?? "VMA5AUG";
   const brandLine = brands.slice(0, 4).join("  •  ");
 
   const supporting =
     phase === "upcoming"
-      ? `${discountPercent}% off with code ${couponCode} — exclusive courtesy on signature compositions. Mark 1–7 August.`
+      ? `Shop ${discountPercent}% Off All Items with Code: ${couponCode} - Valid from 1st - 15th August 2026`
       : phase === "live"
-        ? `${discountPercent}% off with code ${couponCode} — exclusive courtesy on signature compositions while stocks last.`
-        : "This opening edit has closed. Explore the full collection for enduring signatures.";
+        ? `Shop ${discountPercent}% Off All Items with Code: ${couponCode} - Valid from 1st - 15th August 2026`
+        : "This launch has closed. Explore the full collection for enduring signatures.";
 
   return (
     <section className="relative isolate flex min-h-[88svh] items-center justify-center overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[92svh]">
@@ -204,7 +204,7 @@ export function FlashSaleLanding({
               ) : (
                 <>
                   <a href="#opening-edit" className={accentFillCtaClass}>
-                    Shop the opening edit
+                    FLASH SALES
                   </a>
                   <Link href="/shop" className={ghostOnDarkCtaClass}>
                     Browse all fragrances

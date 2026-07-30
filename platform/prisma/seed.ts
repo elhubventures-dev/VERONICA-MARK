@@ -569,10 +569,10 @@ async function main() {
     where: { name: "August Grand Opening Flash Sale" },
   });
 
-  // 1 Aug 2026 00:00 – 7 Aug 2026 23:59 (Europe/Paris / BST +01:00)
+  // 1 Aug 2026 00:00 – 15 Aug 2026 23:59 (Europe/Paris / BST +01:00)
   const promoWindow = {
     startsAt: new Date("2026-08-01T00:00:00+01:00"),
-    endsAt: new Date("2026-08-07T23:59:59+01:00"),
+    endsAt: new Date("2026-08-15T23:59:59+01:00"),
   };
   const promoStatus =
     Date.now() < promoWindow.startsAt.getTime()
@@ -585,7 +585,7 @@ async function main() {
     promotion = await prisma.promotion.create({
       data: {
         name: "August Grand Opening Flash Sale",
-        description: "Launch celebration — 20% off with code VM5AUG-20 on eligible catalog items.",
+        description: "Launch celebration — 20% off with code VMA5AUG on eligible catalog items.",
         type: PromotionType.PERCENTAGE,
         value: new Decimal("20.00"),
         status: promoStatus,
@@ -598,7 +598,7 @@ async function main() {
     promotion = await prisma.promotion.update({
       where: { id: promotion.id },
       data: {
-        description: "Launch celebration — 20% off with code VM5AUG-20 on eligible catalog items.",
+        description: "Launch celebration — 20% off with code VMA5AUG on eligible catalog items.",
         value: new Decimal("20.00"),
         status: promoStatus,
         ...promoWindow,
@@ -606,6 +606,24 @@ async function main() {
     });
   }
 
+  await prisma.coupon.upsert({
+    where: { code: "VMA5AUG" },
+    update: {
+      status: CouponStatus.ACTIVE,
+      expiresAt: promoWindow.endsAt,
+      promotionId: promotion.id,
+    },
+    create: {
+      code: "VMA5AUG",
+      promotionId: promotion.id,
+      status: CouponStatus.ACTIVE,
+      usageLimit: 5000,
+      usedCount: 0,
+      expiresAt: promoWindow.endsAt,
+    },
+  });
+
+  // Legacy alias (previous code with -20 suffix)
   await prisma.coupon.upsert({
     where: { code: "VM5AUG-20" },
     update: {

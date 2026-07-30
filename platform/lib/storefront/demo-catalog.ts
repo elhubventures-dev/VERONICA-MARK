@@ -374,26 +374,27 @@ export function getFlashSaleProducts(): StorefrontProduct[] {
   return demoProducts.filter((p) => p.flashSale);
 }
 
-/** Canonical August opening offer — single source for UI, seed, and checkout demos. */
-export const OPENING_COUPON_CODE = "VM5AUG-20";
+/** Canonical August launch offer — single source for UI, seed, and checkout demos. */
+export const OPENING_COUPON_CODE = "VMA5AUG";
 export const OPENING_DISCOUNT_PERCENT = 20;
 
 export const flashSale = {
-  title: "Private Opening Edit",
+  title: "Private Launch Page",
   description:
-    "A carefully selected opening collection with exclusive pricing on signature compositions — presented with the same curation as the full edit.",
-  /** Canonical August Grand Opening offer. */
+    "Shop 20% Off All Items with Code: VMA5AUG - Valid from 1st - 15th August 2026",
+  /** Canonical August Grand Launch offer. */
   discountPercent: OPENING_DISCOUNT_PERCENT,
-  /** Primary checkout coupon for the opening edit. */
+  /** Primary checkout coupon for the launch. */
   couponCode: OPENING_COUPON_CODE,
-  /** Europe/Paris (+01:00 in August) — 1 Aug 00:00 through 7 Aug 23:59 */
+  /** Europe/Paris (+01:00 in August) — 1 Aug 00:00 through 15 Aug 23:59 */
   startsAt: "2026-08-01T00:00:00+01:00",
-  endsAt: "2026-08-07T23:59:59+01:00",
+  endsAt: "2026-08-15T23:59:59+01:00",
 };
 
 export const demoCoupons: Record<string, { type: "PERCENTAGE" | "FIXED_AMOUNT"; value: number }> = {
   [OPENING_COUPON_CODE]: { type: "PERCENTAGE", value: OPENING_DISCOUNT_PERCENT },
   // Legacy aliases still accepted at checkout
+  "VM5AUG-20": { type: "PERCENTAGE", value: OPENING_DISCOUNT_PERCENT },
   AUGUST20: { type: "PERCENTAGE", value: OPENING_DISCOUNT_PERCENT },
   GRANDOPEN: { type: "PERCENTAGE", value: OPENING_DISCOUNT_PERCENT },
   WELCOME15: { type: "PERCENTAGE", value: 15 },

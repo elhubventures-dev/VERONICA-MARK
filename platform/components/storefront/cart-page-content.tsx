@@ -50,7 +50,7 @@ export function CartPageContent() {
     if (promo) {
       setCouponCode(code.toUpperCase());
     } else {
-      setCouponError("This code is invalid or has expired. Try VM5AUG-20 for 20% off the opening edit.");
+      setCouponError("This code is invalid or has expired. Try VMA5AUG for 20% off.");
     }
     setCouponLoading(false);
   };

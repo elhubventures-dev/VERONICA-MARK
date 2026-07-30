@@ -91,7 +91,7 @@ export function CouponInput({
           id="coupon-code"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="VM5AUG-20"
+          placeholder="VMA5AUG"
           aria-invalid={Boolean(error)}
           aria-describedby={error ? "coupon-error" : undefined}
         />

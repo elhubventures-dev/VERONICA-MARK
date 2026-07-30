@@ -497,7 +497,7 @@ export function CheckoutFlow({ hideTitle = false }: { hideTitle?: boolean }) {
                 setCouponCode(code.toUpperCase());
                 setCouponError(undefined);
               } else {
-                setCouponError("Invalid code. Try VM5AUG-20 for 20% off.");
+                setCouponError("Invalid code. Try VMA5AUG for 20% off.");
               }
             }}
             onRemove={() => setCouponCode(null)}

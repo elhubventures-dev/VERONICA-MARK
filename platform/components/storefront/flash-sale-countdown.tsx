@@ -38,24 +38,20 @@ export function FlashSaleCountdown() {
       <Reveal className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1fr_auto]">
         <div>
           <p className="text-xs font-semibold tracking-[0.2em] text-[var(--color-accent)] uppercase">
-            {time?.phase === "upcoming" ? "Opens 1 August" : "Limited opening event"}
+            {time?.phase === "upcoming" ? "Launches 1st August" : "Limited launch event"}
           </p>
           <h2 className="mt-3 text-3xl drop-shadow-[0_2px_18px_rgba(0,0,0,.45)] sm:text-4xl">
             {flashSale.title}
           </h2>
           <p className="mt-3 max-w-xl text-white/90">
-            {(flashSale.discountPercent ?? 20)}% off with code{" "}
-            <span className="font-semibold text-[var(--color-accent)]">
-              {flashSale.couponCode ?? "VM5AUG-20"}
-            </span>
-            . {flashSale.description}
+            {flashSale.description}
           </p>
         </div>
         {time ? (
           <div className="flex w-[20.25rem] flex-col items-stretch gap-4 lg:ml-auto">
             <CountdownBlocks units={flashSaleCountdownUnits(time)} size="md" />
             <Link href="/flash-sale" className={`w-full justify-center ${editorialCtaClass}`}>
-              View the opening edit
+              FLASH SALES
             </Link>
           </div>
         ) : (

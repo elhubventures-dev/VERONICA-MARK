@@ -22,9 +22,9 @@ import { getFlashSaleCatalog } from "@/lib/storefront/catalog-queries";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 export const metadata: Metadata = {
-  title: "Private Opening Edit",
+  title: "Private Launch Page",
   description:
-    "August Grand Opening — 20% off with code VM5AUG-20 on signature VERONICA MARK fragrances. Limited days only.",
+    "August Grand Launch — Shop 20% Off All Items with Code: VMA5AUG - Valid from 1st - 15th August 2026.",
 };
 
 function uniqueById(products: StorefrontProduct[]) {
@@ -214,13 +214,13 @@ export default async function FlashSalePage() {
               align="center"
               eyebrow="In this edit"
               title="50 real products in the flash-sale edit"
-              description={`Exclusive opening prices across live catalog items — use code ${flashSale.couponCode ?? "VM5AUG-20"} for ${flashSale.discountPercent ?? 20}% off while the event remains live.`}
+              description={`Shop ${flashSale.discountPercent ?? 20}% Off All Items with Code: ${flashSale.couponCode ?? "VMA5AUG"} — Valid from 1st - 15th August 2026.`}
             />
           </Reveal>
 
           {products.length === 0 ? (
             <Reveal className="border border-dashed border-[var(--color-border)] px-6 py-16 text-center">
-              <h3 className="font-display text-xl">This opening edit has closed</h3>
+              <h3 className="font-display text-xl">This launch has closed</h3>
               <p className="mt-2 text-sm text-[var(--color-muted-foreground)]">
                 Explore the full collection for recent arrivals and enduring signatures.
               </p>
@@ -321,10 +321,10 @@ export default async function FlashSalePage() {
         <Reveal className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-5 py-14 text-center sm:px-8">
           <div>
             <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase">
-              1–7 August only
+              1–15 August only
             </p>
             <h2 className="mt-3 font-display text-2xl sm:text-3xl">
-              Secure your opening selection before the edit closes.
+              Secure your launch selection before the sale closes.
             </h2>
           </div>
           <div className="w-full max-w-sm">

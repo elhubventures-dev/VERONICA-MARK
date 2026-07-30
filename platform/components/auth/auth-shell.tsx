@@ -28,7 +28,7 @@ const panelHighlights = [
   "Track orders and invoices in one place",
   "Save favourites to your private wishlist",
   "Authenticity assured on every purchase",
-  `${OPENING_DISCOUNT_PERCENT}% off with code ${OPENING_COUPON_CODE} · 1–7 August`,
+  `${OPENING_DISCOUNT_PERCENT}% off with code ${OPENING_COUPON_CODE} · 1–15 August`,
 ] as const;
 
 export function AuthShell({ children, title, description, className }: AuthShellProps) {
@@ -101,13 +101,13 @@ export function AuthShell({ children, title, description, className }: AuthShell
                 <span className="font-semibold tracking-wide text-[var(--color-accent)]">
                   {coupon}
                 </span>{" "}
-                at checkout — Private Opening Edit, 1–7 August.
+                at checkout — Private Launch Page, 1–15 August.
               </p>
               <Link
                 href="/flash-sale"
                 className="mt-2 inline-flex text-xs font-semibold tracking-[0.12em] text-white/80 uppercase underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
               >
-                View the opening edit
+                FLASH SALES
               </Link>
             </div>
 
@@ -160,7 +160,7 @@ export function AuthShell({ children, title, description, className }: AuthShell
             </span>{" "}
             ·{" "}
             <Link href="/flash-sale" className="underline-offset-2 hover:underline">
-              Private Opening Edit
+              Private Launch Page
             </Link>
           </p>
         </motion.header>

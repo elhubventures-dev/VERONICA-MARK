@@ -172,15 +172,15 @@ export const faqCategories: FaqCategory[] = [
       },
       {
         id: "flash-sale",
-        question: "What is the Private Opening Edit?",
+        question: "What is the Private Launch Page?",
         answer:
-          "Our August Grand Opening flash sale — 20% off selected compositions with code VM5AUG-20 for a limited window (1–7 August). Visit the Opening edit page for the live countdown and eligible pieces.",
+          "Our August Grand Launch flash sale — Shop 20% Off All Items with Code: VMA5AUG - Valid from 1st - 15th August 2026. Visit the Flash Sales page for the live countdown and eligible pieces.",
       },
       {
         id: "coupons",
         question: "How do I apply a coupon?",
         answer:
-          "Enter your code in the bag or at checkout. For the opening edit, use VM5AUG-20 for 20% off eligible items. Valid codes apply automatically; expired or incompatible codes will show a clear message.",
+          "Enter your code in the bag or at checkout. For the launch, use VMA5AUG for 20% off eligible items. Valid codes apply automatically; expired or incompatible codes will show a clear message.",
       },
       {
         id: "newsletter",

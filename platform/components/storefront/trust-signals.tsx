@@ -111,7 +111,7 @@ function buildItems(
     {
       icon: BadgeCheck,
       title: "Verified client reviews",
-      body: `Impressions from customers who purchased through VERONICA MARK. Use code ${OPENING_COUPON_CODE} for ${OPENING_DISCOUNT_PERCENT}% off the opening edit.`,
+      body: `Impressions from customers who purchased through VERONICA MARK. Use code ${OPENING_COUPON_CODE} for ${OPENING_DISCOUNT_PERCENT}% off the launch.`,
     },
   ];
 }

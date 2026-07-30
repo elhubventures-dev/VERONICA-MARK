@@ -19,7 +19,7 @@ type FlashSaleCouponCopyProps = {
 export function FlashSaleCouponCopy({
   variant = "dark",
   className,
-  code = flashSale.couponCode ?? "VM5AUG-20",
+  code = flashSale.couponCode ?? "VMA5AUG",
 }: FlashSaleCouponCopyProps) {
   const [copied, setCopied] = React.useState(false);
 

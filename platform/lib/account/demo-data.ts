@@ -335,7 +335,7 @@ export const accountNotifications: AccountNotification[] = [
   {
     id: "n2",
     title: "Flash sale ends soon",
-    body: "August Grand Opening pricing closes 7 August.",
+    body: "August Grand Launch pricing closes 15 August.",
     createdAt: "2026-07-22T08:00:00+01:00",
     read: false,
     href: "/flash-sale",
@@ -428,12 +428,12 @@ export const accountRewards = {
 export const accountCoupons: AccountCoupon[] = [
   {
     id: "c1",
-    code: "VM5AUG-20",
+    code: "VMA5AUG",
     title: "August Grand Opening",
-    description: "20% off signature compositions (1–7 August)",
+    description: "20% off all items (1–15 August)",
     type: "PERCENTAGE",
     value: 20,
-    expiresAt: "2026-08-07T23:59:59+01:00",
+    expiresAt: "2026-08-15T23:59:59+01:00",
     status: "available",
   },
   {

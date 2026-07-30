@@ -158,7 +158,7 @@ export function FlashSaleProductMarquee({ products, className }: FlashSaleProduc
         <p className="text-[0.68rem] font-semibold tracking-[0.24em] text-[var(--color-accent)] uppercase">
           Moving fast
         </p>
-        <p className="mt-2 font-display text-2xl sm:text-3xl">Live picks from the opening edit</p>
+        <p className="mt-2 font-display text-2xl sm:text-3xl">Live picks from the launch</p>
       </div>
 
       <div className="relative overflow-x-hidden overflow-y-visible px-0 py-8">

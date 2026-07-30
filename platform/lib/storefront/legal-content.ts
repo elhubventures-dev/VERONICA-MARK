@@ -64,7 +64,7 @@ export const termsSections: LegalSection[] = [
     id: "promotions",
     title: "Promotions & opening edit",
     paragraphs: [
-      "Coupons, flash sales (including the Private Opening Edit) and other promotions are subject to stated dates, eligibility, stock and any usage limits. We may modify or end a promotion where necessary for operational or legal reasons.",
+      "Coupons, flash sales (including the Private Launch Page) and other promotions are subject to stated dates, eligibility, stock and any usage limits. We may modify or end a promotion where necessary for operational or legal reasons.",
       "Promotional pricing applies only to eligible items during the live window and cannot normally be combined unless we expressly say otherwise.",
     ],
   },

@@ -452,7 +452,7 @@ export const brandOrders: BrandOrder[] = [
 export const brandCoupons: BrandCoupon[] = [
   {
     id: "cpn-1",
-    code: "VM5AUG-20",
+    code: "VMA5AUG",
     title: "August Grand Opening",
     type: "PERCENTAGE",
     value: 20,
@@ -460,7 +460,7 @@ export const brandCoupons: BrandCoupon[] = [
     maxUses: 5000,
     status: "active",
     startsAt: "2026-08-01T00:00:00+01:00",
-    endsAt: "2026-08-07T23:59:59+01:00",
+    endsAt: "2026-08-15T23:59:59+01:00",
   },
   {
     id: "cpn-1b",
@@ -506,7 +506,7 @@ export const brandFlashSales: BrandFlashSale[] = [
     title: "August Grand Opening Flash Sale",
     status: "scheduled",
     startsAt: "2026-08-01T00:00:00+01:00",
-    endsAt: "2026-08-07T23:59:59+01:00",
+    endsAt: "2026-08-15T23:59:59+01:00",
     discountPercent: 15,
     productCount: 4,
     revenue: 19260000,

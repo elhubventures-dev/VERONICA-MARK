@@ -125,7 +125,7 @@ export function FlashSalePopup() {
               {...stagger(0.05)}
               className="text-[11px] font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase drop-shadow-[0_1px_8px_rgba(0,0,0,.65)]"
             >
-              {time?.phase === "upcoming" ? "Opens 1 August" : "August Grand Opening"}
+              {time?.phase === "upcoming" ? "Launches 1st August" : "August Grand Launch"}
             </motion.p>
             <motion.div {...stagger(0.12)}>
               <DialogTitle className="mt-3 font-display text-3xl text-white drop-shadow-[0_2px_16px_rgba(0,0,0,.7)] sm:text-4xl">
@@ -134,11 +134,11 @@ export function FlashSalePopup() {
             </motion.div>
             <motion.div {...stagger(0.18)}>
               <DialogDescription className="mt-3 max-w-sm text-sm leading-relaxed text-white/90 drop-shadow-[0_1px_10px_rgba(0,0,0,.6)]">
-                {flashSale.discountPercent ?? 20}% off with code{" "}
+                Shop {flashSale.discountPercent ?? 20}% Off All Items with Code:{" "}
                 <span className="font-semibold tracking-wide text-[var(--color-accent)]">
-                  {flashSale.couponCode ?? "VM5AUG-20"}
+                  {flashSale.couponCode ?? "VMA5AUG"}
                 </span>{" "}
-                — available 1–7 August.
+                - Valid from 1st - 15th August 2026
               </DialogDescription>
             </motion.div>
 
@@ -157,7 +157,7 @@ export function FlashSalePopup() {
               className="mx-auto mt-8 flex w-[18.875rem] flex-col items-stretch"
             >
               <Link href="/flash-sale" className={`w-full justify-center ${accentFillCtaClass}`}>
-                View the opening edit
+                FLASH SALES
               </Link>
               <button
                 type="button"

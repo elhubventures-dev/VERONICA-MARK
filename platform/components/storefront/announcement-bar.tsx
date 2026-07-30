@@ -4,7 +4,7 @@ import { Flame, Gift, Sparkles, Tag, Zap } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const MESSAGE = "20% off · Code VM5AUG-20 · August Grand Opening";
+const MESSAGE = "VMA5AUG . AUGUST GRAND LAUNCH";
 const COPIES = 8;
 const SPEED_PX_PER_SEC = 55;
 
