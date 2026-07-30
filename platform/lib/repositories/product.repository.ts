@@ -31,6 +31,9 @@ export type PublishedProduct = Prisma.ProductGetPayload<{
   };
 }>;
 
+/** Storefront catalog sort keys — price sorts are applied in catalog-queries after mapping. */
+export type CatalogSort = "featured" | "price-asc" | "price-desc" | "name-asc" | "newest";
+
 export type ProductListFilters = WithDeletedOption & {
   brandId?: string;
   brandIds?: string[];
@@ -38,7 +41,24 @@ export type ProductListFilters = WithDeletedOption & {
   categoryIds?: string[];
   featured?: boolean;
   search?: string;
+  sort?: CatalogSort;
 };
+
+function catalogOrderBy(sort: CatalogSort = "featured"): Prisma.ProductOrderByWithRelationInput[] {
+  switch (sort) {
+    case "name-asc":
+      return [{ name: "asc" }, { id: "asc" }];
+    case "newest":
+      return [{ publishedAt: "desc" }, { createdAt: "desc" }, { id: "desc" }];
+    case "price-asc":
+    case "price-desc":
+      // Variant prices live on ProductVariant — catalog-queries sorts the full set in memory.
+      return [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }];
+    case "featured":
+    default:
+      return [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }];
+  }
+}
 
 const publishedInclude = {
   brand: true,
@@ -145,6 +165,7 @@ export class ProductRepository extends BaseRepository {
     );
 
     const { skip, take } = toSkipTake(pagination);
+    const orderBy = catalogOrderBy(filters.sort);
 
     const [items, total] = await handlePrisma(() =>
       Promise.all([
@@ -152,7 +173,7 @@ export class ProductRepository extends BaseRepository {
           where,
           skip,
           take,
-          orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+          orderBy,
           include: publishedInclude,
         }),
         this.db.product.count({ where }),

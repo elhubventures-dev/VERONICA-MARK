@@ -86,7 +86,7 @@ async function ensureLibrary(): Promise<string[]> {
 function productSlugs(): Array<{ name: string; slug: string }> {
   return INVOICE_PRODUCTS.map((item) => ({
     name: item.name,
-    slug: slugifyProductName(item.name),
+    slug: item.slug ?? slugifyProductName(item.name),
   }));
 }
 

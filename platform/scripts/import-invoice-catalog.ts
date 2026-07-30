@@ -2,7 +2,7 @@
  * Import Perfume Invoice products into the store database.
  *
  * - costPrice = invoice Rate (NGN)
- * - price (selling) = costPrice × 2 (100% markup)
+ * - price (selling) = costPrice × 1.6 (60% markup)
  * - stock = invoice Qty
  * - currency defaults remain NGN
  *
@@ -114,7 +114,7 @@ async function main() {
 
   for (let index = 0; index < INVOICE_PRODUCTS.length; index += 1) {
     const item = INVOICE_PRODUCTS[index]!;
-    const slug = slugifyProductName(item.name);
+    const slug = item.slug ?? slugifyProductName(item.name);
     const sku = `VM-INV-${String(index + 1).padStart(3, "0")}`;
     const cost = item.costPrice;
     const sell = sellPriceFromCost(cost);
@@ -228,7 +228,7 @@ async function main() {
   }
 
   console.log(`Done. Created ${imported}, updated ${updated}.`);
-  console.log("Selling price = cost × 2 (NGN, 100% markup). Stock set from invoice Qty.");
+  console.log("Selling price = cost × 1.6 (NGN, 60% markup). Stock set from invoice Qty.");
 }
 
 main()

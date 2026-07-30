@@ -1,12 +1,14 @@
 /**
  * Perfume Invoice (C-GLOBAL / PEE VEE S.O. 846) — purchase catalog.
- * costPrice = invoice Rate (NGN). sellPrice = costPrice * 2 (100% markup). stock = Qty.
+ * costPrice = invoice Rate (NGN). sellPrice = costPrice * 1.6 (60% markup). stock = Qty.
  */
 export type InvoiceProduct = {
   name: string;
   qty: number;
   costPrice: number;
   category: "perfume" | "body";
+  /** Stable storefront slug when it must not follow slugify(name). */
+  slug?: string;
 };
 
 export const INVOICE_PRODUCTS: InvoiceProduct[] = [
@@ -91,7 +93,13 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
   { name: "Vintage Radio Perfume 100ml", qty: 2, costPrice: 39800, category: "perfume" },
   { name: "Taskeen Perfume Mix 100ml", qty: 2, costPrice: 19000, category: "perfume" },
   { name: "Georgian's Legend Of Kleopatra 100ml", qty: 2, costPrice: 24000, category: "perfume" },
-  { name: "Eclaire Affair Perfume", qty: 2, costPrice: 44000, category: "perfume" },
+  {
+    name: "Eclair Affair Perfume",
+    qty: 2,
+    costPrice: 44000,
+    category: "perfume",
+    slug: "eclaire-affair-perfume",
+  },
   { name: "Barez Perfume 100ml", qty: 2, costPrice: 16000, category: "perfume" },
   { name: "Flower Garden Perfume", qty: 2, costPrice: 19000, category: "perfume" },
   { name: "Sugar Green", qty: 2, costPrice: 13500, category: "perfume" },
@@ -112,11 +120,23 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
   { name: "Genie Kaly Perfume 50ml", qty: 4, costPrice: 7300, category: "perfume" },
   { name: "Fakhar Lattafa Perfume 100ml", qty: 1, costPrice: 23000, category: "perfume" },
   { name: "Armaf Odyssey Body Spray 200ml", qty: 5, costPrice: 3370, category: "body" },
-  { name: "Tesori Oriente Spray", qty: 2, costPrice: 2700, category: "body" },
+  {
+    name: "Tesori D'oriente Spray",
+    qty: 2,
+    costPrice: 2700,
+    category: "body",
+    slug: "tesori-oriente-spray",
+  },
   { name: "Lattafa Body Spray 200ml", qty: 6, costPrice: 2500, category: "body" },
   { name: "Victoria World Mist 250ml", qty: 6, costPrice: 3050, category: "body" },
   { name: "Pendora / Lomani Body Mist 236ml", qty: 4, costPrice: 5250, category: "body" },
-  { name: "Secrete Amour Body Mist", qty: 3, costPrice: 4100, category: "body" },
+  {
+    name: "Secret Amour Body Mist",
+    qty: 3,
+    costPrice: 4100,
+    category: "body",
+    slug: "secrete-amour-body-mist",
+  },
   { name: "Clive Dorris Mist 250ml", qty: 2, costPrice: 3900, category: "body" },
   { name: "9PM Deodorant", qty: 12, costPrice: 2750, category: "body" },
   { name: "House Of Kinz Spray", qty: 4, costPrice: 2900, category: "body" },
@@ -134,7 +154,7 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
   { name: "Betress Mist 100ml", qty: 12, costPrice: 2000, category: "body" },
 ];
 
-export const MARKUP_MULTIPLIER = 2;
+export const MARKUP_MULTIPLIER = 1.6;
 
 export function sellPriceFromCost(costPrice: number): number {
   return Math.round(costPrice * MARKUP_MULTIPLIER * 100) / 100;

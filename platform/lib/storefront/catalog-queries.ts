@@ -31,6 +31,14 @@ const FALLBACK_IMAGE =
 /** Fallback catalog price ceiling when the live catalog has no priced products (NGN). */
 const NGN_PRICE_FACET_FALLBACK_MAX = 500_000;
 
+/** Max products loaded when sort/price must be applied across the full result set. */
+const CATALOG_FULL_SCAN_LIMIT = 10_000;
+
+type SortableStorefrontProduct = StorefrontProduct & {
+  /** Epoch ms for newest sort; omitted on demo items that lack dates. */
+  publishedAtMs?: number;
+};
+
 export type CatalogFilters = {
   brand?: string[];
   category?: string[];
@@ -73,7 +81,9 @@ export type CatalogResult = {
   totalPages: number;
 };
 
-function mapDbProduct(product: NonNullable<Awaited<ReturnType<typeof productRepository.findBySlug>>>): StorefrontProduct {
+function mapDbProduct(
+  product: NonNullable<Awaited<ReturnType<typeof productRepository.findBySlug>>>,
+): SortableStorefrontProduct {
   const firstVariant = product.variants[0];
   const firstMedia = product.media[0];
   const stock = product.variants.reduce((sum, v) => sum + (v.inventory?.available ?? 0), 0);
@@ -87,6 +97,7 @@ function mapDbProduct(product: NonNullable<Awaited<ReturnType<typeof productRepo
         : firstVariant?.salePrice
           ? "limited"
           : undefined;
+  const publishedAtMs = product.publishedAt?.getTime() ?? product.createdAt.getTime();
   return {
     id: product.id,
     slug: product.slug,
@@ -103,23 +114,41 @@ function mapDbProduct(product: NonNullable<Awaited<ReturnType<typeof productRepo
     stock,
     defaultVariantId: firstVariant?.id,
     defaultVariantLabel: firstVariant?.sizeLabel ?? firstVariant?.colorLabel ?? "Standard",
+    publishedAtMs,
   };
 }
 
-function sortProducts(products: StorefrontProduct[], sort: SortValue = "featured"): StorefrontProduct[] {
+function sortProducts(
+  products: SortableStorefrontProduct[],
+  sort: SortValue = "featured",
+): SortableStorefrontProduct[] {
   const copy = [...products];
   switch (sort) {
     case "price-asc":
-      return copy.sort((a, b) => a.price - b.price);
+      return copy.sort((a, b) => a.price - b.price || a.name.localeCompare(b.name));
     case "price-desc":
-      return copy.sort((a, b) => b.price - a.price);
+      return copy.sort((a, b) => b.price - a.price || a.name.localeCompare(b.name));
     case "name-asc":
       return copy.sort((a, b) => a.name.localeCompare(b.name));
     case "newest":
-      return copy.sort((a, b) => b.slug.localeCompare(a.slug));
+      return copy.sort((a, b) => {
+        const byDate = (b.publishedAtMs ?? 0) - (a.publishedAtMs ?? 0);
+        if (byDate !== 0) return byDate;
+        return b.slug.localeCompare(a.slug);
+      });
     default:
       return copy;
   }
+}
+
+function requiresFullCatalogScan(filters: CatalogFilters): boolean {
+  const sort = filters.sort ?? "featured";
+  return (
+    sort === "price-asc" ||
+    sort === "price-desc" ||
+    filters.priceMin !== undefined ||
+    filters.priceMax !== undefined
+  );
 }
 
 function filterDemoProducts(filters: CatalogFilters): StorefrontProduct[] {
@@ -183,6 +212,7 @@ function applyClientPriceFilter(items: StorefrontProduct[], filters: CatalogFilt
 export async function queryCatalog(filters: CatalogFilters = {}): Promise<CatalogResult> {
   const page = filters.page ?? 1;
   const pageSize = filters.pageSize ?? CATALOG_PAGE_SIZE;
+  const sort = filters.sort ?? "featured";
 
   try {
     const [brandIds, categoryIds] = await Promise.all([
@@ -195,27 +225,33 @@ export async function queryCatalog(filters: CatalogFilters = {}): Promise<Catalo
       return paginateProducts(filterDemoProducts(filters), page, pageSize);
     }
 
-    const result = await productRepository.listPublished(
-      { page, pageSize },
-      {
-        search: filters.search,
-        brandIds: brandIds.length ? brandIds : undefined,
-        categoryIds: categoryIds.length ? categoryIds : undefined,
-      },
-    );
+    const listFilters = {
+      search: filters.search,
+      brandIds: brandIds.length ? brandIds : undefined,
+      categoryIds: categoryIds.length ? categoryIds : undefined,
+      sort,
+    };
+
+    // Price lives on variants and price filters are applied after mapping, so those
+    // paths must load the full matching set, sort, then paginate — otherwise only
+    // the current page is reordered and later pages stay in the wrong order.
+    if (requiresFullCatalogScan(filters)) {
+      const result = await productRepository.listPublished(
+        { page: 1, pageSize: CATALOG_FULL_SCAN_LIMIT },
+        listFilters,
+      );
+      const mapped = applyClientPriceFilter(
+        result.items.map((p) => mapDbProduct(p)),
+        filters,
+      );
+      return paginateProducts(sortProducts(mapped, sort), page, pageSize);
+    }
+
+    const result = await productRepository.listPublished({ page, pageSize }, listFilters);
 
     // Trust a successful DB query — empty brand/category results mean empty, not demo filler.
-    const mapped = applyClientPriceFilter(
-      result.items.map((p) => mapDbProduct(p)),
-      filters,
-    );
-    const sorted = sortProducts(mapped, filters.sort);
-    // Price filter is client-side; when applied, recompute page totals from filtered set.
-    if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
-      return paginateProducts(sorted, page, pageSize);
-    }
     return {
-      items: sorted,
+      items: result.items.map((p) => mapDbProduct(p)),
       total: result.total,
       page: result.page,
       pageSize: result.pageSize,
