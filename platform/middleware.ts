@@ -11,6 +11,7 @@ import {
   normalizeCountryCode,
   resolveCountryFromHeaders,
 } from "@/lib/commerce/geo";
+import { getFlashSalePhase } from "@/lib/storefront/flash-sale-time";
 
 const { auth } = NextAuth(authConfig);
 
@@ -56,6 +57,17 @@ export default auth((request) => {
     }
     return response;
   };
+
+  // Launch window (live only): serve flash-sale content at `/` without changing the URL.
+  if (pathname === "/" && getFlashSalePhase() === "live") {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = "/flash-sale";
+    return finalize(
+      NextResponse.rewrite(rewriteUrl, {
+        request: { headers: responseHeaders },
+      }),
+    );
+  }
 
   if (!rule) {
     return finalize(

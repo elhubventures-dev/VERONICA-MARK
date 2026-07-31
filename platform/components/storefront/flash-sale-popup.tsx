@@ -18,8 +18,11 @@ import {
 } from "@/components/ui/dialog";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { accentFillCtaClass, motionTransition } from "@/lib/motion";
-import { flashSale } from "@/lib/storefront/demo-catalog";
-import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
+import { flashSale } from "@/lib/storefront/flash-sale-config";
+import {
+  formatFlashSaleWindowLocal,
+  getFlashSaleRemaining,
+} from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
 import {
   ENGAGEMENT_POPUP_OPEN_DELAY_MS,
@@ -48,6 +51,7 @@ export function FlashSalePopup() {
   const reduceMotion = useReducedMotion();
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState<ReturnType<typeof remainingToTarget>>(null);
+  const [localWindow, setLocalWindow] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const visitCount = registerStorefrontVisit();
@@ -74,7 +78,10 @@ export function FlashSalePopup() {
 
   React.useEffect(() => {
     if (!open) return;
-    const tick = () => setTime(remainingToTarget());
+    const tick = () => {
+      setTime(remainingToTarget());
+      setLocalWindow(formatFlashSaleWindowLocal());
+    };
     tick();
     const interval = window.setInterval(tick, 1000);
     return () => window.clearInterval(interval);
@@ -138,7 +145,7 @@ export function FlashSalePopup() {
                 <span className="font-semibold tracking-wide text-[var(--color-accent)]">
                   {flashSale.couponCode ?? "VMA5AUG"}
                 </span>{" "}
-                - Valid from 1st - 15th August 2026
+                — {localWindow ? `Your local time: ${localWindow}` : "Valid from 1st - 15th August 2026 (West Africa Time)"}
               </DialogDescription>
             </motion.div>
 

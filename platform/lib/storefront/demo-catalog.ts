@@ -1,3 +1,8 @@
+import {
+  OPENING_COUPON_CODE,
+  OPENING_DISCOUNT_PERCENT,
+} from "@/lib/storefront/flash-sale-config";
+
 export type ProductBadge = "new" | "limited" | "exclusive" | "bestseller";
 
 export type StorefrontProduct = {
@@ -374,22 +379,12 @@ export function getFlashSaleProducts(): StorefrontProduct[] {
   return demoProducts.filter((p) => p.flashSale);
 }
 
-/** Canonical August launch offer — single source for UI, seed, and checkout demos. */
-export const OPENING_COUPON_CODE = "VMA5AUG";
-export const OPENING_DISCOUNT_PERCENT = 20;
-
-export const flashSale = {
-  title: "Private Launch Page",
-  description:
-    "Shop 20% Off All Items with Code: VMA5AUG - Valid from 1st - 15th August 2026",
-  /** Canonical August Grand Launch offer. */
-  discountPercent: OPENING_DISCOUNT_PERCENT,
-  /** Primary checkout coupon for the launch. */
-  couponCode: OPENING_COUPON_CODE,
-  /** Europe/Paris (+01:00 in August) — 1 Aug 00:00 through 15 Aug 23:59 */
-  startsAt: "2026-08-01T00:00:00+01:00",
-  endsAt: "2026-08-15T23:59:59+01:00",
-};
+/** Re-export launch offer — canonical source is `flash-sale-config.ts` (edge-safe). */
+export {
+  flashSale,
+  OPENING_COUPON_CODE,
+  OPENING_DISCOUNT_PERCENT,
+} from "@/lib/storefront/flash-sale-config";
 
 export const demoCoupons: Record<string, { type: "PERCENTAGE" | "FIXED_AMOUNT"; value: number }> = {
   [OPENING_COUPON_CODE]: { type: "PERCENTAGE", value: OPENING_DISCOUNT_PERCENT },

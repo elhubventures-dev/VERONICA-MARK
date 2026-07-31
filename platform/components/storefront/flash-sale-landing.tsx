@@ -12,8 +12,11 @@ import {
 import { FlashSaleCouponCopy } from "@/components/storefront/flash-sale-coupon-copy";
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { accentFillCtaClass, ghostOnDarkCtaClass, motionTransition } from "@/lib/motion";
-import { flashSale } from "@/lib/storefront/demo-catalog";
-import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
+import { flashSale } from "@/lib/storefront/flash-sale-config";
+import {
+  formatFlashSaleWindowLocal,
+  getFlashSaleRemaining,
+} from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 type FlashSaleLandingProps = {
@@ -41,10 +44,12 @@ export function FlashSaleLanding({
   const reduceMotion = useReducedMotion();
   const [time, setTime] = React.useState<ReturnType<typeof getFlashSaleRemaining>>(null);
   const [ready, setReady] = React.useState(false);
+  const [localWindow, setLocalWindow] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const update = () => {
       setTime(getFlashSaleRemaining());
+      setLocalWindow(formatFlashSaleWindowLocal());
       setReady(true);
     };
     update();
@@ -64,12 +69,14 @@ export function FlashSaleLanding({
   const couponCode = flashSale.couponCode ?? "VMA5AUG";
   const brandLine = brands.slice(0, 4).join("  •  ");
 
+  const windowHint = localWindow
+    ? `Your local time: ${localWindow}`
+    : "Valid from 1st - 15th August 2026 (West Africa Time)";
+
   const supporting =
-    phase === "upcoming"
-      ? `Shop ${discountPercent}% Off All Items with Code: ${couponCode} - Valid from 1st - 15th August 2026`
-      : phase === "live"
-        ? `Shop ${discountPercent}% Off All Items with Code: ${couponCode} - Valid from 1st - 15th August 2026`
-        : "This launch has closed. Explore the full collection for enduring signatures.";
+    phase === "upcoming" || phase === "live"
+      ? `Shop ${discountPercent}% Off All Items with Code: ${couponCode}. ${windowHint}`
+      : "This launch has closed. Explore the full collection for enduring signatures.";
 
   return (
     <section className="relative isolate flex min-h-[88svh] items-center justify-center overflow-hidden bg-[var(--color-brand-deep)] text-white sm:min-h-[92svh]">

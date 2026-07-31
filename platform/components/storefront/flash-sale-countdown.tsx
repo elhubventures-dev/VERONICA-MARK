@@ -11,15 +11,22 @@ import {
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { Reveal } from "@/components/storefront/reveal";
 import { editorialCtaClass } from "@/lib/motion";
-import { flashSale } from "@/lib/storefront/demo-catalog";
-import { getFlashSaleRemaining } from "@/lib/storefront/flash-sale-time";
+import { flashSale } from "@/lib/storefront/flash-sale-config";
+import {
+  formatFlashSaleWindowLocal,
+  getFlashSaleRemaining,
+} from "@/lib/storefront/flash-sale-time";
 import { siteMedia } from "@/lib/storefront/site-media";
 
 export function FlashSaleCountdown() {
   const [time, setTime] = React.useState<ReturnType<typeof getFlashSaleRemaining>>();
+  const [localWindow, setLocalWindow] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    const update = () => setTime(getFlashSaleRemaining());
+    const update = () => {
+      setTime(getFlashSaleRemaining());
+      setLocalWindow(formatFlashSaleWindowLocal());
+    };
     update();
     const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
@@ -46,6 +53,9 @@ export function FlashSaleCountdown() {
           <p className="mt-3 max-w-xl text-white/90">
             {flashSale.description}
           </p>
+          {localWindow ? (
+            <p className="mt-2 max-w-xl text-sm text-white/75">Your local time: {localWindow}</p>
+          ) : null}
         </div>
         {time ? (
           <div className="flex w-[20.25rem] flex-col items-stretch gap-4 lg:ml-auto">
