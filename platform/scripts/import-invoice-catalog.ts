@@ -124,14 +124,22 @@ async function main() {
 
     const existing = await prisma.product.findUnique({ where: { slug } });
 
+    const shortDescription =
+      item.shortDescription ?? `${item.name} — curated by VERONICA MARK.`;
+    const description =
+      item.description ??
+      `${item.name} from the VERONICA MARK fragrance edit. Authenticity assured.`;
+    const barcode = item.barcode ?? `VM-INV-${String(index + 1).padStart(4, "0")}`;
+
     const product = await prisma.product.upsert({
       where: { slug },
       update: {
         name: item.name,
         brandId: brand.id,
         categoryId,
-        shortDescription: `${item.name} — curated by VERONICA MARK.`,
-        description: `${item.name} from the VERONICA MARK fragrance edit. Authenticity assured.`,
+        barcode,
+        shortDescription,
+        description,
         status: ProductStatus.PUBLISHED,
         visible: true,
         publishedAt: existing?.publishedAt ?? new Date(),
@@ -142,9 +150,9 @@ async function main() {
         categoryId,
         name: item.name,
         slug,
-        barcode: `VM-INV-${String(index + 1).padStart(4, "0")}`,
-        shortDescription: `${item.name} — curated by VERONICA MARK.`,
-        description: `${item.name} from the VERONICA MARK fragrance edit. Authenticity assured.`,
+        barcode,
+        shortDescription,
+        description,
         status: ProductStatus.PUBLISHED,
         visible: true,
         publishedAt: new Date(),
@@ -157,13 +165,13 @@ async function main() {
       where: { productId: product.id },
       update: {
         metaTitle: `${item.name} | VERONICA MARK`,
-        metaDescription: `Shop ${item.name} in Naira from VERONICA MARK.`,
+        metaDescription: shortDescription.slice(0, 155),
         canonicalUrl: `/products/${slug}`,
       },
       create: {
         productId: product.id,
         metaTitle: `${item.name} | VERONICA MARK`,
-        metaDescription: `Shop ${item.name} in Naira from VERONICA MARK.`,
+        metaDescription: shortDescription.slice(0, 155),
         canonicalUrl: `/products/${slug}`,
       },
     });
