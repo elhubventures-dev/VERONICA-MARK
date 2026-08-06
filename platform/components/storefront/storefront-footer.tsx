@@ -97,6 +97,9 @@ export function StorefrontFooter() {
           <p>© {new Date().getFullYear()} VERONICA MARK. All rights reserved.</p>
           <p>Authenticity assured · Secure checkout · Curated for the Exceptional.</p>
         </div>
+        <p className="pt-4 text-center text-[11px] tracking-wide text-white/45 sm:text-left">
+          Powered by VEES AIRBNB &amp; Hospitality Solutions · BN: 6913957
+        </p>
       </Reveal>
     </footer>
   );

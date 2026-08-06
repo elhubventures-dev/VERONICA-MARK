@@ -31,7 +31,7 @@ Required for local app boot:
 | `AUTH_SECRET`           | `openssl rand -base64 32`                  |
 | `NEXT_PUBLIC_APP_URL`   | `http://localhost:3000`                    |
 
-Optional until later phases: Google OAuth, Supabase, Upstash Redis, Paystack, SquadCo.
+Optional until later phases: Google OAuth, Supabase, Upstash Redis, Paystack, SquadCo, Resend, Twilio WhatsApp (see `docs/ops/TWILIO_WHATSAPP.md`).
 
 ## 3. Local database (Docker)
 

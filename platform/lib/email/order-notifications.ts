@@ -14,6 +14,7 @@ import { sendTemplateEmail } from "@/lib/email/send";
 import { logger } from "@/lib/logger";
 import type { OrderWithRelations } from "@/lib/repositories/order.repository";
 import { absoluteUrl } from "@/lib/seo/metadata";
+import { notifyCustomerOrderWhatsApp } from "@/lib/whatsapp/order-notifications";
 
 export {
   buildOrderAdminDetails,
@@ -83,6 +84,15 @@ export async function notifyCustomerOrderStatus(
     }
   } else {
     logger.warn({ orderNumber: order.orderNumber, status }, "order.email.missing_recipient");
+  }
+
+  try {
+    await notifyCustomerOrderWhatsApp(order, status);
+  } catch (error) {
+    logger.error(
+      { err: error, orderNumber: order.orderNumber, status },
+      "order.whatsapp.send_failed",
+    );
   }
 
   await notifyAdminEvent({

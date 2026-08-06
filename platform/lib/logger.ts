@@ -21,6 +21,8 @@ export const logger = pino({
       "SUPABASE_SERVICE_ROLE_KEY",
       "PAYSTACK_SECRET_KEY",
       "SQUADCO_SECRET_KEY",
+      "TWILIO_AUTH_TOKEN",
+      "TWILIO_ACCOUNT_SID",
       "req.headers.authorization",
       "req.headers.cookie",
     ],

@@ -28,7 +28,7 @@
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase | Server uploads |
 | `UPSTASH_REDIS_REST_URL` / `TOKEN` | Upstash | Rate limits |
 
-Optional: Google OAuth, Paystack/SquadCo keys, `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` (see [SENTRY.md](./SENTRY.md)), `CRON_SECRET`, `SEED_DEFAULT_PASSWORD` (non-prod only).
+Optional: Google OAuth, Paystack/SquadCo keys, Resend (`RESEND_API_KEY`), Twilio WhatsApp (see [TWILIO_WHATSAPP.md](./TWILIO_WHATSAPP.md)), `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` (see [SENTRY.md](./SENTRY.md)), `CRON_SECRET`, `SEED_DEFAULT_PASSWORD` (non-prod only).
 
 ### Post-deploy smoke
 1. `GET /api/health` → `{ status: "ok" }`
