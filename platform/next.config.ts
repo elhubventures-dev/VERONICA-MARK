@@ -38,8 +38,10 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1440, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Fewer widths = fewer unique Image Optimization transformations on Hobby.
+    // deviceSizes: full-bleed / vw layouts; imageSizes: fixed thumbs & cards.
+    deviceSizes: [640, 1080, 1920],
+    imageSizes: [48, 64, 96, 128, 256, 320],
     minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {

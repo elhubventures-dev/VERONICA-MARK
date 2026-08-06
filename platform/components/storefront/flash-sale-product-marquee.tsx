@@ -21,6 +21,8 @@ function MarqueeCard({
   loopKey,
   tone,
   active,
+  /** Loop clones skip next/image so they don't double-count transforms. */
+  optimizeImage,
   onHoverStart,
   onHoverEnd,
 }: {
@@ -28,11 +30,13 @@ function MarqueeCard({
   loopKey: string;
   tone: "white" | "gold";
   active: boolean;
+  optimizeImage: boolean;
   onHoverStart: () => void;
   onHoverEnd: () => void;
 }) {
   const isGold = tone === "gold";
   const reduceMotion = useReducedMotion();
+  const alt = `${product.brand} ${product.name}`;
 
   return (
     <motion.div
@@ -65,13 +69,25 @@ function MarqueeCard({
         }}
       >
         <div className="relative aspect-[4/5] overflow-hidden bg-[var(--color-brand-deep)]">
-          <Image
-            src={product.image}
-            alt={`${product.brand} ${product.name}`}
-            fill
-            sizes="220px"
-            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-          />
+          {optimizeImage ? (
+            <Image
+              src={product.image}
+              alt={alt}
+              fill
+              sizes="220px"
+              quality={70}
+              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element -- loop clone; avoid second Image Optimization hit
+            <img
+              src={product.image}
+              alt={alt}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
           <div
             aria-hidden
             className="absolute inset-0"
@@ -190,6 +206,7 @@ export function FlashSaleProductMarquee({ products, className }: FlashSaleProduc
                 loopKey={`marquee-${index}`}
                 tone={index % 2 === 0 ? "white" : "gold"}
                 active={hoveredKey === key}
+                optimizeImage={index < items.length}
                 onHoverStart={() => setHoveredKey(key)}
                 onHoverEnd={() => setHoveredKey((current) => (current === key ? null : current))}
               />

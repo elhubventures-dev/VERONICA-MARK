@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { MediaScrim } from "@/components/storefront/media-scrim";
 import { accentFillCtaClass, ghostOnDarkCtaClass, luxuryEase, motionTransition } from "@/lib/motion";
@@ -37,6 +37,15 @@ export function HeroBanner() {
 
   const activeIndex = reduceMotion ? 0 : index;
 
+  // Only mount active + neighbors so idle slides never hit the optimizer.
+  const mountedIndexes = useMemo(() => {
+    if (reduceMotion || HERO_SLIDES.length < 2) return [0];
+    const len = HERO_SLIDES.length;
+    const next = (activeIndex + 1) % len;
+    const prev = (activeIndex + len - 1) % len;
+    return Array.from(new Set([activeIndex, next, prev]));
+  }, [activeIndex, reduceMotion]);
+
   return (
     <section className="relative isolate flex min-h-[78svh] items-end overflow-hidden bg-[var(--color-brand-deep)] text-white">
       <div
@@ -49,7 +58,9 @@ export function HeroBanner() {
       />
 
       <div className="absolute inset-0 -z-20" aria-hidden>
-        {HERO_SLIDES.map((src, slideIndex) => {
+        {mountedIndexes.map((slideIndex) => {
+          const src = HERO_SLIDES[slideIndex];
+          if (!src) return null;
           const isActive = slideIndex === activeIndex;
           return (
             <motion.div
@@ -73,7 +84,7 @@ export function HeroBanner() {
                 fill
                 priority={slideIndex === 0}
                 fetchPriority={slideIndex === 0 ? "high" : "auto"}
-                quality={75}
+                quality={70}
                 sizes="100vw"
                 className="object-cover object-center"
               />

@@ -88,6 +88,7 @@ export function ProductCard({
             alt={imageAlt}
             fill
             sizes="(max-width:768px) 50vw, 320px"
+            quality={70}
             className={cn(
               "object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]",
               !inStock && "grayscale-[0.35]",

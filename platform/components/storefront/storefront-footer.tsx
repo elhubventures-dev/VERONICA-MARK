@@ -44,6 +44,8 @@ export function StorefrontFooter() {
         alt=""
         fill
         sizes="100vw"
+        // Decorative site WebP — skip optimizer to save Hobby transformations.
+        unoptimized
         className="-z-20 object-cover vm-ambient-drift"
       />
       <MediaScrim variant="center" />

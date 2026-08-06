@@ -40,6 +40,8 @@ export function BrandMark({
         height={imgH}
         className="shrink-0 object-contain"
         priority={priority}
+        // Already WebP at display size — skip Vercel Image Optimization quota.
+        unoptimized
       />
       {withWordmark && variant !== "lockup" ? (
         <span className="font-display text-lg tracking-[0.14em] text-current sm:text-xl">
