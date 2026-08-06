@@ -88,6 +88,19 @@ describe("shipping rates", () => {
     expect(quote.currency).toBe("USD");
   });
 
+  it("quotes store pickup at ₦0 without destination checks", () => {
+    expect(
+      quoteShipping({ country: "NG", state: "Lagos", methodId: "store_pickup" }),
+    ).toMatchObject({
+      methodId: "store_pickup",
+      fee: 0,
+      currency: "NGN",
+    });
+    expect(
+      shippingFeeNgn({ country: "NG", state: "Lagos", methodId: "store_pickup" }),
+    ).toBe(0);
+  });
+
   it("converts international USD fee to NGN for Paystack at ₦1,500/$1", () => {
     expect(internationalShippingFeeNgn(1500)).toBe(75_000);
     expect(

@@ -21,6 +21,7 @@ const SHIPPING_METHOD_LABELS: Record<string, string> = {
   interstate: "Interstate shipping",
   express: "Express courier",
   international: "International shipping",
+  store_pickup: "Store pickup · Port Harcourt",
 };
 
 function asShippingAddress(value: unknown): ShippingAddressJson {

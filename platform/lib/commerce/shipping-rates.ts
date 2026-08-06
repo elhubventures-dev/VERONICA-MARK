@@ -9,6 +9,7 @@ export const SHIPPING_METHOD_IDS = [
   "interstate",
   "express",
   "international",
+  "store_pickup",
 ] as const;
 
 export type ShippingMethodId = (typeof SHIPPING_METHOD_IDS)[number];
@@ -59,7 +60,7 @@ export const DOMESTIC_SHIPPING_RATES = {
     currency: "NGN" as const,
     estimatedDelivery: "1–2 business days",
   },
-} satisfies Record<Exclude<ShippingMethodId, "international">, ShippingQuote>;
+} satisfies Record<Exclude<ShippingMethodId, "international" | "store_pickup">, ShippingQuote>;
 
 export const INTERNATIONAL_SHIPPING_RATE: ShippingQuote = {
   methodId: "international",
@@ -68,6 +69,16 @@ export const INTERNATIONAL_SHIPPING_RATE: ShippingQuote = {
   fee: 50,
   currency: "USD",
   estimatedDelivery: "5–10 business days",
+};
+
+/** In-store collection — Port Harcourt only (no delivery fee). */
+export const STORE_PICKUP_RATE: ShippingQuote = {
+  methodId: "store_pickup",
+  label: "Store pickup · Port Harcourt",
+  description: "Collect from 115 Woji Road, GRA Phase 3, Port Harcourt — no delivery charge",
+  fee: 0,
+  currency: "NGN",
+  estimatedDelivery: "Ready when we notify you",
 };
 
 /** Nigerian states — used at checkout to choose intra-city vs interstate. */
@@ -178,6 +189,10 @@ export function quoteShipping(input: {
   state?: string;
   methodId: ShippingMethodId;
 }): ShippingQuote {
+  if (input.methodId === "store_pickup") {
+    return STORE_PICKUP_RATE;
+  }
+
   const available = getAvailableShippingMethods(input);
   const match = available.find((method) => method.methodId === input.methodId);
   if (match) {

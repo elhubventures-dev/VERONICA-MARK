@@ -100,6 +100,7 @@ function customerFacingNotes(notes: string | null | undefined): string {
         !line.startsWith("CART_SNAPSHOT:") &&
         !line.startsWith("SHIPPING_METHOD:") &&
         !line.startsWith("SHIPPING_DISPLAY_CURRENCY:") &&
+        !line.startsWith("FULFILLMENT:") &&
         !line.startsWith("COUPON:") &&
         !line.startsWith("PARTIAL_LINE_ITEMS:"),
     )
@@ -114,6 +115,7 @@ function systemNoteLines(notes: string | null | undefined): string[] {
       line.startsWith("CART_SNAPSHOT:") ||
       line.startsWith("SHIPPING_METHOD:") ||
       line.startsWith("SHIPPING_DISPLAY_CURRENCY:") ||
+      line.startsWith("FULFILLMENT:") ||
       line.startsWith("COUPON:") ||
       line.startsWith("PARTIAL_LINE_ITEMS:"),
   );

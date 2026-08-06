@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { PageBanner } from "@/components/storefront/page-banner";
 import { CheckoutFlow } from "@/components/storefront/checkout-flow";
@@ -21,7 +22,9 @@ export default function CheckoutPage() {
         compact
         priority
       />
-      <CheckoutFlow hideTitle />
+      <Suspense fallback={<div className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8">Loading checkout…</div>}>
+        <CheckoutFlow hideTitle />
+      </Suspense>
     </>
   );
 }

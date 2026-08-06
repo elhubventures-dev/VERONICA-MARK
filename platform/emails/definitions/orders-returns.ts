@@ -7,7 +7,12 @@ function orderDetails(vars: OrderEmailVars) {
   if (vars.shippingMethod) rows.push({ label: "Shipping", value: vars.shippingMethod });
   if (vars.estimatedDelivery) rows.push({ label: "Estimate", value: vars.estimatedDelivery });
   if (vars.trackingNumber) rows.push({ label: "Tracking", value: vars.trackingNumber });
-  if (vars.shippingAddress) rows.push({ label: "Deliver to", value: vars.shippingAddress });
+  if (vars.shippingAddress) {
+    const addressLabel = vars.shippingMethod?.toLowerCase().includes("pickup")
+      ? "Collect from"
+      : "Deliver to";
+    rows.push({ label: addressLabel, value: vars.shippingAddress });
+  }
   if (vars.currencyNote) rows.push({ label: "Note", value: vars.currencyNote });
   return rows;
 }

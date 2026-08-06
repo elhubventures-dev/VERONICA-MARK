@@ -9,6 +9,7 @@ import {
   quoteShipping,
   shippingFeeNgn,
 } from "@/lib/commerce/shipping-rates";
+import { buildStorePickupAddress } from "@/lib/commerce/fulfillment";
 import { withTransaction } from "@/lib/db/transactions";
 import {
   notifyCustomerOrderStatus,
@@ -56,7 +57,7 @@ export type CheckoutShippingPayload = {
 
 export type InitializeCheckoutInput = {
   shipping: CheckoutShippingPayload;
-  shippingMethod: "intra_city" | "interstate" | "express" | "international";
+  shippingMethod: "intra_city" | "interstate" | "express" | "international" | "store_pickup";
   lines: CheckoutLinePayload[];
   couponCode?: string | null;
   couponDiscount?: number;
@@ -134,6 +135,19 @@ function computeCheckoutTotals(input: InitializeCheckoutInput) {
     throw new ValidationError("Invalid shipping method");
   }
 
+  if (input.shippingMethod === "store_pickup") {
+    return recomputeTotals({
+      items: input.lines.map((line) => ({
+        variantId: line.variantId,
+        quantity: line.quantity,
+        unitPrice: line.product.price,
+      })),
+      taxRatePercent: 0,
+      shippingFee: 0,
+      couponDiscount: input.couponDiscount ?? 0,
+    });
+  }
+
   const quote = quoteShipping({
     country: input.shipping.country,
     state: input.shipping.state,
@@ -209,7 +223,13 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
   if (!phone || phoneDigits.length < 7 || phoneDigits.length > 15) {
     throw new ValidationError("A valid phone number is required");
   }
-  if (isNigeriaCountry(input.shipping.country) && !input.shipping.state?.trim()) {
+
+  const isPickup = input.shippingMethod === "store_pickup";
+  if (
+    !isPickup &&
+    isNigeriaCountry(input.shipping.country) &&
+    !input.shipping.state?.trim()
+  ) {
     throw new ValidationError("State is required for Nigerian deliveries");
   }
 
@@ -223,18 +243,26 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
   const orderNumber = buildOrderNumber();
   const reference = createPaystackReference(orderNumber);
 
-  const regionLabel = input.shipping.state?.trim() || input.shipping.country;
-  const address = {
-    name: input.shipping.name,
-    phone,
-    line1: input.shipping.line1?.trim() || regionLabel,
-    line2: input.shipping.line2 || undefined,
-    city: input.shipping.city?.trim() || regionLabel,
-    state: input.shipping.state || undefined,
-    postalCode: undefined,
-    country: input.shipping.country,
-    email,
-  };
+  const address = isPickup
+    ? buildStorePickupAddress({
+        name: input.shipping.name,
+        email,
+        phone,
+      })
+    : (() => {
+        const regionLabel = input.shipping.state?.trim() || input.shipping.country;
+        return {
+          name: input.shipping.name,
+          phone,
+          line1: input.shipping.line1?.trim() || regionLabel,
+          line2: input.shipping.line2 || undefined,
+          city: input.shipping.city?.trim() || regionLabel,
+          state: input.shipping.state || undefined,
+          postalCode: undefined,
+          country: input.shipping.country,
+          email,
+        };
+      })();
 
   const cartSnapshot = input.lines.map((line) => ({
     variantId: line.variantId,
@@ -302,6 +330,7 @@ export async function initializePaystackCheckout(input: InitializeCheckoutInput)
       input.notes?.trim(),
       `CART_SNAPSHOT:${JSON.stringify(cartSnapshot)}`,
       `SHIPPING_METHOD:${input.shippingMethod}`,
+      isPickup ? "FULFILLMENT:store_pickup" : "FULFILLMENT:delivery",
       input.shippingMethod === "international" ? "SHIPPING_DISPLAY_CURRENCY:USD" : "SHIPPING_DISPLAY_CURRENCY:NGN",
       input.couponCode ? `COUPON:${input.couponCode}` : null,
       orderItems.length < input.lines.length

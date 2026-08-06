@@ -109,6 +109,12 @@ export const faqCategories: FaqCategory[] = [
           "Intra-city drop within Rivers (Port Harcourt) or Abuja-FCT: ₦3,500 (typically 1–2 business days). Interstate to other Nigerian states: ₦8,000 (typically 3–5 business days). Express courier nationwide: ₦10,000 (typically 1–2 business days). Available options are shown at checkout based on your address.",
       },
       {
+        id: "store-pickup",
+        question: "Can I pick up my order in store?",
+        answer:
+          "Yes. At checkout you can choose store pickup in Port Harcourt (115 Woji Road, GRA Phase 3). There is no delivery fee — we only need your full name, email, and phone. We will notify you when your order is ready for collection.",
+      },
+      {
         id: "international",
         question: "Do you ship internationally?",
         answer:

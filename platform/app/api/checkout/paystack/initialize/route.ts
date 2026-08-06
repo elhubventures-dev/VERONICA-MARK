@@ -23,7 +23,7 @@ const bodySchema = z.object({
     postalCode: z.string().optional().default(""),
     country: z.string().min(2),
   }),
-  shippingMethod: z.enum(["intra_city", "interstate", "express", "international"]),
+  shippingMethod: z.enum(["intra_city", "interstate", "express", "international", "store_pickup"]),
   lines: z
     .array(
       z.object({

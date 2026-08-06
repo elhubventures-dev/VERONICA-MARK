@@ -17,7 +17,7 @@ import { computeStorefrontTotals } from "@/lib/storefront/cart-totals";
 import { toast } from "sonner";
 
 export function CartPageContent() {
-  const { proceedToCheckout, isReady } = useProceedToCheckout();
+  const { proceedToCheckout, isReady, fulfillmentDialog } = useProceedToCheckout();
   const { lines, subtotal, updateQuantity, removeItem, couponCode, setCouponCode } = useCart();
   const [couponError, setCouponError] = React.useState<string>();
   const [couponLoading, setCouponLoading] = React.useState(false);
@@ -124,6 +124,7 @@ export function CartPageContent() {
           <TrustSignals variant="compact" />
         </Reveal>
       </div>
+      {fulfillmentDialog}
     </div>
   );
 }
