@@ -8,7 +8,7 @@ Sourced from `lib/storefront/contact.ts` via `emails/tokens.ts` (`emailDefaults`
 
 - Phone / WhatsApp: `+234 904 319 7743` (`https://wa.me/2349043197743`)
 - Email: `sales@veronicamark.com`
-- Address: `115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria`
+- Address: `88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria`
 
 Contact form auto-replies (`contact.auto_reply`) also include these details in the body.
 

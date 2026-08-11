@@ -100,7 +100,7 @@ export const faqCategories: FaqCategory[] = [
         id: "hub",
         question: "Where do you ship from?",
         answer:
-          "Orders are fulfilled from our hubs at 115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria, and Abuja-FCT.",
+          "Orders are fulfilled from our hubs at 88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria, and Abuja-FCT.",
       },
       {
         id: "nigeria-rates",
@@ -112,7 +112,7 @@ export const faqCategories: FaqCategory[] = [
         id: "store-pickup",
         question: "Can I pick up my order in store?",
         answer:
-          "Yes. At checkout you can choose store pickup in Port Harcourt (115 Woji Road, GRA Phase 3). There is no delivery fee — we only need your full name, email, and phone. We will notify you when your order is ready for collection.",
+          "Yes. At checkout you can choose store pickup in Port Harcourt (88 Woji Road, GRA Phase 3). There is no delivery fee — we only need your full name, email, and phone. We will notify you when your order is ready for collection.",
       },
       {
         id: "international",

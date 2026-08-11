@@ -8,15 +8,15 @@ export const storefrontContact = {
   telUrl: "tel:+2349043197743",
   whatsappUrl: "https://wa.me/2349043197743",
   address: {
-    line1: "115 Woji Road, GRA Phase 3",
+    line1: "88 Woji Road, GRA Phase 3",
     line2: "Port Harcourt 500001",
     line3: "Rivers, Nigeria",
   },
   /** Single-line address for legal/FAQ/email copy. */
   addressLine:
-    "115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
+    "88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
   mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=115+Woji+Road+GRA+Phase+3+Port+Harcourt+500001+Rivers+Nigeria",
+    "https://www.google.com/maps/search/?api=1&query=88+Woji+Road+GRA+Phase+3+Port+Harcourt+500001+Rivers+Nigeria",
   websiteLabel: "www.veronicamark.com",
   websiteUrl: "https://www.veronicamark.com",
   responseNote: "We aim to respond within one business day.",

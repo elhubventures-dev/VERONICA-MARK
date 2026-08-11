@@ -75,7 +75,7 @@ export const INTERNATIONAL_SHIPPING_RATE: ShippingQuote = {
 export const STORE_PICKUP_RATE: ShippingQuote = {
   methodId: "store_pickup",
   label: "Store pickup · Port Harcourt",
-  description: "Collect from 115 Woji Road, GRA Phase 3, Port Harcourt — no delivery charge",
+  description: "Collect from 88 Woji Road, GRA Phase 3, Port Harcourt — no delivery charge",
   fee: 0,
   currency: "NGN",
   estimatedDelivery: "Ready when we notify you",

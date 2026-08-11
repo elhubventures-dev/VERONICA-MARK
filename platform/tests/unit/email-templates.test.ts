@@ -92,11 +92,11 @@ describe("email templates catalog", () => {
     });
 
     expect(rendered.html).toContain("+234 904 319 7743");
-    expect(rendered.html).toContain("115 Woji Road, GRA Phase 3");
+    expect(rendered.html).toContain("88 Woji Road, GRA Phase 3");
     expect(rendered.html).toContain("https://wa.me/2349043197743");
     expect(rendered.text).toContain("+234 904 319 7743");
     expect(rendered.text).toContain(
-      "115 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
+      "88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
     );
   });
 });
