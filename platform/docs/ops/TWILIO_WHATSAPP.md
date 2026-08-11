@@ -26,7 +26,7 @@ Normalized to international digits (e.g. `0803…` → `234803…`), then sent a
 
 ## Twilio dashboard setup
 
-1. Create / open a Twilio account and enable **WhatsApp** (sender for `+234 904 319 7743`, or the Twilio sandbox for local tests).
+1. Create / open a Twilio account and enable **WhatsApp** (sender for `+234 808 518 3747`, or the Twilio sandbox for local tests).
 2. Create four **Content templates** (WhatsApp) and submit for Meta approval. Suggested bodies (`{{1}}` …):
 
 | Key | Body |
@@ -47,7 +47,7 @@ Status callbacks / inbound webhooks are **not required** for these outbound orde
 ```env
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
-TWILIO_WHATSAPP_FROM=whatsapp:+2349043197743
+TWILIO_WHATSAPP_FROM=whatsapp:+2348085183747
 TWILIO_CONTENT_SID_ORDER_PAID=
 TWILIO_CONTENT_SID_ORDER_SHIPPED=
 TWILIO_CONTENT_SID_ORDER_OUT_FOR_DELIVERY=

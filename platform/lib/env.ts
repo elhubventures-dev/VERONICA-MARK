@@ -31,7 +31,7 @@ const serverSchema = z.object({
   /** Twilio WhatsApp (optional — soft-skip when unset). */
   TWILIO_ACCOUNT_SID: optionalString,
   TWILIO_AUTH_TOKEN: optionalString,
-  /** Sender, e.g. whatsapp:+2349043197743 */
+  /** Sender, e.g. whatsapp:+2348085183747 */
   TWILIO_WHATSAPP_FROM: optionalString,
   TWILIO_CONTENT_SID_ORDER_PAID: optionalString,
   TWILIO_CONTENT_SID_ORDER_SHIPPED: optionalString,

@@ -2,11 +2,11 @@
 export const storefrontContact = {
   email: "sales@veronicamark.com",
   /** Display format for storefront copy and tel: links. */
-  phone: "+234 904 319 7743",
+  phone: "+234 808 518 3747",
   /** Digits-only E.164 without leading + — used for WhatsApp / wa.me. */
-  phoneE164: "2349043197743",
-  telUrl: "tel:+2349043197743",
-  whatsappUrl: "https://wa.me/2349043197743",
+  phoneE164: "2348085183747",
+  telUrl: "tel:+2348085183747",
+  whatsappUrl: "https://wa.me/2348085183747",
   address: {
     line1: "88 Woji Road, GRA Phase 3",
     line2: "Port Harcourt 500001",

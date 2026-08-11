@@ -31,10 +31,10 @@ describe("resolveOrderWhatsAppPhone", () => {
   it("prefers shipping address phone", () => {
     expect(
       resolveOrderWhatsAppPhone({
-        shippingAddress: { phone: "09043197743" },
+        shippingAddress: { phone: "08085183747" },
         customer: { user: { phone: "08031234567" } },
       }),
-    ).toBe("2349043197743");
+    ).toBe("2348085183747");
   });
 
   it("falls back to user phone", () => {
@@ -123,7 +123,7 @@ describe("sendTwilioWhatsAppTemplate payload", () => {
   it("POSTs Twilio Messages API with ContentSid and ContentVariables", async () => {
     vi.stubEnv("TWILIO_ACCOUNT_SID", "ACtest123");
     vi.stubEnv("TWILIO_AUTH_TOKEN", "auth_test_token");
-    vi.stubEnv("TWILIO_WHATSAPP_FROM", "whatsapp:+2349043197743");
+    vi.stubEnv("TWILIO_WHATSAPP_FROM", "whatsapp:+2348085183747");
 
     const fetchMock = vi.fn(
       async (_url: string, _init?: RequestInit): Promise<Response> =>
@@ -162,7 +162,7 @@ describe("sendTwilioWhatsAppTemplate payload", () => {
     );
     const params = new URLSearchParams(String(init?.body));
     expect(params.get("To")).toBe("whatsapp:+2348031234567");
-    expect(params.get("From")).toBe("whatsapp:+2349043197743");
+    expect(params.get("From")).toBe("whatsapp:+2348085183747");
     expect(params.get("ContentSid")).toBe("HXpaid");
     expect(params.get("ContentVariables")).toBe(JSON.stringify({ "1": "Camille", "2": "VM-1" }));
   });
@@ -198,7 +198,7 @@ describe("notifyCustomerOrderWhatsApp", () => {
   it("skips when phone is missing", async () => {
     vi.stubEnv("TWILIO_ACCOUNT_SID", "ACtest123");
     vi.stubEnv("TWILIO_AUTH_TOKEN", "auth_test_token");
-    vi.stubEnv("TWILIO_WHATSAPP_FROM", "whatsapp:+2349043197743");
+    vi.stubEnv("TWILIO_WHATSAPP_FROM", "whatsapp:+2348085183747");
     vi.stubEnv("TWILIO_CONTENT_SID_ORDER_PAID", "HXpaid");
 
     const fetchMock = vi.fn();

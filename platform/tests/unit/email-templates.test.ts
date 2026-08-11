@@ -91,10 +91,10 @@ describe("email templates catalog", () => {
       topic: "General enquiry",
     });
 
-    expect(rendered.html).toContain("+234 904 319 7743");
+    expect(rendered.html).toContain("+234 808 518 3747");
     expect(rendered.html).toContain("88 Woji Road, GRA Phase 3");
-    expect(rendered.html).toContain("https://wa.me/2349043197743");
-    expect(rendered.text).toContain("+234 904 319 7743");
+    expect(rendered.html).toContain("https://wa.me/2348085183747");
+    expect(rendered.text).toContain("+234 808 518 3747");
     expect(rendered.text).toContain(
       "88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria",
     );

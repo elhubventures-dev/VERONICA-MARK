@@ -6,7 +6,7 @@ Templates live in `emails/`. Sends go through Resend via `lib/email/send.ts`.
 
 Sourced from `lib/storefront/contact.ts` via `emails/tokens.ts` (`emailDefaults`):
 
-- Phone / WhatsApp: `+234 904 319 7743` (`https://wa.me/2349043197743`)
+- Phone / WhatsApp: `+234 808 518 3747` (`https://wa.me/2348085183747`)
 - Email: `sales@veronicamark.com`
 - Address: `88 Woji Road, GRA Phase 3, Port Harcourt 500001, Rivers, Nigeria`
 
