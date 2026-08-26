@@ -432,7 +432,7 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
   {
     name: "Elizabeth Arden Red Door EDT 100ml For Women",
     qty: 10,
-    sellPrice: 55000,
+    sellPrice: 75000,
     category: "perfume",
     sku: "VM-EA-RED-DOOR-100",
     slug: "elizabeth-arden-red-door-edt-100ml",
