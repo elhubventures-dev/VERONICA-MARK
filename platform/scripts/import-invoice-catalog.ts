@@ -2,15 +2,20 @@
  * Import Perfume Invoice products into the store database.
  *
  * - costPrice = invoice Rate (NGN)
- * - price (selling) = costPrice × 1.6 (60% markup)
+ * - price (selling) = sellPrice when set, otherwise costPrice × 1.6 (60% markup)
  * - stock = invoice Qty
  * - currency defaults remain NGN
  *
- * Usage: pnpm db:import-invoice
+ * Usage:
+ *   pnpm db:import-invoice
+ *   pnpm exec tsx scripts/import-invoice-catalog.ts --only=elizabeth-arden-red-door-edt-100ml
  */
 import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
 loadEnv();
+
+import { existsSync, readFileSync } from "node:fs";
+import { basename, extname, join } from "node:path";
 
 import {
   BrandStatus,
@@ -20,17 +25,90 @@ import {
   ProductStatus,
 } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
+import { createClient } from "@supabase/supabase-js";
 
 import {
   INVOICE_PRODUCTS,
   sellPriceFromCost,
   slugifyProductName,
+  type InvoiceProduct,
 } from "./invoice-products";
 
 const prisma = new PrismaClient();
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=900&q=85";
+
+const MEDIA_ROOT = join(process.cwd(), "public", "media", "products");
+
+const onlySlug = process.argv
+  .find((arg) => arg.startsWith("--only="))
+  ?.slice("--only=".length)
+  ?.trim();
+
+function mimeFromExt(ext: string): string {
+  switch (ext.toLowerCase()) {
+    case ".png":
+      return "image/png";
+    case ".webp":
+      return "image/webp";
+    case ".gif":
+      return "image/gif";
+    default:
+      return "image/jpeg";
+  }
+}
+
+function localProductImage(slug: string): string | null {
+  for (const name of ["front.png", "front.jpg", "front.jpeg", "front.webp"]) {
+    const path = join(MEDIA_ROOT, slug, name);
+    if (existsSync(path)) return path;
+  }
+  return null;
+}
+
+async function uploadProductImage(slug: string, localPath: string): Promise<string | null> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const bucket = process.env.SUPABASE_STORAGE_BUCKET || "veronica-mark-media";
+  if (!supabaseUrl || !serviceKey) return null;
+
+  const ext = extname(localPath) || ".jpg";
+  const objectPath = `products/${slug}/front${ext}`;
+  const client = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { error } = await client.storage.from(bucket).upload(objectPath, readFileSync(localPath), {
+    contentType: mimeFromExt(ext),
+    upsert: true,
+  });
+  if (error) {
+    console.warn(`  supabase upload failed for ${slug}: ${error.message}`);
+    return null;
+  }
+  const { data } = client.storage.from(bucket).getPublicUrl(objectPath);
+  return data.publicUrl;
+}
+
+async function resolveImageUrl(item: InvoiceProduct, slug: string): Promise<string> {
+  const local = localProductImage(slug);
+  if (local) {
+    const remote = await uploadProductImage(slug, local);
+    if (remote) return remote;
+    return `/media/products/${slug}/${basename(local)}`;
+  }
+  return item.imageUrl ?? FALLBACK_IMAGE;
+}
+
+function resolveSellPrice(item: InvoiceProduct): { cost: number | null; sell: number } {
+  if (item.sellPrice != null) {
+    return { cost: item.costPrice ?? null, sell: item.sellPrice };
+  }
+  if (item.costPrice != null) {
+    return { cost: item.costPrice, sell: sellPriceFromCost(item.costPrice) };
+  }
+  throw new Error(`No sellPrice or costPrice for ${item.name}`);
+}
 
 function sizeLabelFromName(name: string): string | undefined {
   const match = name.match(/(\d+\s*ml)/i);
@@ -43,8 +121,24 @@ function inventoryStatus(available: number, reorderLevel: number): InventoryStat
   return InventoryStatus.IN_STOCK;
 }
 
+function isWomensPerfume(item: InvoiceProduct): boolean {
+  return /for women|for her|\bwomen\b/i.test(item.name);
+}
+
 async function main() {
-  console.log(`Importing ${INVOICE_PRODUCTS.length} invoice products…`);
+  const catalog = onlySlug
+    ? INVOICE_PRODUCTS.filter((item) => (item.slug ?? slugifyProductName(item.name)) === onlySlug)
+    : INVOICE_PRODUCTS;
+
+  if (onlySlug && catalog.length === 0) {
+    throw new Error(`No catalog product matches --only=${onlySlug}`);
+  }
+
+  console.log(
+    onlySlug
+      ? `Upserting 1 catalog product (${onlySlug})…`
+      : `Importing ${catalog.length} invoice products…`,
+  );
 
   const brand = await prisma.brand.upsert({
     where: { slug: "vma-scents" },
@@ -92,11 +186,24 @@ async function main() {
     },
   });
 
-  // Hide demo seed fragrances so the invoice catalog is the live assortment.
-  await prisma.product.updateMany({
-    where: { slug: { in: ["noir-eclat-edp", "sable-meridian-cologne"] } },
-    data: { visible: false, status: ProductStatus.ARCHIVED },
+  const women = await prisma.category.upsert({
+    where: { slug: "perfumes-women" },
+    update: { parentId: perfumes.id },
+    create: {
+      name: "Women",
+      slug: "perfumes-women",
+      parentId: perfumes.id,
+      sortOrder: 0,
+    },
   });
+
+  if (!onlySlug) {
+    // Hide demo seed fragrances so the invoice catalog is the live assortment.
+    await prisma.product.updateMany({
+      where: { slug: { in: ["noir-eclat-edp", "sable-meridian-cologne"] } },
+      data: { visible: false, status: ProductStatus.ARCHIVED },
+    });
+  }
 
   await prisma.systemSetting.upsert({
     where: { key: "default_currency" },
@@ -112,15 +219,17 @@ async function main() {
   let imported = 0;
   let updated = 0;
 
-  for (let index = 0; index < INVOICE_PRODUCTS.length; index += 1) {
-    const item = INVOICE_PRODUCTS[index]!;
+  for (let index = 0; index < catalog.length; index += 1) {
+    const item = catalog[index]!;
     const slug = item.slug ?? slugifyProductName(item.name);
-    const sku = `VM-INV-${String(index + 1).padStart(3, "0")}`;
-    const cost = item.costPrice;
-    const sell = sellPriceFromCost(cost);
-    const categoryId = item.category === "body" ? bodyCare.id : perfumes.id;
+    const sourceIndex = INVOICE_PRODUCTS.indexOf(item);
+    const sku = item.sku ?? `VM-INV-${String(sourceIndex + 1).padStart(3, "0")}`;
+    const { cost, sell } = resolveSellPrice(item);
+    const categoryId =
+      item.category === "body" ? bodyCare.id : isWomensPerfume(item) ? women.id : perfumes.id;
     const sizeLabel = sizeLabelFromName(item.name);
     const reorderLevel = item.category === "body" ? 3 : 1;
+    const imageUrl = await resolveImageUrl(item, slug);
 
     const existing = await prisma.product.findUnique({ where: { slug } });
 
@@ -129,7 +238,7 @@ async function main() {
     const description =
       item.description ??
       `${item.name} from the VERONICA MARK fragrance edit. Authenticity assured.`;
-    const barcode = item.barcode ?? `VM-INV-${String(index + 1).padStart(4, "0")}`;
+    const barcode = item.barcode ?? sku;
 
     const product = await prisma.product.upsert({
       where: { slug },
@@ -157,7 +266,7 @@ async function main() {
         visible: true,
         publishedAt: new Date(),
         newArrival: true,
-        featured: index < 8,
+        featured: !onlySlug && index < 8,
       },
     });
 
@@ -176,7 +285,6 @@ async function main() {
       },
     });
 
-    // Never overwrite existing product photos — only add a placeholder if none exist.
     const mediaCount = await prisma.productMedia.count({
       where: { productId: product.id, deletedAt: null },
     });
@@ -184,20 +292,35 @@ async function main() {
       await prisma.productMedia.create({
         data: {
           productId: product.id,
-          url: FALLBACK_IMAGE,
-          altText: item.name,
+          url: imageUrl,
+          altText: `${item.name} bottle and packaging`,
           type: MediaType.IMAGE,
           sortOrder: 0,
           isPrimary: true,
         },
       });
+    } else if (onlySlug && imageUrl !== FALLBACK_IMAGE) {
+      const primary = await prisma.productMedia.findFirst({
+        where: { productId: product.id, deletedAt: null },
+        orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }],
+      });
+      if (primary) {
+        await prisma.productMedia.update({
+          where: { id: primary.id },
+          data: {
+            url: imageUrl,
+            altText: `${item.name} bottle and packaging`,
+            isPrimary: true,
+          },
+        });
+      }
     }
 
     const variant = await prisma.productVariant.upsert({
       where: { sku },
       update: {
         productId: product.id,
-        costPrice: new Decimal(cost.toFixed(2)),
+        costPrice: cost != null ? new Decimal(cost.toFixed(2)) : null,
         price: new Decimal(sell.toFixed(2)),
         salePrice: null,
         sizeLabel,
@@ -206,7 +329,7 @@ async function main() {
       create: {
         productId: product.id,
         sku,
-        costPrice: new Decimal(cost.toFixed(2)),
+        costPrice: cost != null ? new Decimal(cost.toFixed(2)) : null,
         price: new Decimal(sell.toFixed(2)),
         sizeLabel,
         active: true,
@@ -236,7 +359,9 @@ async function main() {
   }
 
   console.log(`Done. Created ${imported}, updated ${updated}.`);
-  console.log("Selling price = cost × 1.6 (NGN, 60% markup). Stock set from invoice Qty.");
+  if (!onlySlug) {
+    console.log("Selling price = sellPrice or cost × 1.6 (NGN). Stock set from invoice Qty.");
+  }
 }
 
 main()

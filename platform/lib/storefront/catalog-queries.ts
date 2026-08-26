@@ -81,6 +81,15 @@ export type CatalogResult = {
   totalPages: number;
 };
 
+function concentrationLabel(name: string): string {
+  const n = name.toLowerCase();
+  if (/\bedt\b|eau de toilette/.test(n)) return "Eau de Toilette";
+  if (/\bcologne\b|eau de cologne/.test(n)) return "Eau de Cologne";
+  if (/\bextrait\b|\belixir\b/.test(n)) return "Extrait de Parfum";
+  if (/body mist|body spray|deodorant/.test(n)) return "Body mist";
+  return "Eau de Parfum";
+}
+
 function mapDbProduct(
   product: NonNullable<Awaited<ReturnType<typeof productRepository.findBySlug>>>,
 ): SortableStorefrontProduct {
@@ -306,7 +315,7 @@ export async function getProductDetail(slug: string): Promise<StorefrontProductD
         images,
         variants: variants.length ? variants : getDemoProductBySlug(slug)?.variants ?? [],
         specs: [
-          { label: "Concentration", value: "Eau de Parfum" },
+          { label: "Concentration", value: concentrationLabel(product.name) },
           { label: "House", value: mapped.brand },
           { label: "Category", value: mapped.category },
           { label: "SKU", value: product.barcode ?? product.slug },

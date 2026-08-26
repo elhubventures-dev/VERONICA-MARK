@@ -6,10 +6,15 @@
 export type InvoiceProduct = {
   name: string;
   qty: number;
-  costPrice: number;
+  /** Purchase / wholesale cost (NGN). Optional when `sellPrice` is set. */
+  costPrice?: number;
+  /** Customer-facing selling price (NGN). Defaults to costPrice × 1.6. */
+  sellPrice?: number;
   category: "perfume" | "body";
   /** Stable storefront slug when it must not follow slugify(name). */
   slug?: string;
+  /** Stable SKU. Defaults to VM-INV-NNN from array order. */
+  sku?: string;
   /** Invoice / barcode when available. */
   barcode?: string;
   shortDescription?: string;
@@ -423,6 +428,19 @@ export const INVOICE_PRODUCTS: InvoiceProduct[] = [
     shortDescription: "Saffron, rosemary, and oud — Reef’s signature oriental woody.",
     description:
       "Reef 33 by Reef Perfumes (2020, Kevin Mathys) is an oriental woody eau de parfum. Indian saffron and aromatic rosemary over rich oud — spicy, smoky, and evening-ready. 100ml.",
+  },
+  {
+    name: "Elizabeth Arden Red Door EDT 100ml For Women",
+    qty: 10,
+    sellPrice: 55000,
+    category: "perfume",
+    sku: "VM-EA-RED-DOOR-100",
+    slug: "elizabeth-arden-red-door-edt-100ml",
+    imageUrl: "/media/products/elizabeth-arden-red-door-edt-100ml/front.png",
+    shortDescription:
+      "Iconic chypre floral — red rose, orchid, and freesia over honey and sandalwood.",
+    description:
+      "Elizabeth Arden Red Door is the house’s signature eau de toilette, inspired by the famous Red Door Spa. An elegant chypre floral: ylang-ylang, rose, and a hint of fruit open onto orchid, jasmine, lily of the valley, Moroccan orange blossom, freesia, and wild violet. The dry-down is oakmoss, sandalwood, vetiver, honey, and musk — glamorous, classic, and made for day-to-evening wear. 100ml spray.",
   },
 ];
 
